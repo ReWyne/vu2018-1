@@ -1,0 +1,372 @@
+# Translation of WordPress.com - Themes - Apostrophe in Romanian
+# This file is distributed under the same license as the WordPress.com - Themes - Apostrophe package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2017-03-23 06:02:31+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+"Language: ro\n"
+"Project-Id-Version: WordPress.com - Themes - Apostrophe\n"
+
+#: inc/wpcom-colors.php:139
+msgid "Accents"
+msgstr "Accente"
+
+#: inc/wpcom-colors.php:118
+msgid "Links and Buttons"
+msgstr "Legături și butoane"
+
+#: functions.php:210
+msgid "collapse child menu"
+msgstr "restrânge meniul copil"
+
+#: functions.php:209
+msgid "expand child menu"
+msgstr "extinde meniul copil"
+
+#: comments.php:26
+msgctxt "comments title"
+msgid "One comment"
+msgid_plural "%s comments"
+msgstr[0] "Un comentariu"
+msgstr[1] "%s comentarii"
+msgstr[2] "%s de comentarii"
+
+#. Template Name of the plugin/theme
+#: wp-content/themes/pub/apostrophe/full-width-page.php
+msgid "Full-Width Page"
+msgstr "Pagină lățime completă"
+
+#. Author URI of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "https://wordpress.com/themes/"
+msgstr "https://wordpress.com/themes/"
+
+#. Author of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "Automattic"
+msgstr "Automattic"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "A clean, no-nonsense magazine theme"
+msgstr "O temă revistă, curată, simplă și directă"
+
+#: search.php:15
+msgid "Search Results for: %s"
+msgstr "Rezultatele căutării pentru: %s"
+
+#: inc/template-tags.php:351
+msgid "Posts navigation"
+msgstr "Navigare articole"
+
+#: inc/template-tags.php:329 inc/template-tags.php:331
+msgid "&larr;"
+msgstr "&larr;"
+
+#: inc/template-tags.php:328 inc/template-tags.php:332
+msgid "&rarr;"
+msgstr "&rarr;"
+
+#: inc/template-tags.php:221
+msgid "Archives"
+msgstr "Arhive"
+
+#. translators: 1: Taxonomy singular name, 2: Current taxonomy term
+#: inc/template-tags.php:219
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+#: inc/template-tags.php:215
+msgid "Archives: %s"
+msgstr "Arhive: %s"
+
+#: inc/template-tags.php:213
+msgctxt "post format archive title"
+msgid "Chats"
+msgstr "Conversații"
+
+#: inc/template-tags.php:211
+msgctxt "post format archive title"
+msgid "Audio"
+msgstr "Audio"
+
+#: inc/template-tags.php:209
+msgctxt "post format archive title"
+msgid "Statuses"
+msgstr "Stări"
+
+#: inc/template-tags.php:207
+msgctxt "post format archive title"
+msgid "Links"
+msgstr "Legături"
+
+#: inc/template-tags.php:205
+msgctxt "post format archive title"
+msgid "Quotes"
+msgstr "Citat"
+
+#: inc/template-tags.php:203
+msgctxt "post format archive title"
+msgid "Videos"
+msgstr "Videouri"
+
+#: inc/template-tags.php:201
+msgctxt "post format archive title"
+msgid "Images"
+msgstr "Imagini"
+
+#: inc/template-tags.php:199
+msgctxt "post format archive title"
+msgid "Galleries"
+msgstr "Galerii"
+
+#: inc/template-tags.php:197
+msgctxt "post format archive title"
+msgid "Asides"
+msgstr "Note"
+
+#: inc/template-tags.php:195
+msgctxt "daily archives date format"
+msgid "F j, Y"
+msgstr "j F Y"
+
+#: inc/template-tags.php:195
+msgid "Day: %s"
+msgstr "Zi: %s"
+
+#: inc/template-tags.php:193
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr "F Y"
+
+#: inc/template-tags.php:193
+msgid "Month: %s"
+msgstr "Lună: %s"
+
+#: inc/template-tags.php:191
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr "Y"
+
+#: inc/template-tags.php:191
+msgid "Year: %s"
+msgstr "An: %s"
+
+#: inc/template-tags.php:189
+msgid "Author: %s"
+msgstr "Autor: %s"
+
+#: inc/template-tags.php:187
+msgid "Tag: %s"
+msgstr "Etichetă: %s"
+
+#: inc/template-tags.php:185
+msgid "Category: %s"
+msgstr "Categorie: %s"
+
+#: inc/template-tags.php:127
+msgid "%s year ago"
+msgid_plural "%s years ago"
+msgstr[0] "Acum %s an"
+msgstr[1] "Acum %s ani"
+msgstr[2] "Acum %s de ani"
+
+#: inc/template-tags.php:122
+msgid "%s month ago"
+msgid_plural "%s months ago"
+msgstr[0] "Acum %s lună"
+msgstr[1] "Acum %s luni"
+msgstr[2] "Acum %s de luni"
+
+#: inc/template-tags.php:117
+msgid "%s week ago"
+msgid_plural "%s weeks ago"
+msgstr[0] "Acum %s săptămână"
+msgstr[1] "Acum %s săptămâni"
+msgstr[2] "Acum %s de săptămâni"
+
+#: inc/template-tags.php:112
+msgid "%s day ago"
+msgid_plural "%s days ago"
+msgstr[0] "Acum %s zi"
+msgstr[1] "Acum %s zile"
+msgstr[2] "Acum %s de zile"
+
+#: inc/template-tags.php:107
+msgid "%s hour ago"
+msgid_plural "%s hours ago"
+msgstr[0] "Acum %s oră"
+msgstr[1] "Acum %s ore"
+msgstr[2] "Acum %s de ore"
+
+#. translators: min=minute
+#: inc/template-tags.php:102
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "Acum %s minut"
+msgstr[1] "Acum %s minute"
+msgstr[2] "Acum %s de minute"
+
+#: inc/template-tags.php:52
+msgctxt "Next post link"
+msgid "Next"
+msgstr "Următor"
+
+#: inc/template-tags.php:49
+msgctxt "Previous post link"
+msgid "Previous"
+msgstr "Anterior"
+
+#: inc/template-tags.php:46
+msgid "Post navigation"
+msgstr "Navigare articol"
+
+#: inc/extras.php:36
+msgid "Page %s"
+msgstr "Pagina %s"
+
+#: inc/customizer.php:32
+msgid "Hide author bio panel on individual post pages."
+msgstr "Ascunde panou bibliografie autor în pagini de articol individuale."
+
+#: inc/customizer.php:22
+msgid "Theme"
+msgstr "Temă"
+
+#: image.php:64
+msgctxt "Parent post link"
+msgid "<span class=\"meta-nav\">Published in</span><span class=\"post-title\">%title</span>"
+msgstr "<span class=\"meta-nav\">Publicat în</span><span class=\"post-title\">%title</span>"
+
+#: image.php:57
+msgid "Next Image &raquo;"
+msgstr "Imaginea următoare &raquo; "
+
+#: image.php:57
+msgid "&laquo; Previous Image"
+msgstr "&laquo; Imagine anterioară"
+
+#: image.php:48
+msgid "Page"
+msgstr "Pagină"
+
+#: header.php:35
+msgid "Skip to content"
+msgstr "Sări la conţinut"
+
+#: header.php:34
+msgid "Menu"
+msgstr "Meniu"
+
+#. Translators: If there are characters in your language that are not
+#. * supported by Open Sans, translate this to 'off'. Do not translate
+#. * into your own language.
+#: functions.php:167
+msgctxt "Open Sans font: on or off"
+msgid "on"
+msgstr "activ"
+
+#. Translators: If there are characters in your language that are not
+#. * supported by PT Serif, translate this to 'off'. Do not translate
+#. * into your own language.
+#: functions.php:161
+msgctxt "PT Serif font: on or off"
+msgid "on"
+msgstr "on"
+
+#: functions.php:141
+msgid "Footer Sidebar"
+msgstr "Bară laterală subsol"
+
+#: functions.php:132
+msgid "Tertiary"
+msgstr "Terțiar"
+
+#: functions.php:123
+msgid "Secondary"
+msgstr "Secundar"
+
+#: functions.php:114
+msgid "Primary"
+msgstr "Primar"
+
+#: functions.php:62
+msgid "Social Menu"
+msgstr "Meniu socializare"
+
+#: functions.php:61
+msgid "Primary Menu"
+msgstr "Primary Menu"
+
+#: footer.php:26
+msgid "Theme: %1$s by %2$s."
+msgstr "Tema: %1$s de %2$s."
+
+#: footer.php:24
+msgid "Proudly powered by %s"
+msgstr "Propulsat cu mândrie de %s"
+
+#: footer.php:24
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: content-single.php:10 image.php:21
+msgid "Edit"
+msgstr "Editează"
+
+#: content-page.php:18 content-single.php:21 image.php:44
+msgid "Pages:"
+msgstr "Pagini:"
+
+#: content-none.php:28
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "Nu s-a putut găsi conținutul căutat. Probabil o căutare sau una dintre legăturile de mai jos pot ajuta."
+
+#: content-none.php:23
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Ne pare rau, căutarea nu are nici un rezultat. Vă rugăm să încercați din nou cu unele cuvinte cheie diferite."
+
+#: content-none.php:19
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "Pregătit să publici primul articol? <a href=\"%1$s\">Începe de aici</a>."
+
+#: content-none.php:13
+msgid "Nothing Found"
+msgstr "Nu a fost găsit nimic"
+
+#: comments.php:61
+msgid "Comments are closed."
+msgstr "Comentariile sunt închise."
+
+#: comments.php:35 comments.php:51
+msgid "Newer Comments &raquo;"
+msgstr "Comentarii mai noi &raquo;"
+
+#: comments.php:34 comments.php:50
+msgid "&laquo; Older Comments"
+msgstr "&laquo; Comentarii mai vechi"
+
+#: comments.php:33 comments.php:49
+msgid "Comment navigation"
+msgstr "Navigare comentarii"
+
+#. translators: %1$s: smiley
+#: 404.php:46
+msgid "Try looking in the monthly archives. %1$s"
+msgstr "Încearcă să cauți în arhiva lunară. %1$s"
+
+#: 404.php:27
+msgid "Most Used Categories"
+msgstr "Cele mai folosite categorii"
+
+#: 404.php:19
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr "Se pare că nu a fost găsit nimic la această locație. Poate încerci una din legăturile de mai jos sau o căutare?"
+
+#: 404.php:15
+msgid "Oops! That page can&rsquo;t be found."
+msgstr "Hopa! Pagina nu a fost găsită."

@@ -1,0 +1,331 @@
+# Translation of WordPress.com - Themes - Apostrophe in Hindi
+# This file is distributed under the same license as the WordPress.com - Themes - Apostrophe package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2016-04-16 12:07:43+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/2.1.0-alpha\n"
+"Language: hi_IN\n"
+"Project-Id-Version: WordPress.com - Themes - Apostrophe\n"
+
+#: comments.php:26
+msgctxt "comments title"
+msgid "One comment"
+msgid_plural "%s comments"
+msgstr[0] "एक टिप्पणी"
+msgstr[1] "%s टिप्पणियाँ"
+
+#. Template Name of the plugin/theme
+#: wp-content/themes/pub/apostrophe/full-width-page.php
+msgid "Full-Width Page"
+msgstr "पूर्ण- चौड़ाई पृष्ठ"
+
+#. Author URI of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "https://wordpress.com/themes/"
+msgstr "https://wordpress.com/themes/"
+
+#. Author of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "Automattic"
+msgstr "ऑटोमैटिक"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "A clean, no-nonsense magazine theme"
+msgstr "एक साफ, कोई बकवास नहीं, पत्रिका थीम"
+
+#: search.php:15
+msgid "Search Results for: %s"
+msgstr "%s के लिए खोज परिणाम:"
+
+#: inc/template-tags.php:351
+msgid "Posts navigation"
+msgstr "पोस्टस नेविगेशन"
+
+#: inc/template-tags.php:329 inc/template-tags.php:331
+msgid "&larr;"
+msgstr "&larr;"
+
+#: inc/template-tags.php:328 inc/template-tags.php:332
+msgid "&rarr;"
+msgstr "&rarr;"
+
+#: inc/template-tags.php:221
+msgid "Archives"
+msgstr "पुरालेख"
+
+#. translators: 1: Taxonomy singular name, 2: Current taxonomy term
+#: inc/template-tags.php:219
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+#: inc/template-tags.php:215
+msgid "Archives: %s"
+msgstr "पुरालेख: %s"
+
+#: inc/template-tags.php:213
+msgctxt "post format archive title"
+msgid "Chats"
+msgstr "चैट्स"
+
+#: inc/template-tags.php:211
+msgctxt "post format archive title"
+msgid "Audio"
+msgstr "ऑडियो"
+
+#: inc/template-tags.php:209
+msgctxt "post format archive title"
+msgid "Statuses"
+msgstr "स्थितियां"
+
+#: inc/template-tags.php:207
+msgctxt "post format archive title"
+msgid "Links"
+msgstr "कड़ियाँ"
+
+#: inc/template-tags.php:205
+msgctxt "post format archive title"
+msgid "Quotes"
+msgstr "उद्धरण"
+
+#: inc/template-tags.php:203
+msgctxt "post format archive title"
+msgid "Videos"
+msgstr "वीडियोस"
+
+#: inc/template-tags.php:201
+msgctxt "post format archive title"
+msgid "Images"
+msgstr "छवियाँ"
+
+#: inc/template-tags.php:199
+msgctxt "post format archive title"
+msgid "Galleries"
+msgstr "गैलेरियां"
+
+#: inc/template-tags.php:195
+msgid "Day: %s"
+msgstr "दिन: %s"
+
+#: inc/template-tags.php:193
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr "F Y"
+
+#: inc/template-tags.php:193
+msgid "Month: %s"
+msgstr "महीना: %s"
+
+#: inc/template-tags.php:191
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr "Y"
+
+#: inc/template-tags.php:191
+msgid "Year: %s"
+msgstr "वर्ष: %s"
+
+#: inc/template-tags.php:189
+msgid "Author: %s"
+msgstr "लेखक: %s"
+
+#: inc/template-tags.php:187
+msgid "Tag: %s"
+msgstr "टैग: %s"
+
+#: inc/template-tags.php:49
+msgctxt "Previous post link"
+msgid "Previous"
+msgstr "पिछला"
+
+#: inc/template-tags.php:52
+msgctxt "Next post link"
+msgid "Next"
+msgstr "अगला"
+
+#: inc/template-tags.php:185
+msgid "Category: %s"
+msgstr "श्रेणी: %s"
+
+#. translators: min=minute
+#: inc/template-tags.php:102
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "%s मिनट पहले"
+msgstr[1] "%s मिनटों पहले"
+
+#: inc/template-tags.php:107
+msgid "%s hour ago"
+msgid_plural "%s hours ago"
+msgstr[0] "%s घंटे पहले"
+msgstr[1] "%s घंटो पहले"
+
+#: inc/template-tags.php:112
+msgid "%s day ago"
+msgid_plural "%s days ago"
+msgstr[0] "%s दिन पहले"
+msgstr[1] "%s दिनों पहले"
+
+#: inc/template-tags.php:117
+msgid "%s week ago"
+msgid_plural "%s weeks ago"
+msgstr[0] "%s सप्ताह पहले"
+msgstr[1] "%s सप्ताहों पहले"
+
+#: inc/template-tags.php:122
+msgid "%s month ago"
+msgid_plural "%s months ago"
+msgstr[0] "%s महीने पहले"
+msgstr[1] "%s महिनो पहले"
+
+#: inc/template-tags.php:127
+msgid "%s year ago"
+msgid_plural "%s years ago"
+msgstr[0] "%s साल पहले"
+msgstr[1] "%s सालो पहले"
+
+#: inc/template-tags.php:46
+msgid "Post navigation"
+msgstr "पोस्ट नेविगेशन"
+
+#: inc/extras.php:36
+msgid "Page %s"
+msgstr "पृष्ठ %s"
+
+#: inc/customizer.php:22
+msgid "Theme"
+msgstr "थीम"
+
+#: image.php:63
+msgctxt "Parent post link"
+msgid "<span class=\"meta-nav\">Published in</span><span class=\"post-title\">%title</span>"
+msgstr "<span class=\"meta-nav\">में प्रकाशित</span><span class=\"post-title\">%title</span>"
+
+#: image.php:57
+msgid "Next Image &raquo;"
+msgstr "अगली छवि &raquo;"
+
+#: image.php:57
+msgid "&laquo; Previous Image"
+msgstr "&laquo; पिछली छवि"
+
+#: image.php:48
+msgid "Page"
+msgstr "पृष्ठ"
+
+#: header.php:35
+msgid "Skip to content"
+msgstr "सामग्री पर जाएं"
+
+#: header.php:34
+msgid "Menu"
+msgstr "मेनू "
+
+#. Translators: If there are characters in your language that are not
+#. * supported by Open Sans, translate this to 'off'. Do not translate
+#. * into your own language.
+#: functions.php:167
+msgctxt "Open Sans font: on or off"
+msgid "on"
+msgstr "ऑन"
+
+#. Translators: If there are characters in your language that are not
+#. * supported by PT Serif, translate this to 'off'. Do not translate
+#. * into your own language.
+#: functions.php:161
+msgctxt "PT Serif font: on or off"
+msgid "on"
+msgstr "on"
+
+#: functions.php:123
+msgid "Secondary"
+msgstr "माध्यमिक"
+
+#: functions.php:141
+msgid "Footer Sidebar"
+msgstr "फूटर साइडबार"
+
+#: functions.php:114
+msgid "Primary"
+msgstr "प्राथमिक"
+
+#: functions.php:62
+msgid "Social Menu"
+msgstr "सामाजिक मेनू"
+
+#: functions.php:61
+msgid "Primary Menu"
+msgstr "प्राथमिक मेनू"
+
+#: footer.php:26
+msgid "Theme: %1$s by %2$s."
+msgstr "थीम: %2$s द्वारा %1$s।"
+
+#: footer.php:24
+msgid "Proudly powered by %s"
+msgstr "%s द्वारा गर्व के साथ संचालित"
+
+#: footer.php:24
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: content-single.php:10 image.php:21
+msgid "Edit"
+msgstr "सम्पादन"
+
+#: content-page.php:18 content-single.php:21 image.php:44
+msgid "Pages:"
+msgstr "पृष्ठ:"
+
+#: content-none.php:28
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "ऐसा लगता है आप जो देख रहे हैं हमें नहीं मिल रहा है। शायद खोज मदद कर सकता है।"
+
+#: content-none.php:23
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "क्षमा करें, लेकिन कुछ भी आपके खोज शब्दों से मेल नहीं खाते। कृपया कुछ अलग खोजशब्दों के साथ फिर से प्रयास करें।"
+
+#: content-none.php:19
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "अपनी पहली पोस्ट को प्रकाशित करने के लिए तैयार हैं? <a href=\"%1$s\">यहाँ से शुरुआत करें</a>।"
+
+#: content-none.php:13
+msgid "Nothing Found"
+msgstr "कुछ नहीं मिला"
+
+#: comments.php:61
+msgid "Comments are closed."
+msgstr "टिप्पणियाँ बंद कर दी गयी है."
+
+#: comments.php:35 comments.php:51
+msgid "Newer Comments &raquo;"
+msgstr "नई टिप्पणियाँ &raquo;"
+
+#: comments.php:34 comments.php:50
+msgid "&laquo; Older Comments"
+msgstr "&laquo; पुराना टिप्पणिया"
+
+#: comments.php:33 comments.php:49
+msgid "Comment navigation"
+msgstr "टिप्पणी नेविगेशन"
+
+#. translators: %1$s: smiley
+#: 404.php:46
+msgid "Try looking in the monthly archives. %1$s"
+msgstr "मासिक अभिलेखागार में देखने की कोशिश कीजिए।  %1$s"
+
+#: 404.php:27
+msgid "Most Used Categories"
+msgstr "अधिकतर उपयोग किये गये श्रेणियाँ"
+
+#: 404.php:19
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr "ऐसा लगता है कि कुछ भी नहीं इस स्थान पर पाया गया। शायद नीचे दिए गए लिंक्स या खोज से एक कोशिश करें?"
+
+#: 404.php:15
+msgid "Oops! That page can&rsquo;t be found."
+msgstr "उफ़! वह पृष्ठ नहीं पाया जा सकता है।"
