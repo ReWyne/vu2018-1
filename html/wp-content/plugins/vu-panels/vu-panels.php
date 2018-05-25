@@ -9,6 +9,8 @@
  * License: GPL2 or later
  */
 
+defined( 'ABSPATH' ) or die( 'Error: Hacking is illegal and does far more harm than good. Why are you doing this?' );
+
 define( 'TESTING', true );
 
 global $vu_panels_vars;
@@ -20,29 +22,51 @@ abstract class UserType {
 //    const Parents = 'Parents';
 }
 
-//Collections type post -- list of links
 
-// function create_posttype() {
-//     register_post_type( 'collections',
-//     // CPT Options
-//         array(
-//             'labels' => array(
-//                 'name' => __( 'Collections' ),
-//                 'singular_name' => __( 'Collection' )
-//             ),
-//         'public' => validate_user(/*$user*/true, UserType::Professors), //#TODO
-//             'has_archive' => true,
-//             'rewrite' => array('slug' => 'movies'),
-//         )
-//     );
-// }
+function vu_create_link_posttype() {
+
+    //Link type post -- Limited visibility item redirecting to an external page
+
+      // Set the labels, this variable is used in the $args array
+  $labels = array(
+    'name'               => _x( 'Links', 'link plural' ),
+    'singular_name'      => _x( 'Link', 'link singular' ),
+    //'add_new'            => __( 'Add New Link' ),
+    'add_new_item'       => __( 'Add New Link' ),
+    'edit_item'          => __( 'Edit Link' ),
+    'new_item'           => __( 'New Link' ),
+    'all_items'          => __( 'All Links' ),
+    'view_item'          => __( 'View Link' ),
+    'search_items'       => __( 'Search Links' ),
+    'featured_image'     => 'Icon',
+    'set_featured_image' => 'Add Icon',
+  );
+ 
+  // The arguments for our post type, to be entered as parameter 2 of register_post_type()
+  $args = array(
+    'labels'            => $labels,
+    'description'       => 'Holds our movies and movie specific data',
+    'public'            => true,
+    //'menu_position'     => 5,
+    'show_in_menu'      => 'post.php',
+    'supports'          => array( 'title', 'editor', 'thumbnail', 'custom-fields'), //#TODO custom field: tags array (if categories don't work fine)
+    'has_archive'       => false,                                                   //#TODO add 'url' custom field
+    'show_in_admin_bar' => false,
+    'show_in_nav_menus' => false,
+    'query_var'         => 'link',
+  );
+
+  register_post_type( 'link', $args);
+}
 
 // Hooking up our function to theme setup
-add_action( 'init', 'create_posttype' );
+add_action( 'init', 'vu_create_link_posttype' );
+
+
 
 //#temp
 add_action( 'wp_head', 'test_function' );
-function test_function() {
+function vu_test_function() {
   echo 'vu-panels active';
 }
 
