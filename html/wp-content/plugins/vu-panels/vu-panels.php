@@ -99,6 +99,21 @@ class LinkPostType {
 
 $link_post_type = new LinkPostType();
 
+
+
+
+//utility functions
+function vu_log($message) {
+  if ( WP_DEBUG === true ) {
+      if ( is_array($message) || is_object($message) ) {
+          error_log( print_r($message, true) );
+      } else {
+          error_log( $message );
+      }
+  }
+}
+
+
 // add_action( 'init', 'vu_create_link_posttype' );
 // function vu_create_link_posttype() {
 
