@@ -15,14 +15,14 @@ define( 'TESTING', true );
 
 global $vu_panels_vars;
 
-abstract class UserType {
-    const Admins = 'Admins';
-    const Professors = 'Faculty';
-    const Students = 'Students';
+abstract class vu_UserType {
+  const Admins = 'Admins';
+  const Professors = 'Faculty';
+  const Students = 'Students';
 //    const Parents = 'Parents';
 }
 
-class LinkPostType {
+class vu_LinkPostType {
 
   function __construct() {
       add_action( 'init', array($this, 'register_link_post_type'));
@@ -32,29 +32,30 @@ class LinkPostType {
   }
 
   function register_link_post_type() {
-      register_post_type( 'Links',
-          array(
-              'labels' => array(
-                'name'               => _x( 'Links', 'link plural' ),
-                'singular_name'      => _x( 'Link', 'link singular' ),
-                //'add_new'            => __( 'Add New Link' ),
-                'add_new_item'       => __( 'Add New Link' ),
-                'edit_item'          => __( 'Edit Link' ),
-                'new_item'           => __( 'New Link' ),
-                'all_items'          => __( 'All Links' ),
-                'view_item'          => __( 'View Link' ),
-                'search_items'       => __( 'Search Links' ),
-              ),
-              'public' => true,
-              'has_archive' => true,
-              'show_ui' => true,
-              'show_in_admin_bar' => true,
-              'menu_position' => 5,
-              'register_meta_box_cb' => array($this,'add_link_custom_fields'),
-              'supports' => array( 'title', 'editor', 'thumbnail' ),
-              'taxonomies' => array('post_tag')
-          )
-      );
+    vu_log("register_link_post_type");
+    register_post_type( 'link',
+      array(
+        'labels' => array(
+          'name'               => _x( 'Links', 'link plural' ),
+          'singular_name'      => _x( 'Link', 'link singular' ),
+          //'add_new'            => __( 'Add New Link' ),
+          'add_new_item'       => __( 'Add New Link' ),
+          'edit_item'          => __( 'Edit Link' ),
+          'new_item'           => __( 'New Link' ),
+          'all_items'          => __( 'All Links' ),
+          'view_item'          => __( 'View Link' ),
+          'search_items'       => __( 'Search Links' ),
+        ),
+        'public' => true,
+        'has_archive' => false,
+        'show_ui' => true,
+        'show_in_admin_bar' => true, //defaults to show_ui
+        'menu_position' => 5,
+        'register_meta_box_cb' => array($this,'add_link_custom_fields'),
+        'supports' => array( 'title', 'editor', 'thumbnail' ),
+        'taxonomies' => array('post_tag')
+      )
+    );
   }
 
 
@@ -80,16 +81,16 @@ class LinkPostType {
     vu_log("save_link_url");
       // Check if nonce is set
       if ( ! isset( $_POST['link_url_nonce'] ) ) {
-          return $post_id;
+        return $post_id;
       }
 
       if ( ! wp_verify_nonce( $_POST['link_url_nonce'], 'link_save' ) ) {
-          return $post_id;
+        return $post_id;
       }
 
       // Check that the logged in user has permission to edit this post
       if ( ! current_user_can( 'edit_post' ) ) {
-          return $post_id;
+        return $post_id;
       }
 
       $link_url_value = sanitize_text_field( $_POST['link_url_value'] );
