@@ -1,4 +1,4 @@
-/*! elementor - v2.0.12 - 15-05-2018 */
+/*! elementor - v2.0.14 - 29-05-2018 */
 .elementor-screen-only,
 .screen-reader-text,
 .screen-reader-text span,
@@ -962,9 +962,9 @@ body.elementor-editor-inactive #elementor-editor {
     #elementor-new-template__form .elementor-form-field select:focus {
       border-color: #a4afb7; }
   #elementor-new-template__form .elementor-form-field__select {
+    appearance: none;
     -webkit-appearance: none;
-       -moz-appearance: none;
-            appearance: none;
+    -moz-appearance: none;
     cursor: pointer; }
     #elementor-new-template__form .elementor-form-field__select__wrapper {
       position: relative; }

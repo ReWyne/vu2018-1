@@ -4,7 +4,7 @@ Donate link: http://profiles.wordpress.org/emrevona/
 Tags: cache, performance, wp-cache, total cache, super cache
 Requires at least: 3.3
 Tested up to: 4.9
-Stable tag: 0.8.8.0
+Stable tag: 0.8.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,12 @@ Wpfc does not support Wordpress Multisite yet.
 18. Database Cleanup
 
 == Changelog ==
+
+= 0.8.8.1 =
+* to update russian translation
+* to set browser caching for Cloudflare
+* not to load the css and js sources of clear cache button when toolar is not visible
+* to fix SyntaxError: Unexpected token M in JSON at position 0 error
 
 = 0.8.8.0 =
 * to rename the text on admin bar

@@ -68,6 +68,38 @@
 			}
 		}
 
+
+		public static function cloudflare_set_browser_caching($email = false, $key = false, $zoneid = false){
+			if($email && $key && $zoneid){
+				$header = array("method" => "PATCH",
+								'headers' => array(
+												"X-Auth-Email" => $email,
+												"X-Auth-Key" => $key,
+												"Content-Type" => "application/json"
+												),
+								'body' => '{"value":2073600}'
+								);
+
+				$response = wp_remote_request('https://api.cloudflare.com/client/v4/zones/'.$zoneid.'/settings/browser_cache_ttl', $header);
+
+				if(!$response || is_wp_error($response)){
+					return array("success" => false, "error_message" => "Unable to disable rocket loader option");
+				}else{
+					$body = json_decode(wp_remote_retrieve_body($response));
+
+					if($body->success){
+						return array("success" => true);
+					}else if(isset($body->errors) && isset($body->errors[0])){
+						return array("success" => false, "error_message" => $body->errors[0]->message);
+					}else{
+						return array("success" => false, "error_message" => "Unknown error: 101");
+					}
+				}
+
+				return array("success" => false, "error_message" => "Unknown error");
+			}
+		}
+
 		public static function cloudflare_disable_minify($email = false, $key = false, $zoneid = false){
 			if($email && $key && $zoneid){
 				$header = array("method" => "PATCH",
@@ -149,10 +181,15 @@
 					$minify = CdnWPFC::cloudflare_disable_minify($email, $key, $zone["zoneid"]);
 					$rocket_loader = CdnWPFC::cloudflare_disable_rocket_loader($email, $key, $zone["zoneid"]);
 					$purge_cache = CdnWPFC::cloudflare_clear_cache($email, $key, $zone["zoneid"]);
+					$browser_caching = CdnWPFC::cloudflare_set_browser_caching($email, $key, $zone["zoneid"]);
 
 					if($minify["success"]){
 						if($rocket_loader["success"]){
-							$res = array("success" => true);
+							if($browser_caching["success"]){
+								$res = array("success" => true);
+							}else{
+								$res = array("success" => false, "error_message" => $browser_caching["error_message"]);
+							}
 						}else{
 							$res = array("success" => false, "error_message" => $rocket_loader["error_message"]);
 						}

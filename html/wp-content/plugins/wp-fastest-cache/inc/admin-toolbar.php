@@ -8,10 +8,12 @@
 				add_action('admin_enqueue_scripts', array($this, 'load_toolbar_js'));
 				add_action('admin_enqueue_scripts', array($this, 'load_toolbar_css'));
 			}else{
-				add_action('wp_before_admin_bar_render', array($this, "wpfc_tweaked_toolbar_on_frontpage"));
-				add_action('wp_enqueue_scripts', array($this, 'load_toolbar_js'));
-				add_action('wp_enqueue_scripts', array($this, 'load_toolbar_css'));
-				add_action('wp_footer', array($this, 'print_my_inline_script'));
+				if(is_admin_bar_showing()){
+					add_action('wp_before_admin_bar_render', array($this, "wpfc_tweaked_toolbar_on_frontpage"));
+					add_action('wp_enqueue_scripts', array($this, 'load_toolbar_js'));
+					add_action('wp_enqueue_scripts', array($this, 'load_toolbar_css'));
+					add_action('wp_footer', array($this, 'print_my_inline_script'));
+				}
 			}
 		}
 

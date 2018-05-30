@@ -1,4 +1,4 @@
-/*! elementor - v2.0.12 - 15-05-2018 */
+/*! elementor - v2.0.14 - 29-05-2018 */
 @charset "UTF-8";
 .elementor-panel-box {
   margin-top: 10px;
@@ -1383,8 +1383,6 @@
                 box-shadow: none;
         color: #fff; }
       .pen-input-wrapper .pen-url-input::-webkit-input-placeholder {
-        color: #d5dadf; }
-      .pen-input-wrapper .pen-url-input::-moz-placeholder {
         color: #d5dadf; }
       .pen-input-wrapper .pen-url-input:-ms-input-placeholder {
         color: #d5dadf; }
