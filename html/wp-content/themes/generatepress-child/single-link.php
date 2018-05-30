@@ -9,7 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-vu_log("single-link.php  get_header()");
+if(function_exists(vu_log)){vu_log("single-link.php  get_header()");}
+else{$message = "ERROR: vu_log function DNE";
+	echo "<script type='text/javascript'>alert('$message');</script>";}
 
 get_header(); ?>
 

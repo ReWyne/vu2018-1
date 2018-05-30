@@ -27,7 +27,6 @@ class vu_LinkPostType {
   function __construct() {
       add_action( 'init', array($this, 'register_link_post_type'));
       add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
-
       add_action( 'save_post', array($this,'save_link_url'));
   }
 
@@ -53,7 +52,8 @@ class vu_LinkPostType {
         'menu_position' => 5,
         'register_meta_box_cb' => array($this,'add_link_custom_fields'),
         'supports' => array( 'title', 'editor', 'thumbnail' ),
-        'taxonomies' => array('post_tag')
+        'taxonomies' => array('post_tag'),
+        //'menu_icon' => 'dashicons-editor-unlink',
       )
     );
   }
