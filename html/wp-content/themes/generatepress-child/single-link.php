@@ -26,6 +26,17 @@ get_header(); ?>
 			do_action( 'generate_before_main_content' );
 
 			while ( have_posts() ) : the_post();
+
+				$link = get_post_meta(get_the_ID(), 'link_url_value', true); ?>
+
+				<h2><?php the_title(); ?></h2>
+				
+				<!-- <a class='content' href="<?php $value ?>" > <?php the_title(); ?> </a> -->
+				<div class='content'>
+					<?php the_title("<a href='$link'>","</a>");
+					the_content() ?>
+				</div>
+				<?php
 				echo "TEST";
 				vu_log("single-link.php the_post()");
 				get_template_part( 'content', 'single' );
