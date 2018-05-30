@@ -100,7 +100,7 @@ class vu_LinkPostType {
 
 }
 
-$link_post_type = new LinkPostType();
+$link_post_type = new vu_LinkPostType();
 
 
 
