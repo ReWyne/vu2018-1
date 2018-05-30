@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+vu_log("single-link.php  get_header()");
+
 get_header(); ?>
 
 	<div id="primary" <?php generate_content_class();?>>
