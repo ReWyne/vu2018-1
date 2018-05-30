@@ -22,7 +22,8 @@ get_header(); ?>
 			do_action( 'generate_before_main_content' );
 
 			while ( have_posts() ) : the_post();
-
+			global $post;
+				vu_log("generatepress single.php printing $post->post_name");
 				get_template_part( 'content', 'single' );
 
 				// If comments are open or we have at least one comment, load up the comment template.
