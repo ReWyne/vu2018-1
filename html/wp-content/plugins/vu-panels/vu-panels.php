@@ -45,7 +45,7 @@ class LinkPostType {
                 'view_item'          => __( 'View Link' ),
                 'search_items'       => __( 'Search Links' ),
               ),
-              'public' => false,
+              'public' => true,
               'has_archive' => true,
               'show_ui' => true,
               'show_in_admin_bar' => true,
