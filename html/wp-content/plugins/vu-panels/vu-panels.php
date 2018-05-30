@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) or die( 'Error: Hacking is illegal and does far more harm t
 
 define( 'TESTING', true );
 
-global $vu_panels_vars;
+global $panels_vars_vu;
 
 abstract class UserType {
     const Admins = 'Admins';
@@ -32,6 +32,7 @@ class LinkPostType {
   }
 
   function register_link_post_type() {
+      log_vu("registering link post type");
       register_post_type( 'Links',
           array(
               'labels' => array(
@@ -65,6 +66,7 @@ class LinkPostType {
 
   //Display the contents of the custom meta box
   function links_url_custom_field_display(){
+      log_vu("Displaying link custom field");
       wp_nonce_field( 'link_save', 'link_url_nonce' );
       $value = get_post_meta(get_the_ID(), 'link_url_value', true);
       echo '<label for="link_url">';
@@ -103,7 +105,7 @@ $link_post_type = new LinkPostType();
 
 
 //utility functions
-function vu_log($message) {
+function log_vu($message) {
   if ( WP_DEBUG === true ) {
       if ( is_array($message) || is_object($message) ) {
           error_log( print_r($message, true) );
@@ -114,8 +116,8 @@ function vu_log($message) {
 }
 
 
-// add_action( 'init', 'vu_create_link_posttype' );
-// function vu_create_link_posttype() {
+// add_action( 'init', 'create_link_posttype_vu' );
+// function create_link_posttype_vu() {
 
 //     //Link type post -- Limited visibility item redirecting to an external page
 
@@ -155,8 +157,8 @@ function vu_log($message) {
 
 
 //#temp
-add_action( 'wp_head', 'vu_test_function' );
-function vu_test_function() {
+add_action( 'wp_head', 'test_function_vu' );
+function test_function_vu() {
   echo 'vu-panels active';
 }
 
