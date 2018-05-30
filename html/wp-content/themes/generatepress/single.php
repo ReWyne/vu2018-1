@@ -22,7 +22,7 @@ get_header(); ?>
 			do_action( 'generate_before_main_content' );
 
 			while ( have_posts() ) : the_post();
-			global $post;
+				global $post; //#TEMP
 				vu_log("generatepress single.php printing $post->post_name");
 				get_template_part( 'content', 'single' );
 

@@ -27,19 +27,18 @@ get_header(); ?>
 
 			while ( have_posts() ) : the_post();
 
-				$link = get_post_meta(get_the_ID(), 'link_url_value', true); ?>
+				$link = get_post_meta(get_the_ID(), 'link_url_value', true); 
+				vu_log("single-link.php the_post()");
+				?>
 
 				<h2><?php the_title(); ?></h2>
 				
-				<!-- <a class='content' href="<?php $link ?>" > <?php the_title(); ?> </a> -->
 				<div class='content'>
 					<?php the_title("<a href='$link'>","</a>");
 					the_content() ?>
 				</div>
-				<?php
-				echo "TEST";
-				vu_log("single-link.php the_post()");
-				get_template_part( 'content', 'single' );
+				
+				<?php get_template_part( 'content', 'single' );
 
 				// If comments are open or we have at least one comment, load up the comment template.
 				if ( comments_open() || '0' != get_comments_number() ) :
