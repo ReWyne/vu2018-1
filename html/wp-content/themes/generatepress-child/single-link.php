@@ -31,7 +31,7 @@ get_header(); ?>
 
 				<h2><?php the_title(); ?></h2>
 				
-				<!-- <a class='content' href="<?php $value ?>" > <?php the_title(); ?> </a> -->
+				<!-- <a class='content' href="<?php $link ?>" > <?php the_title(); ?> </a> -->
 				<div class='content'>
 					<?php the_title("<a href='$link'>","</a>");
 					the_content() ?>
