@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) or die( 'Error: Hacking is illegal and does far more harm t
 
 define( 'TESTING', true );
 
-global $panels_vars_vu;
+global $vu_panels_vars;
 
 abstract class UserType {
     const Admins = 'Admins';
@@ -32,7 +32,6 @@ class LinkPostType {
   }
 
   function register_link_post_type() {
-      log_vu("registering link post type");
       register_post_type( 'Links',
           array(
               'labels' => array(
@@ -61,12 +60,13 @@ class LinkPostType {
 
   //Callback from register_post_type
   function add_link_custom_fields() {
-      add_meta_box( 'meta_id', 'link_url_value', array($this, 'links_url_custom_field_display'), 'links', 'normal', 'high' );
+    vu_log("add_link_custom_fields");
+    add_meta_box( 'meta_id', 'link_url_value', array($this, 'links_url_custom_field_display'), 'links', 'normal', 'high' );
   }
 
   //Display the contents of the custom meta box
   function links_url_custom_field_display(){
-      log_vu("Displaying link custom field");
+    vu_log("links_url_custom_field_display");
       wp_nonce_field( 'link_save', 'link_url_nonce' );
       $value = get_post_meta(get_the_ID(), 'link_url_value', true);
       echo '<label for="link_url">';
@@ -77,7 +77,7 @@ class LinkPostType {
 
   //Save the meta value entered
   function save_link_url( $post_id ) {
-
+    vu_log("save_link_url");
       // Check if nonce is set
       if ( ! isset( $_POST['link_url_nonce'] ) ) {
           return $post_id;
@@ -105,7 +105,7 @@ $link_post_type = new LinkPostType();
 
 
 //utility functions
-function log_vu($message) {
+function vu_log($message) {
   if ( WP_DEBUG === true ) {
       if ( is_array($message) || is_object($message) ) {
           error_log( print_r($message, true) );
@@ -116,8 +116,8 @@ function log_vu($message) {
 }
 
 
-// add_action( 'init', 'create_link_posttype_vu' );
-// function create_link_posttype_vu() {
+// add_action( 'init', 'vu_create_link_posttype' );
+// function vu_create_link_posttype() {
 
 //     //Link type post -- Limited visibility item redirecting to an external page
 
@@ -157,8 +157,8 @@ function log_vu($message) {
 
 
 //#temp
-add_action( 'wp_head', 'test_function_vu' );
-function test_function_vu() {
+add_action( 'wp_head', 'vu_test_function' );
+function vu_test_function() {
   echo 'vu-panels active';
 }
 
