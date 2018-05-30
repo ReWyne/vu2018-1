@@ -62,7 +62,7 @@ class vu_LinkPostType {
   //Callback from register_post_type
   function add_link_custom_fields() {
     vu_log("add_link_custom_fields");
-    add_meta_box( 'meta_id', 'link_url_value', array($this, 'links_url_custom_field_display'), 'links', 'normal', 'high' );
+    add_meta_box( 'meta_id', 'link_url_value', array($this, 'links_url_custom_field_display'), 'link', 'normal', 'high' );
   }
 
   //Display the contents of the custom meta box
