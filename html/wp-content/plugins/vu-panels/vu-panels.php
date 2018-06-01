@@ -203,14 +203,4 @@ add_shortcode( 'recentposts', 'vu_display_link_posts' );
 
 //   register_post_type( 'link', $args);
 // }
-
-
-
-
-//#temp
-add_action( 'wp_head', 'vu_test_function' );
-function vu_test_function() {
-  echo 'vu-panels active';
-}
-
 ?>
