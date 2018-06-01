@@ -102,7 +102,19 @@ class vu_LinkPostType {
 
 $link_post_type = new vu_LinkPostType();
 
-// add links custom post type to front page
+// add links custom post type to the front page main loop via hooks
+
+add_action( 'pre_get_posts', 'vu_generate_link_posts' );
+
+function vu_generate_link_posts( $query ) {
+  vu_log('vu_generate_link_posts');
+    if( $query->is_main_query() && $query->is_home() ) {
+        $query->set( 'post_type', array( 'post', 'link') );
+    }
+}
+
+
+// add links custom post type to front page shortcode function
 
 function vu_display_link_posts( $atts = null, $content = null, $tag = null ) {
 vu_log('vu_display_link_posts');
