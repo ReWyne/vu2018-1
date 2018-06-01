@@ -24,7 +24,7 @@ get_header(); ?>
 			while ( have_posts() ) : the_post();
 				global $post; //#TEMP
 				vu_log("generatepress single.php printing: $post->post_name");
-				PCdebug("generatepress single.php printing: $post->post_name\n".$post);
+				PC::debug("generatepress single.php printing: $post->post_name\n".$post);
 				get_template_part( 'content', 'single' );
 
 				// If comments are open or we have at least one comment, load up the comment template.
