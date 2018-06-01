@@ -105,7 +105,7 @@ $link_post_type = new vu_LinkPostType();
 // add links custom post type to front page
 
 function vu_display_link_posts( $atts = null, $content = null, $tag = null ) {
-
+vu_log('vu_display_link_posts');
   $out = '';
 
   $args = array( 
