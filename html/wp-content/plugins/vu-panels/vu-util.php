@@ -1,5 +1,8 @@
 
 <?php
+
+defined( 'ABSPATH' ) or die();
+
 //utility functions
 function vu_log($message) {
   if ( WP_DEBUG === true ) {

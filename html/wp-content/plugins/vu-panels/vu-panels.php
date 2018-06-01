@@ -108,6 +108,7 @@ $link_post_type = new vu_LinkPostType();
 add_action( 'pre_get_posts', 'vu_generate_link_posts' );
 
 function vu_generate_link_posts( $query ) {
+  error_log('vu_generate_link_posts');
   vu_log('vu_generate_link_posts');
   if(function_exists('vu_log')){vu_log("vu_generate_link_posts");}
   else{$message = "ERROR: vu_log function DNE";
