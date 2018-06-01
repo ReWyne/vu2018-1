@@ -102,6 +102,47 @@ class vu_LinkPostType {
 
 $link_post_type = new vu_LinkPostType();
 
+// add links custom post type to front page
+
+function vu_display_link_posts( $atts = null, $content = null, $tag = null ) {
+
+  $out = '';
+
+  $args = array( 
+      'numberposts' => '6', 
+      'post_status' => 'publish', 
+      'post_type' => 'link' ,
+  );
+
+  $recent = wp_get_recent_posts( $args );
+
+  if ( $recent ) {
+
+      $out .= '<section class="overview">';
+
+      $out .= '<h1>Recent Projects</h1>';
+
+      $out .= '<div class="overview">';
+
+      foreach ( $recent as $item ) {
+
+          $out .= '<a href="' . get_permalink( $item['ID'] ) . '">';
+          $out .= get_the_post_thumbnail( $item['ID'] ); 
+          $out .= '</a>';
+      }
+
+      $out .= '</div></section>';
+  }
+
+  if ( $tag ) {
+      return $out;
+  } else {
+      echo $out;
+  }
+
+}
+
+add_shortcode( 'recentposts', 'vu_display_link_posts' );
 
 
 
