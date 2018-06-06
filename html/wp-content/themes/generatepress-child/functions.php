@@ -33,3 +33,19 @@ function orbisius_ct_generatepress_child_child_theme_enqueue_styles() {
 }
 
 add_action( 'wp_enqueue_scripts', 'orbisius_ct_generatepress_child_child_theme_enqueue_styles' );
+
+add_filter( 'generate_copyright','vu_custom_copyright' );
+function vu_custom_copyright() {
+    ?>
+    <address>
+                      <strong>© Valparaiso University 2018</strong>, 
+                      Valparaiso, 
+                      IN 46383-6493, 
+                      219.464.5000
+                      | <a href="http://valpo.edu/copyright/">Privacy Policy</a> 
+                      | <a href="http://www.valpo.edu/about/contact-us/website-feedback/">
+                         <i class="fa fa-comment"></i> Website Feedback
+                        </a>
+                    </address>
+    <?php
+}
