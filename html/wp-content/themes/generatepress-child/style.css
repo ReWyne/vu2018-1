@@ -34,7 +34,7 @@ Version: 1.0.0
 }
 /*gradient .site-header background*/
 .site-header{
-background: linear-gradient(to bottom , rgb(63, 52, 21), #381E0E);
+background: linear-gradient(to bottom , #A58329, #381E0E);
 }
 
 /*make posts prettier*/
