@@ -49,21 +49,50 @@ function vu_custom_copyright() {
     <?php
 }
 
-/**
- * Enqueue Font Awesome.
- */
-add_action( 'wp_enqueue_scripts', 'vu_load_font_awesome' );
-function vu_load_font_awesome() {
-    wp_enqueue_script( 'font-awesome', '//use.fontawesome.com/releases/v5.0.13/js/all.js', array(), null );
-}
+// font awesome provided by https://github.com/MickeyKay/better-font-awesome-library
 
-/**
- * Defer Font Awesome.
- */
-add_filter( 'script_loader_tag', 'vu_defer_font_awesome', 10, 2 );
-function vu_defer_font_awesome( $tag, $handle ) {
-    if ( 'font-awesome' === $handle ) {
-        $tag = str_replace( ' src', ' defer src', $tag );
-    }
-    return $tag;
-}
+ /**
+  * Initialize the Better Font Awesome Library.
+  *
+  * (see usage notes below on proper hook priority)
+  */
+add_action( 'init', 'my_prefix_load_bfa' );
+ function my_prefix_load_bfa() {
+
+ 	// Include the main library file. Make sure to modify the path to match your directory structure.
+ 	require_once ( dirname( __FILE__ ) . '/better-font-awesome-library/better-font-awesome-library.php' );
+
+ 	// Set the library initialization args (defaults shown).
+ 	$args = array(
+ 			'version'             => 'latest',
+ 			'minified'            => true,
+ 			'remove_existing_fa'  => false,
+ 			'load_styles'         => true,
+ 			'load_admin_styles'   => true,
+ 			'load_shortcode'      => true,
+ 			'load_tinymce_plugin' => true,
+ 	);
+
+ 	// Initialize the Better Font Awesome Library.
+ 	Better_Font_Awesome_Library::get_instance( $args );
+ }
+
+
+// /**
+//  * Enqueue Font Awesome.
+//  */
+// add_action( 'wp_enqueue_scripts', 'vu_load_font_awesome' );
+// function vu_load_font_awesome() {
+//     wp_enqueue_script( 'font-awesome', '//use.fontawesome.com/releases/v5.0.13/js/all.js', array(), null );
+// }
+
+// /**
+//  * Defer Font Awesome.
+//  */
+// add_filter( 'script_loader_tag', 'vu_defer_font_awesome', 10, 2 );
+// function vu_defer_font_awesome( $tag, $handle ) {
+//     if ( 'font-awesome' === $handle ) {
+//         $tag = str_replace( ' src', ' defer src', $tag );
+//     }
+//     return $tag;
+// }
