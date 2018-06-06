@@ -74,17 +74,24 @@ overflow: hidden;
 */
 }
 
+
+
 /*give links a hover animation*/
 .type-link .inside-article .entry-content{
 	color:#FFFFFF;
+	transition: .3s;
 }
 
 .type-link .inside-article:hover .entry-content{
 	color:#666666;
-	transition: .3s;
+    transition:  .3s;
 }
 
 /*italics looks bad w/ ©*/
 .site-info .inside-site-info .copyright-bar address {
 	font-style:normal;
+}
+
+a{
+	color:black;
 }
