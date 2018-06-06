@@ -34,7 +34,7 @@ Version: 1.0.0
 }
 /*gradient .site-header background*/
 .site-header{
-background: linear-gradient(to bottom , #A58329, #381E0E);
+background: linear-gradient(to bottom , rgb(63, 52, 21), #381E0E);
 }
 
 /*make posts prettier*/
@@ -50,7 +50,7 @@ article .inside-article {
 
 /*make post subtext grey*/
 article .inside-article .entry-content {
-	color:#666666;
+	color:#666;
 	font-size: 15px;
 }
 
@@ -78,12 +78,12 @@ overflow: hidden;
 
 /*give links a hover animation*/
 .type-link .inside-article .entry-content{
-	color:#FFFFFF;
+	color:#CCC;
 	transition: .3s;
 }
 
 .type-link .inside-article:hover .entry-content{
-	color:#666666;
+	color:#666;
     transition:  .3s;
 }
 
