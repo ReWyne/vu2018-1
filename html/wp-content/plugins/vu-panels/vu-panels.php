@@ -220,14 +220,15 @@ add_filter( 'body_class', 'category_id_class' );
 // /* Display the post meta box. */
 // function smashing_flautist_access_meta_box( $object, $box ) { ?>
 
-//    <?php wp_nonce_field( basename( __FILE__ ), 'smashing_flautist_access_nonce' ); ?>
+    <!-- <?php wp_nonce_field( basename( __FILE__ ), 'smashing_flautist_access_nonce' ); ?> -->
 
-//    <p>
-//       <label for="smashing-flautist-access"><?php _e( "Enter the username of the subscriber that you want to view this content.", 'smashing_flautist' ); ?></label>
-//       <br />
-//       <input class="widefat" type="text" name="smashing-flautist-access" id="smashing-flautist-access" value="<?php echo esc_attr( get_post_meta( $object->ID, 'smashing_flautist_access', true ) ); ?>" size="30" />
-//    </p>
-// <?php }
+    <!-- <p> -->
+       <!-- <label for="smashing-flautist-access"><?php _e( "Enter the username of the subscriber that you want to view this content.", 'smashing_flautist' ); ?></label> -->
+       <!-- <br /> -->
+       <!-- <input class="widefat" type="text" name="smashing-flautist-access" id="smashing-flautist-access" value="<?php echo esc_attr( get_post_meta( $object->ID, 'smashing_flautist_access', true ) ); ?>" size="30" /> -->
+    <!-- </p> -->
+ <?php 
+// }
 
 
 
