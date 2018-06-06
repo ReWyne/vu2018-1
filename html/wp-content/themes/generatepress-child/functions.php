@@ -19,6 +19,9 @@ function orbisius_ct_generatepress_child_child_theme_enqueue_styles() {
     $parent_style = 'orbisius_ct_generatepress_child_parent_style';
     $parent_base_dir = 'generatepress';
 
+    //boostrap style
+    wp_enqueue_style( 'bootstrap_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css' );
+
     wp_enqueue_style( $parent_style,
         get_template_directory_uri() . '/style.css',
         array(),
@@ -30,6 +33,12 @@ function orbisius_ct_generatepress_child_child_theme_enqueue_styles() {
         array( $parent_style ),
         wp_get_theme()->get('Version')
     );
+
+    //enqueue bootstrap scripts
+    global $wp_scripts;
+
+	wp_enqueue_script( 'bootstrap_js', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js');
+	wp_enqueue_script( 'vu_custom_js', get_template_directory_uri() . '/js/scripts.js');
 }
 
 add_action( 'wp_enqueue_scripts', 'orbisius_ct_generatepress_child_child_theme_enqueue_styles' );
@@ -56,8 +65,8 @@ function vu_custom_copyright() {
   *
   * (see usage notes below on proper hook priority)
   */
-add_action( 'init', 'my_prefix_load_bfa' );
- function my_prefix_load_bfa() {
+add_action( 'init', 'vu_load_bfa' );
+ function vu_load_bfa() {
 
  	// Include the main library file. Make sure to modify the path to match your directory structure.
  	require_once ( dirname( __FILE__ ) . '/better-font-awesome-library/better-font-awesome-library.php' );
