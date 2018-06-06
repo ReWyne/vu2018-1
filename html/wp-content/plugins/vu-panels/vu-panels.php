@@ -188,47 +188,48 @@ add_filter( 'body_class', 'category_id_class' );
 
 
 
-// //handle custom meta boxes for setting people as admins
-// //#TODO, currently copy-paste from https://www.smashingmagazine.com/2012/01/limiting-visibility-posts-username/
-// /* Fire our meta box setup function on the post editor screen. */
-// add_action( 'load-post.php', 'smashing_post_meta_boxes_setup' );
-// add_action( 'load-post-new.php', 'smashing_post_meta_boxes_setup' );
+//handle custom meta boxes for setting people as admins
+//#TODO, currently copy-paste from https://www.smashingmagazine.com/2012/01/limiting-visibility-posts-username/
+/* Fire our meta box setup function on the post editor screen. */
+<<<'EOT'
+add_action( 'load-post.php', 'smashing_post_meta_boxes_setup' );
+add_action( 'load-post-new.php', 'smashing_post_meta_boxes_setup' );
 
-// /* Meta box setup function. */
-// function smashing_post_meta_boxes_setup() {
+/* Meta box setup function. */
+function smashing_post_meta_boxes_setup() {
 
-//    /* Add meta boxes on the 'add_meta_boxes' hook. */
-//    add_action( 'add_meta_boxes', 'smashing_add_post_meta_boxes' );
+   /* Add meta boxes on the 'add_meta_boxes' hook. */
+   add_action( 'add_meta_boxes', 'smashing_add_post_meta_boxes' );
 
-//    /* Save post meta on the 'save_post' hook. */
-//    add_action( 'save_post', 'smashing_flautist_access_save_meta', 10, 2 );
-// }
+   /* Save post meta on the 'save_post' hook. */
+   add_action( 'save_post', 'smashing_flautist_access_save_meta', 10, 2 );
+}
 
-// /* Create one or more meta boxes to be displayed on the post editor screen. */
-// function smashing_add_post_meta_boxes() {
+/* Create one or more meta boxes to be displayed on the post editor screen. */
+function smashing_add_post_meta_boxes() {
 
-//    add_meta_box(
-//       'smashing-flautist-access',         // Unique ID
-//       esc_html__( 'Post Viewing Permission', 'smashing_flautist' ),     // Title
-//       'smashing_flautist_access_meta_box',      // Callback function
-//       'post',              // Admin page (or post type)
-//       'normal',               // Context
-//       'default'               // Priority
-//    );
-// }
+   add_meta_box(
+      'smashing-flautist-access',         // Unique ID
+      esc_html__( 'Post Viewing Permission', 'smashing_flautist' ),     // Title
+      'smashing_flautist_access_meta_box',      // Callback function
+      'post',              // Admin page (or post type)
+      'normal',               // Context
+      'default'               // Priority
+   );
+}
 
-// /* Display the post meta box. */
-// function smashing_flautist_access_meta_box( $object, $box ) { ?>
+/* Display the post meta box. */
+function smashing_flautist_access_meta_box( $object, $box ) { ?>
 
-    <!-- <?php wp_nonce_field( basename( __FILE__ ), 'smashing_flautist_access_nonce' ); ?> -->
+   <?php wp_nonce_field( basename( __FILE__ ), 'smashing_flautist_access_nonce' ); ?>
 
-    <!-- <p> -->
-       <!-- <label for="smashing-flautist-access"><?php _e( "Enter the username of the subscriber that you want to view this content.", 'smashing_flautist' ); ?></label> -->
-       <!-- <br /> -->
-       <!-- <input class="widefat" type="text" name="smashing-flautist-access" id="smashing-flautist-access" value="<?php echo esc_attr( get_post_meta( $object->ID, 'smashing_flautist_access', true ) ); ?>" size="30" /> -->
-    <!-- </p> -->
- <?php 
-// }
+   <p>
+      <label for='smashing-flautist-access'><?php _e( 'Enter the username of the subscriber that you want to view this content.', 'smashing_flautist' ); ?></label>
+      <br />
+      <input class='widefat' type='text' name='smashing-flautist-access' id='smashing-flautist-access' value='<?php echo esc_attr( get_post_meta( $object->ID, 'smashing_flautist_access', true ) ); ?>' size='30' />
+   </p>
+<?php }
+EOT;
 
 
 
