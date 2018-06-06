@@ -9,4 +9,3 @@ function vu_validate_user($user) {
 
 }
 
-?>

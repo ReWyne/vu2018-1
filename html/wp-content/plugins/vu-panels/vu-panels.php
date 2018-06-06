@@ -104,7 +104,6 @@ class vu_LinkPostType {
 $link_post_type = new vu_LinkPostType();
 
 // add links custom post type to the front page main loop via hooks
-
 add_action( 'pre_get_posts', 'vu_generate_link_posts' );
 
 function vu_generate_link_posts( $query ) {
@@ -122,45 +121,116 @@ function vu_generate_link_posts( $query ) {
 
 // add links custom post type to front page shortcode function
 
-function vu_display_link_posts( $atts = null, $content = null, $tag = null ) {
-vu_log('vu_display_link_posts');
-  $out = '';
+// function vu_display_link_posts( $atts = null, $content = null, $tag = null ) {
+// vu_log('vu_display_link_posts');
+//   $out = '';
 
-  $args = array( 
-      'numberposts' => '6', 
-      'post_status' => 'publish', 
-      'post_type' => 'link' ,
-  );
+//   $args = array( 
+//       'numberposts' => '6', 
+//       'post_status' => 'publish', 
+//       'post_type' => 'link' ,
+//   );
 
-  $recent = wp_get_recent_posts( $args );
+//   $recent = wp_get_recent_posts( $args );
 
-  if ( $recent ) {
+//   if ( $recent ) {
 
-      $out .= '<section class="overview">';
+//       $out .= '<section class="overview">';
 
-      $out .= '<h1>Recent Projects</h1>';
+//       $out .= '<h1>Recent Projects</h1>';
 
-      $out .= '<div class="overview">';
+//       $out .= '<div class="overview">';
 
-      foreach ( $recent as $item ) {
+//       foreach ( $recent as $item ) {
 
-          $out .= '<a href="' . get_permalink( $item['ID'] ) . '">';
-          $out .= get_the_post_thumbnail( $item['ID'] ); 
-          $out .= '</a>';
-      }
+//           $out .= '<a href="' . get_permalink( $item['ID'] ) . '">';
+//           $out .= get_the_post_thumbnail( $item['ID'] ); 
+//           $out .= '</a>';
+//       }
 
-      $out .= '</div></section>';
+//       $out .= '</div></section>';
+//   }
+
+//   if ( $tag ) {
+//       return $out;
+//   } else {
+//       echo $out;
+//   }
+// }
+// add_shortcode( 'recentposts', 'vu_display_link_posts' );
+
+
+//add general class for all our custom post types
+function vu_mark_CPTs($classes){
+  if(!vu_is_custom_post_type($classes)){
+    return $classes;
   }
 
-  if ( $tag ) {
-      return $out;
-  } else {
-      echo $out;
-  }
+  $additional_classes = array('vu-panel');
 
+  $classes = $classes + $additional_classes;
+  return $classes;
 }
+add_filter('post_class', 'vu_mark_CPTs');
 
-add_shortcode( 'recentposts', 'vu_display_link_posts' );
+// add category nicenames in body and post class
+function category_id_class( $classes ) {
+	global $post;
+	foreach ( ( get_the_category( $post->ID ) ) as $category ) {
+		$classes[] = $category->category_nicename;
+	}
+	return $classes;
+}
+add_filter( 'post_class', 'category_id_class' );
+add_filter( 'body_class', 'category_id_class' );
+
+
+
+
+
+// //handle custom meta boxes for setting people as admins
+// //#TODO, currently copy-paste from https://www.smashingmagazine.com/2012/01/limiting-visibility-posts-username/
+// /* Fire our meta box setup function on the post editor screen. */
+// add_action( 'load-post.php', 'smashing_post_meta_boxes_setup' );
+// add_action( 'load-post-new.php', 'smashing_post_meta_boxes_setup' );
+
+// /* Meta box setup function. */
+// function smashing_post_meta_boxes_setup() {
+
+//    /* Add meta boxes on the 'add_meta_boxes' hook. */
+//    add_action( 'add_meta_boxes', 'smashing_add_post_meta_boxes' );
+
+//    /* Save post meta on the 'save_post' hook. */
+//    add_action( 'save_post', 'smashing_flautist_access_save_meta', 10, 2 );
+// }
+
+// /* Create one or more meta boxes to be displayed on the post editor screen. */
+// function smashing_add_post_meta_boxes() {
+
+//    add_meta_box(
+//       'smashing-flautist-access',         // Unique ID
+//       esc_html__( 'Post Viewing Permission', 'smashing_flautist' ),     // Title
+//       'smashing_flautist_access_meta_box',      // Callback function
+//       'post',              // Admin page (or post type)
+//       'normal',               // Context
+//       'default'               // Priority
+//    );
+// }
+
+// /* Display the post meta box. */
+// function smashing_flautist_access_meta_box( $object, $box ) { ?>
+
+//    <?php wp_nonce_field( basename( __FILE__ ), 'smashing_flautist_access_nonce' ); ?>
+
+//    <p>
+//       <label for="smashing-flautist-access"><?php _e( "Enter the username of the subscriber that you want to view this content.", 'smashing_flautist' ); ?></label>
+//       <br />
+//       <input class="widefat" type="text" name="smashing-flautist-access" id="smashing-flautist-access" value="<?php echo esc_attr( get_post_meta( $object->ID, 'smashing_flautist_access', true ) ); ?>" size="30" />
+//    </p>
+// <?php }
+
+
+
 
 
 
@@ -202,5 +272,4 @@ add_shortcode( 'recentposts', 'vu_display_link_posts' );
 //   );
 
 //   register_post_type( 'link', $args);
-// }
-?>
+// }s
