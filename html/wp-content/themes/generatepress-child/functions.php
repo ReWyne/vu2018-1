@@ -38,14 +38,32 @@ add_filter( 'generate_copyright','vu_custom_copyright' );
 function vu_custom_copyright() {
     ?>
     <address>
-                      <strong>© Valparaiso University 2018</strong>, 
-                      Valparaiso, 
-                      IN 46383-6493, 
-                      219.464.5000
-                      | <a href="http://valpo.edu/copyright/">Privacy Policy</a> 
-                      | <a href="http://www.valpo.edu/about/contact-us/website-feedback/">
-                         <i class="fa fa-comment"></i> Website Feedback
-                        </a>
-                    </address>
+        <strong>© Valparaiso University 2018</strong>, 
+        Valparaiso, 
+        IN 46383-6493, 
+        219.464.5000
+        | <a href="http://valpo.edu/copyright/">Privacy Policy</a> 
+        | <a href="http://www.valpo.edu/about/contact-us/website-feedback/">
+            <i class="fa fa-comments-o" aria-hidden="true"></i> Website Feedback</a>
+    </address>
     <?php
+}
+
+/**
+ * Enqueue Font Awesome.
+ */
+add_action( 'wp_enqueue_scripts', 'vu_load_font_awesome' );
+function vu_load_font_awesome() {
+    wp_enqueue_script( 'font-awesome', '//use.fontawesome.com/releases/v5.0.13/js/all.js', array(), null );
+}
+
+/**
+ * Defer Font Awesome.
+ */
+add_filter( 'script_loader_tag', 'vu_defer_font_awesome', 10, 2 );
+function vu_defer_font_awesome( $tag, $handle ) {
+    if ( 'font-awesome' === $handle ) {
+        $tag = str_replace( ' src', ' defer src', $tag );
+    }
+    return $tag;
 }
