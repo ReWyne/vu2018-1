@@ -21,6 +21,7 @@ function orbisius_ct_generatepress_child_child_theme_enqueue_styles() {
 
     //boostrap style
     wp_enqueue_style( 'bootstrap_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css' );
+//<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
     wp_enqueue_style( $parent_style,
         get_template_directory_uri() . '/style.css',

@@ -191,7 +191,7 @@ add_filter( 'body_class', 'category_id_class' );
 //handle custom meta boxes for setting people as admins
 //#TODO, currently copy-paste from https://www.smashingmagazine.com/2012/01/limiting-visibility-posts-username/
 /* Fire our meta box setup function on the post editor screen. */
-//<<<'EOT'
+<<<'EOT'
 add_action( 'load-post.php', 'smashing_post_meta_boxes_setup' );
 add_action( 'load-post-new.php', 'smashing_post_meta_boxes_setup' );
 
