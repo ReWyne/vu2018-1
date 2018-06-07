@@ -17,7 +17,7 @@ Version: 1.0.0
 
 .site-branding .main-title a{
 	color:#FFCC00;
-	font-weight:500;
+	font-weight:400;
 }
 
 .site-description{
@@ -38,6 +38,15 @@ Version: 1.0.0
 	background: linear-gradient(to bottom , #A58329, #381E0E);
 }
 
+/*make search less ugly*/
+.navigation-search {
+	transition: opacity 200ms ease-in-out;
+}
+
+.navigation-search input {
+	opacity: .95;
+}
+
 /*make posts not run into the edge of the screen*/
 div#primary main#main  {
 	padding-left:5px;
@@ -47,23 +56,26 @@ div#primary main#main  {
 /*make posts prettier*/
 article .inside-article {
 	padding:5px;
-	max-width:90%;
+	max-width:100%;
 	text-align:center;
 	box-shadow: 2px 2px 10px rgba(109, 70, 42, .55);
 	border-radius: 7px;
 	position:relative;
-	left:1px;
+	left:0px;
 }
 
 /*make post subtext grey*/
 article .inside-article .entry-content {
 	color:#666;
 	font-size: 15px;
+	font-weight:300;
 }
 
 /* make links smol*/
 .type-link .inside-article{
 	padding:5px;
+	padding-top:10px;
+	padding-bottom:10px;
 	max-width:300px;
 }
 

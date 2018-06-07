@@ -53,7 +53,7 @@ class vu_LinkPostType {
         'menu_position' => 5,
         'register_meta_box_cb' => array($this,'add_link_custom_fields'),
         'supports' => array( 'title', 'editor', 'thumbnail' ),
-        'taxonomies' => array('post_tag'),
+        'taxonomies' => array('post_tag', 'category'),
         //'menu_icon' => 'dashicons-editor-unlink',
       )
     );
@@ -191,7 +191,7 @@ add_filter( 'body_class', 'category_id_class' );
 //handle custom meta boxes for setting people as admins
 //#TODO, currently copy-paste from https://www.smashingmagazine.com/2012/01/limiting-visibility-posts-username/
 /* Fire our meta box setup function on the post editor screen. */
-<<<'EOT'
+//<<<'EOT'
 add_action( 'load-post.php', 'smashing_post_meta_boxes_setup' );
 add_action( 'load-post-new.php', 'smashing_post_meta_boxes_setup' );
 
@@ -229,6 +229,73 @@ function smashing_flautist_access_meta_box( $object, $box ) { ?>
       <input class='widefat' type='text' name='smashing-flautist-access' id='smashing-flautist-access' value='<?php echo esc_attr( get_post_meta( $object->ID, 'smashing_flautist_access', true ) ); ?>' size='30' />
    </p>
 <?php }
+
+
+
+
+
+
+
+
+//still need to add "adding ease to the selection" code block
+
+
+
+
+
+
+
+
+/* Save post meta on the 'save_post' hook. */
+add_action( 'save_post', 'smashing_flautist_access_save_meta', 10, 2 );
+
+/* Save the meta box's post metadata. */
+function smashing_flautist_access_save_meta( $post_id, $post ) {
+
+   /* Make all $wpdb references within this function refer to this variable */
+   global $wpdb;
+
+   /* Verify the nonce before proceeding. */
+   if ( !isset( $_POST['smashing_flautist_access_nonce'] ) || !wp_verify_nonce( $_POST['smashing_flautist_access_nonce'], basename( __FILE__ ) ) )
+      return $post_id;
+
+   /* Get the post type object. */
+   $post_type = get_post_type_object( $post->post_type );
+
+   /* Check if the current user has permission to edit the post. */
+   if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+      return $post_id;
+
+   /* Get the posted data and sanitize it for use as an HTML class. */
+   $new_meta_value = ( isset( $_POST['smashing-flautist-access'] ) ? sanitize_html_class( $_POST['smashing-flautist-access'] ) : '' );
+
+   /* Get the meta key. */
+   $meta_key = 'smashing_flautist_access';
+
+   /* Get the meta value of the custom field key. */
+   $meta_value = get_post_meta( $post_id, $meta_key, true );
+
+   /* If a new meta value was added and there was no previous value, add it. */
+   if ( $new_meta_value && '' == $meta_value )
+      {
+      add_post_meta( $post_id, $meta_key, $new_meta_value, true );
+      $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'private' WHERE ID = ".$post_id." AND post_type ='post'"));
+      }
+   /* If the new meta value does not match the old value, update it. */
+   elseif ( $new_meta_value && $new_meta_value != $meta_value )
+      {
+      update_post_meta( $post_id, $meta_key, $new_meta_value );
+      $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'private' WHERE ID = ".$post_id." AND post_type ='post'"));
+      }
+   /* If there is no new meta value but an old value exists, delete it. */
+   elseif ( '' == $new_meta_value && $meta_value )
+      {
+      delete_post_meta( $post_id, $meta_key, $meta_value );
+      $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'public' WHERE ID = ".$post_id." AND post_type ='post'"));
+      }
+}
+
+
 EOT;
 
 

@@ -1,0 +1,6 @@
+[submodule "html/wp-content/themes/understrap"]
+	path = html/wp-content/themes/understrap
+	url = https://github.com/understrap/understrap.git
+[submodule "html/wp-content/themes/understrap-child"]
+	path = html/wp-content/themes/understrap-child
+	url = https://github.com/understrap/understrap-child.git
