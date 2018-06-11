@@ -1,7 +1,7 @@
 
 <?php
 
-defined( 'ABSPATH' ) or die();
+defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 //utility functions
 
@@ -33,7 +33,7 @@ function vu_is_custom_post_type( $post = NULL )
     if ( empty ( $all_custom_post_types ) )
         return FALSE;
 
-    $custom_types      = array_keys( $all_custom_post_types );
+    $custom_types = array_keys( $all_custom_post_types );
 
     //if array was passed, check if anything in it is a custom post type
     if(is_array($post)){

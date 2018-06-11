@@ -120,17 +120,72 @@ add_action( 'widgets_init', 'vu_custom_portal_widgets_init' );
  * Enqueue scripts and styles.
  */
 function vu_custom_portal_scripts() {
+
+	//boostrap style
+	//wp_enqueue_style( 'bootstrap_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css' );
+		
 	wp_enqueue_style( 'vu_custom_portal-style', get_stylesheet_uri() );
 
-	wp_enqueue_script( 'vu_custom_portal-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
+	//enqueue bootstrap scripts
+	global $wp_scripts;
+	//wp_enqueue_script( 'bootstrap_js', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js');
 
+	wp_enqueue_script( 'vu_custom_portal-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 	wp_enqueue_script( 'vu_custom_portal-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
+
+	wp_enqueue_script( 'vu_custom_js', get_template_directory_uri() . '/js/scripts.js');
+	
+
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'vu_custom_portal_scripts' );
+
+ /**
+  * Initialize the Better Font Awesome Library.
+  *
+  * (see usage notes below on proper hook priority)
+  */
+  add_action( 'init', 'vu_load_bfa' );
+  function vu_load_bfa() {
+ 
+	  // Include the main library file. Make sure to modify the path to match your directory structure.
+	  require_once ( dirname( __FILE__ ) . '/better-font-awesome-library/better-font-awesome-library.php' );
+ 
+	  // Set the library initialization args (defaults shown).
+	  $args = array(
+			  'version'             => 'latest',
+			  'minified'            => true,
+			  'remove_existing_fa'  => false,
+			  'load_styles'         => true,
+			  'load_admin_styles'   => true,
+			  'load_shortcode'      => true,
+			  'load_tinymce_plugin' => true,
+	  );
+ 
+	  // Initialize the Better Font Awesome Library.
+	  Better_Font_Awesome_Library::get_instance( $args );
+  }
+
+/**
+ * Tweak footer message
+ */
+  add_filter( 'wp_footer','vu_custom_copyright' );
+  function vu_custom_copyright() {
+	  ?>
+	  <address>
+		  <strong>© Valparaiso University 2018</strong>, 
+		  Valparaiso, 
+		  IN 46383-6493, 
+		  219.464.5000
+		  | <a href="http://valpo.edu/copyright/">Privacy Policy</a> 
+		  | <a href="http://www.valpo.edu/about/contact-us/website-feedback/">
+			  <i class="fa fa-comments-o" aria-hidden="true"></i> Website Feedback</a>
+	  </address>
+	  <?php
+  }
 
 /**
  * Implement the Custom Header feature.
