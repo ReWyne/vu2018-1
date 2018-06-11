@@ -4,7 +4,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
- * @package _s_example_theme_example_theme
+ * @package vu_custom_portal
  */
 
 get_header();

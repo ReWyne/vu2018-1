@@ -4,7 +4,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
- * @package _s_example_theme_example_theme
+ * @package vu_custom_portal
  */
 
 ?>
@@ -14,14 +14,14 @@
 		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 	</header><!-- .entry-header -->
 
-	<?php _s_example_theme_post_thumbnail(); ?>
+	<?php vu_custom_portal_post_thumbnail(); ?>
 
 	<div class="entry-content">
 		<?php
 		the_content();
 
 		wp_link_pages( array(
-			'before' => '<div class="page-links">' . esc_html__( 'Pages:', '_s_example_theme_example_theme' ),
+			'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'vu_custom_portal' ),
 			'after'  => '</div>',
 		) );
 		?>
@@ -34,7 +34,7 @@
 				sprintf(
 					wp_kses(
 						/* translators: %s: Name of current post. Only visible to screen readers */
-						__( 'Edit <span class="screen-reader-text">%s</span>', '_s_example_theme_example_theme' ),
+						__( 'Edit <span class="screen-reader-text">%s</span>', 'vu_custom_portal' ),
 						array(
 							'span' => array(
 								'class' => array(),
