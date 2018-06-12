@@ -175,11 +175,7 @@ add_filter('post_class', 'vu_mark_CPTs');
 function category_id_class( $classes ) {
 	global $post;
 	foreach ( ( get_the_category( $post->ID ) ) as $category ) {
-    echo"category_id_class";
-    echo $classes;
-    echo $category->category_nicename;
     $classes[] = $category->category_nicename;
-    echo $classes;
 	}
 	return $classes;
 }
