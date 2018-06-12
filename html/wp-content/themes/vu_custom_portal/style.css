@@ -999,7 +999,7 @@ object {
 
 /*#AUTH Anthony*/
 html{
-	background-color:#E3DAC8;
+	background-color:black;
 	min-height:100%;
 	height:100%;
 	position:relative;
@@ -1141,11 +1141,11 @@ span.edit-link{
 	transition:  .3s;
 }
 
+/*kludge stick footer to bottom for small webpages:
+https://stackoverflow.com/questions/18739937/how-to-keep-footer-at-bottom-of-screen/18739987*/
 .site-footer {
 	position: relative;
-	margin-top: -80px;
 	/* negative value of footer height */
-	height: 80px;
 	clear: both;
 	background-color: black;
   }
@@ -1165,5 +1165,4 @@ body:before {
 	float: left;
 	width: 0;
 	margin-top: -32767px;
-	/* thank you Erik J - negate effect of float*/
-  }
+  }/*
