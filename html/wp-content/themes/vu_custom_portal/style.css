@@ -999,7 +999,10 @@ object {
 
 /*#AUTH Anthony*/
 html{
-	background-color:black;
+	background-color:#E3DAC8;
+	min-height:100%;
+	height:100%;
+	position:relative;
 }
 
 a, a:visited{
@@ -1018,11 +1021,13 @@ a:hover{
 .site-title a{
 	color:#FFCC00;
 	font-weight:500;
+	font-size:32px;
 	padding:5px;
 }
 
 .site-description{
 	color: #E3DAC8;
+	font-size:16px;
 }
 
 /* img .site-header background*/
@@ -1060,6 +1065,7 @@ main  {
 	padding-top: 15px;
 	padding-bottom: 10px;
 	background-color: #E3DAC8;
+	overflow:auto;
 }
 
 /*make posts prettier*/
@@ -1124,10 +1130,19 @@ span.edit-link{
 	transition:  .3s;
 }
 
+.site-footer {
+	position: relative;
+	margin-top: -80px;
+	/* negative value of footer height */
+	height: 80px;
+	clear: both;
+	background-color: black;
+  }
+
 /*italics looks bad w/ ©*/
 .site-info a, .site-info address {
-	background-color:black;
 	font-style:normal;
 	text-align:center;
+	vertical-align: middle;
 	color:white;
 }
