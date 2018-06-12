@@ -10,6 +10,7 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<?php vu_custom_portal_post_thumbnail(); ?>
 	<header class="entry-header">
 		<?php
 		if ( is_singular() ) :
@@ -30,7 +31,7 @@
 		<?php endif; ?>
 	</header><!-- .entry-header -->
 
-	<?php vu_custom_portal_post_thumbnail(); ?>
+	
 
 	<div class="entry-content">
 		<?php

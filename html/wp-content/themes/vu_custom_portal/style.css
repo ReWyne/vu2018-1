@@ -1099,7 +1099,7 @@ main.site-main  {
 	display: grid;
 	grid-gap: 15px;
 	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-	grid-template-rows: repeat(2, 95px);
+	grid-template-rows: repeat(2, 100px);
 }
 
 article.type-link .entry-title {
