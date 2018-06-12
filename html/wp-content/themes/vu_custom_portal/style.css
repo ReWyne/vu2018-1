@@ -1014,8 +1014,13 @@ a:hover{
 	color:black;
 }
 
+/*make posts not run into the edge of the screen*/
 main{
-	overflow: auto;
+	padding:5px;
+	padding-top: 15px;
+	padding-bottom: 80px;
+	background-color: #E3DAC8;
+	overflow:auto;
 	padding-bottom: 180px;
 }
 
@@ -1065,20 +1070,6 @@ main{
 	opacity: .95;
 }
 
-/*make posts not run into the edge of the screen*/
-main  {
-	padding:5px;
-	padding-top: 15px;
-	padding-bottom: 80px;
-	background-color: #E3DAC8;
-	overflow:auto;
-	/*grid stuff*/
-	display: grid;
-	grid-gap: 15px;
-	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-	grid-template-rows: repeat(2, 150px);
-}
-
 /*make posts prettier*/
 article.hentry {
 	font-family: 'Warnock Pro', 'Minion Pro', 'Arial', monospace;
@@ -1093,9 +1084,28 @@ article.hentry {
 	left:0px;
 	overflow:hidden;
 }
+article.type-link {
+	margin-bottom:0px;
+}
 
-article .entry-title {
+article .entry-content {
+	margin-top:0px;
+}
+article .entry-content p{
+	margin-top:0px;
+}
+/*link-grid-specific stuff*/
+main.site-main  {
+	display: grid;
+	grid-gap: 15px;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	grid-template-rows: repeat(2, 95px);
+}
+
+article.type-link .entry-title {
 	height:1ch;
+	margin:0px;
+	overflow:hidden;
 }
 
 /*make post subtext grey*/
@@ -1110,7 +1120,7 @@ article .entry-content {
 }
 
 /* make links smol*/
-.type-link .inside-article{
+.type-link{
 	padding:5px;
 	padding-top:10px;
 	padding-bottom:10px;
@@ -1129,10 +1139,6 @@ article .entry-content {
 	text-indent: -9999px; 
 	overflow: hidden;
 	*/
-}
-
-span.edit-link{
-	z-index: 1000;
 }
 
 /*give links a hover animation*/
