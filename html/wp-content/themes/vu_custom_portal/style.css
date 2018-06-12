@@ -1110,7 +1110,7 @@ article .entry-content {
 }
 
 span.edit-link{
-	z-index: 10;
+	z-index: 1000;
 }
 
 /*give links a hover animation*/
