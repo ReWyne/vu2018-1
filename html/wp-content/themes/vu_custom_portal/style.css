@@ -983,8 +983,35 @@ object {
 	display: block;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*#AUTH Anthony*/
-.site-branding .main-title a{
+a{
+	text-decoration: none;
+}
+
+.hentry{
+	font-family: 'Warnock Pro', 'Minion Pro', 'Arial', monospace;
+}
+
+.site-branding{
+	text-align:center;
+	font-family: 'Avenir', 'Arial', monospace;
+}
+
+.site-title a{
 	color:#FFCC00;
 	font-weight:400;
 }
@@ -1005,6 +1032,12 @@ object {
 /*gradient .site-header background*/
 .site-header{
 	background: linear-gradient(to bottom , #A58329, #381E0E);
+}
+
+.main-navigation{
+	background-color:black;
+	padding:5px;
+	color:white;
 }
 
 /*make search less ugly*/

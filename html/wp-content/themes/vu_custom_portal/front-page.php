@@ -36,7 +36,6 @@ get_header();
 				the_post();
 
 				global $post; //#TEMP
-				echo "test";
 				vu_log("vu_custom front-page.php printing: $post->post_name");
 				PC::debug("vu_custom front-page.php printing: $post->post_name\n".$post);
 				/*
