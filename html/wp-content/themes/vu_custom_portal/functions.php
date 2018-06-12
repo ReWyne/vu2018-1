@@ -169,6 +169,14 @@ add_action( 'wp_enqueue_scripts', 'vu_custom_portal_scripts' );
 	  Better_Font_Awesome_Library::get_instance( $args );
   }
 
+	//display tweaks
+  function vu_create_grid($classes) {
+    $classes[] = 'grid';
+    return $classes;
+}
+add_filter('body_class', 'vu_create_grid');
+
+
 /**
  * Implement the Custom Header feature.
  */
