@@ -1094,6 +1094,15 @@ article .entry-content {
 article .entry-content p{
 	margin-top:0px;
 }
+
+/*thumbs*/
+.post-thumbnail{
+	float:left;
+	position:relative;
+	height:0rem;
+	width:5rem;
+}
+
 /*link-grid-specific stuff*/
 main.site-main  {
 	display: grid;
