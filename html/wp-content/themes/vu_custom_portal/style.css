@@ -1013,6 +1013,12 @@ a, a:visited{
 a:hover{
 	color:black;
 }
+
+main{
+	overflow: auto;
+	padding-bottom: 180px;
+}
+
 .site-branding{
 	text-align:center;
 	font-family: 'Avenir', 'Arial', monospace;
@@ -1063,7 +1069,7 @@ a:hover{
 main  {
 	padding:5px;
 	padding-top: 15px;
-	padding-bottom: 60px;
+	padding-bottom: 80px;
 	background-color: #E3DAC8;
 	overflow:auto;
 	/*grid stuff*/
