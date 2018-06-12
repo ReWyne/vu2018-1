@@ -1041,24 +1041,26 @@ main{
 	font-size:16px;
 }
 
-/* img .site-header background*/
 .site-header{
+	/* img .site-header background*/
 	background-image:url("https://placeimg.com/1280/240/nature");
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 	height:auto;
 	width:auto;
-}
-/*gradient .site-header background*/
-.site-header{
+
+	/*gradient .site-header background*/
 	background: linear-gradient(to bottom , #A58329, #381E0E);
+
+	/*mono color .site-header background*/
+	background: #6D462A;
 }
 
 .main-navigation, .nav-menu li a, .nav-menu a{
-	background-color:black;
+	background-color:#381E0E;
+	color:#E3DAC8;
 	padding:5px;
-	color:white;
 }
 
 /*make search less ugly*/
