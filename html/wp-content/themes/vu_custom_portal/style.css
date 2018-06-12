@@ -998,13 +998,13 @@ object {
 
 
 /*#AUTH Anthony*/
+html{
+	background-color:black;
+}
+
 a, a:visited{
 	text-decoration: none;
 	color:#381E0E;
-}
-
-p{
-	margin-bottom: 0px;
 }
 
 a:hover{
@@ -1083,6 +1083,10 @@ article .entry-content {
 	font-weight:300;
 }
 
+.entry-content p, address{
+	margin-bottom: 0px;
+}
+
 /* make links smol*/
 .type-link .inside-article{
 	padding:5px;
@@ -1105,7 +1109,9 @@ article .entry-content {
 	*/
 }
 
-
+span.edit-link{
+	z-index: 10;
+}
 
 /*give links a hover animation*/
 .type-link .entry-content{
