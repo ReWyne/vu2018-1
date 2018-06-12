@@ -1063,9 +1063,14 @@ a:hover{
 main  {
 	padding:5px;
 	padding-top: 15px;
-	padding-bottom: 10px;
+	padding-bottom: 60px;
 	background-color: #E3DAC8;
 	overflow:auto;
+	/*grid stuff*/
+	display: grid;
+	grid-gap: 15px;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	grid-template-rows: repeat(2, 150px);
 }
 
 /*make posts prettier*/
@@ -1146,3 +1151,13 @@ span.edit-link{
 	vertical-align: middle;
 	color:white;
 }
+
+/* Opera Fix thanks to Maleika (Kohoutec) */
+body:before {
+	content: "";
+	height: 100%;
+	float: left;
+	width: 0;
+	margin-top: -32767px;
+	/* thank you Erik J - negate effect of float*/
+  }
