@@ -1000,6 +1000,7 @@ object {
 /*#AUTH Anthony*/
 a{
 	text-decoration: none;
+	color:black;
 }
 
 .hentry{
@@ -1050,13 +1051,13 @@ a{
 }
 
 /*make posts not run into the edge of the screen*/
-div#primary main#main  {
+main  {
 	padding-left:5px;
 	padding-right:5px;
 }
 
 /*make posts prettier*/
-article .inside-article {
+article {
 	padding:5px;
 	max-width:100%;
 	text-align:center;
@@ -1067,7 +1068,7 @@ article .inside-article {
 }
 
 /*make post subtext grey*/
-article .inside-article .entry-content {
+article .entry-content {
 	color:#666;
 	font-size: 15px;
 	font-weight:300;
@@ -1082,7 +1083,7 @@ article .inside-article .entry-content {
 }
 
 /*make links fully clickable*/
-.type-link .inside-article .entry-header .entry-title a{
+.type-link .entry-header .entry-title a{
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -1098,21 +1099,17 @@ article .inside-article .entry-content {
 
 
 /*give links a hover animation*/
-.type-link .inside-article .entry-content{
+.type-link .entry-content{
 	color:#CCC;
 	transition: .3s;
 }
 
-.type-link .inside-article:hover .entry-content{
+.type-link:hover .entry-content{
 	color:#666;
 	transition:  .3s;
 }
 
 /*italics looks bad w/ ©*/
-.site-info .inside-site-info .copyright-bar address {
+.site-info .copyright-bar address {
 	font-style:normal;
-}
-
-a{
-	color:black;
 }
