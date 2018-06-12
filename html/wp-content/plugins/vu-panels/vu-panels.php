@@ -112,7 +112,7 @@ function vu_generate_link_posts( $query ) {
   vu_log('vu_generate_link_posts');
 
     if( $query->is_main_query() && $query->is_home() ) {
-      $query->set( 'post_type', array( 'post', 'link') );
+      $query->set( 'post_type', array('link') );
     }
 }
 
