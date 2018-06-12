@@ -170,24 +170,6 @@ add_action( 'wp_enqueue_scripts', 'vu_custom_portal_scripts' );
   }
 
 /**
- * Tweak footer message
- */
-  add_filter( 'wp_footer','vu_custom_copyright' );
-  function vu_custom_copyright() {
-	  ?>
-	  <address>
-		  <strong>© Valparaiso University 2018</strong>, 
-		  Valparaiso, 
-		  IN 46383-6493, 
-		  219.464.5000
-		  | <a href="http://valpo.edu/copyright/">Privacy Policy</a> 
-		  | <a href="http://www.valpo.edu/about/contact-us/website-feedback/">
-			  <i class="fa fa-comments-o" aria-hidden="true"></i> Website Feedback</a>
-	  </address>
-	  <?php
-  }
-
-/**
  * Implement the Custom Header feature.
  */
 require get_template_directory() . '/inc/custom-header.php';
