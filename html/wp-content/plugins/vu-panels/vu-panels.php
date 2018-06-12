@@ -9,7 +9,8 @@
  * License: GPL2 or later
  */
 
-defined( 'ABSPATH' ) or die( 'Error: Hacking is illegal and does far more harm than good. Why are you doing this?' );
+defined( 'ABSPATH' ) or die(); //exit if accessed directly
+
 define( 'TESTING', true );
 
 include 'vu-util.php';
@@ -109,12 +110,9 @@ add_action( 'pre_get_posts', 'vu_generate_link_posts' );
 function vu_generate_link_posts( $query ) {
   error_log('vu_generate_link_posts');
   vu_log('vu_generate_link_posts');
-  if(function_exists('vu_log')){vu_log("vu_generate_link_posts");}
-  else{$message = "ERROR: vu_log function DNE";
-    echo "<script type='text/javascript'>alert('$message');</script>";}
 
     if( $query->is_main_query() && $query->is_home() ) {
-        $query->set( 'post_type', array( 'post', 'link') );
+      $query->set( 'post_type', array( 'post', 'link') );
     }
 }
 

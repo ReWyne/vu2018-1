@@ -15,17 +15,15 @@
 
 	<footer id="colophon" class="site-footer">
 		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'vu_custom_portal' ) ); ?>">
-				<?php
-				/* translators: %s: CMS name, i.e. WordPress. */
-				printf( esc_html__( 'Proudly powered by %s', 'vu_custom_portal' ), 'WordPress' );
-				?>
-			</a>
-			<span class="sep"> | </span>
-				<?php
-				/* translators: 1: Theme name, 2: Theme author. */
-				printf( esc_html__( 'Theme: %1$s by %2$s.', 'vu_custom_portal' ), 'vu_custom_portal', '<a href="http://underscores.me/">Underscores.me</a>' );
-				?>
+			<address>
+			<strong>© Valparaiso University 2018</strong>, 
+			Valparaiso, 
+			IN 46383-6493, 
+			219.464.5000
+			| <a href="http://valpo.edu/copyright/">Privacy Policy</a> 
+			| <a href="http://www.valpo.edu/about/contact-us/website-feedback/">
+				<i class="fa fa-comments-o" aria-hidden="true"></i> Website Feedback</a>
+			</address>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->

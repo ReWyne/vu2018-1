@@ -34,10 +34,10 @@ get_header();
 			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
-				
+
 				global $post; //#TEMP
-				vu_log("generatepress single.php printing: $post->post_name");
-				PC::debug("generatepress single.php printing: $post->post_name\n".$post);
+				vu_log("vu_custom front-page.php printing: $post->post_name");
+				PC::debug("vu_custom front-page.php printing: $post->post_name\n".$post);
 				/*
 				 * Include the Post-Type-specific template for the content.
 				 * If you want to override this in a child theme, then include a file
