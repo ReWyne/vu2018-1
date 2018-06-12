@@ -1091,6 +1091,7 @@ article.hentry {
 	border-radius: 7px;
 	position:relative;
 	left:0px;
+	overflow:hidden;
 }
 
 /*make post subtext grey*/

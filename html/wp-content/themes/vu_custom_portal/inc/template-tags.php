@@ -91,23 +91,24 @@ if ( ! function_exists( 'vu_custom_portal_entry_footer' ) ) :
 			);
 			echo '</span>';
 		}
-
-		edit_post_link(
-			sprintf(
-				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'vu_custom_portal' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
+		if (is_single()){
+			edit_post_link(
+				sprintf(
+					wp_kses(
+						/* translators: %s: Name of current post. Only visible to screen readers */
+						__( 'Edit <span class="screen-reader-text">%s</span>', 'vu_custom_portal' ),
+						array(
+							'span' => array(
+								'class' => array(),
+							),
+						)
+					),
+					get_the_title()
 				),
-				get_the_title()
-			),
-			'<span class="edit-link">',
-			'</span>'
-		);
+				'<span class="edit-link">',
+				'</span>'
+			);
+		}
 	}
 endif;
 
