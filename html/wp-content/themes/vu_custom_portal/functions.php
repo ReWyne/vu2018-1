@@ -171,7 +171,9 @@ add_action( 'wp_enqueue_scripts', 'vu_custom_portal_scripts' );
 
 	//display tweaks
   function vu_create_grid($classes) {
-    $classes[] = 'grid';
+	
+	$classes[] = 'grid';
+	echo "vcg ".$classes;
     return $classes;
 }
 add_filter('body_class', 'vu_create_grid');
