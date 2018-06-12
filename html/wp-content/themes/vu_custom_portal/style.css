@@ -1118,7 +1118,7 @@ article .entry-content {
 }
 
 /*make links fully clickable*/
-/*.type-link .entry-header .entry-title a,*/ .type-link a.entry-link{
+/*.type-link .entry-header .entry-title a,*/ .type-link .entry-header a.entry-link{
 	position: absolute;
 	top: 0;
 	left: 0;
