@@ -998,6 +998,13 @@ object {
 
 
 /*#AUTH Anthony*/
+/*css variables, keep in mind that these will inherit, 
+fallback vars cause runtime slowdown, 
+and IE11 doesn't support var() at all*/
+:root{
+	--link-height: 100px;
+}
+
 html{
 	background-color:black;
 	min-height:100%;
@@ -1078,56 +1085,26 @@ article.hentry {
 	padding:5px;
 	margin-bottom:10px;
 	max-width:100%;
-	text-align:center;
+	text-align:left;
 	background-color: #f9f9f9;
 	box-shadow: 2px 2px 10px rgba(109, 70, 42, .55);
 	border-radius: 7px;
 	position:relative;
 	left:0px;
 	overflow:hidden;
+	display:table-cell; /*fallback display for browsers not supporting grid layout*/
 }
-article.type-link {
-	margin-bottom:0px;
-}
-
-article .entry-content {
-	margin-top:0px;
-}
-article .entry-content p{
-	margin-top:0px;
-}
-
-/*thumbs*/
-.post-thumbnail{
-	float:left;
-	position:relative;
-	height:0rem;
-	width:5rem;
-}
-
-/*link-grid-specific stuff*/
-main.site-main  {
-	display: grid;
-	grid-gap: 15px;
-	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-	grid-template-rows: repeat(2, 100px);
-}
-
-article.type-link .entry-title {
-	height:35px;
-	margin:0px;
-	overflow:hidden;
-}
-
 /*make post subtext grey*/
 article .entry-content {
 	color:#666;
 	font-size: 15px;
 	font-weight:300;
 }
-
-.entry-content p, address{
-	margin-bottom: 0px;
+article .entry-content {
+	margin-top:0px;
+}
+article .entry-content p{
+	margin-top:0px;
 }
 
 /* make links smol*/
@@ -1136,6 +1113,46 @@ article .entry-content {
 	padding-top:10px;
 	padding-bottom:10px;
 	max-width:300px;
+}
+
+/*link-grid-specific stuff*/
+main.site-main  {
+	display: grid;
+	grid-gap: 15px;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	grid-template-rows: repeat(2, var(--link-height));
+}
+
+article.type-link {
+	margin-bottom:0px;
+}
+
+/*link thumbnail stuff*/
+.post-thumbnail{
+	/*float: left;*/
+	height: var(--link-height);
+	width: var(--link-height);
+	/*from https://stackoverflow.com/questions/19192892/css-how-can-i-set-image-size-relative-to-parent-height*/
+	display: block;
+	position: absolute;
+	margin-top: auto;
+	margin-bottom: auto;
+	left: 0%;
+	/*min-height: var(--link-height);
+	min-width: var(--link-height);*/
+}
+
+/*truncate link titles after one line*/
+article.type-link .entry-title {
+	height:35px;
+	margin:0px;
+	margin-left:var(--link-height);
+	overflow:hidden;
+}
+
+.entry-content p, address{
+	margin-bottom: 0px;
+	margin-left:var(--link-height);
 }
 
 /*make links fully clickable*/
