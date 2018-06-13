@@ -1129,17 +1129,17 @@ article.type-link {
 }
 
 /*link thumbnail stuff*/
-.post-thumbnail{
-	object-fit:fill;
+.post-thumbnail, .wp-post-image{
+	object-fit:scale-down;
 	/*float: left;*/
-	height: calc(var(--link-height) - 30px);
-	width: calc(var(--link-height) - 30px);
+	height: calc(var(--link-height) - 10px);
+	width: calc(var(--link-height) - 10px);
 	/*from https://stackoverflow.com/questions/19192892/css-how-can-i-set-image-size-relative-to-parent-height*/
 	display: block;
 	position: absolute;
 	margin-top: auto;
 	margin-bottom: auto;
-	margin-left: 0px;
+	margin-left: -4px;
 	/*min-height: var(--link-height);
 	min-width: var(--link-height);*/
 }
@@ -1148,13 +1148,13 @@ article.type-link {
 article.type-link .entry-title {
 	height:35px;
 	margin:0px;
-	margin-left:var(--link-height);
+	margin-left:calc(var(--link-height) - 20px);
 	overflow:hidden;
 }
 
 .entry-content p, address{
 	margin-bottom: 0px;
-	margin-left:var(--link-height);
+	margin-left:calc(var(--link-height) - 20px);
 }
 
 /*make links fully clickable*/
