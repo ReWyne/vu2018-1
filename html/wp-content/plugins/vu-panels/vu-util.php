@@ -25,9 +25,9 @@ function vu_log($message) {
  * @param  function $func
  * @return string output
  */
-function vu_echo_to_str($func){
+function vu_echo_to_str($func, ...$params){
     ob_start();
-    $func();
+    $func(...$params);
     $output = ob_get_clean();
     ob_end_flush();
     return $output ;
