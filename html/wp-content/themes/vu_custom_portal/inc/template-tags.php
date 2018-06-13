@@ -142,7 +142,7 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 					) ),
 				) );
 			} else { ?>
-			<img src="<?php bloginfo('template_directory'); ?>/images/default_image.jpg" alt="<?php the_title(); ?>" />
+			<img src="<?php bloginfo('template_directory'); ?>/images/default_image.png" alt="<?php the_title(); ?>" />
 			<?php } 
 			?>
 		</a>
