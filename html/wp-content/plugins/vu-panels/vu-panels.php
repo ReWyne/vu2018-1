@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
-define( 'TESTING', true );
+define( 'TESTING', true ); //just use WP_DEBUG instead
 
 include 'vu-util.php';
 

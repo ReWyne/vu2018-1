@@ -135,13 +135,13 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 
 		<a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
 			<?php 
-			if ( has_post_thumbnail() ) {PC::debug("template-tags if ".bloginfo('template_directory')."/images/default_image.png");
+			if ( has_post_thumbnail() ) {PC::debug("template-tags if ".vu_echo_to_str(bloginfo('template_directory'))."/images/default_image.png");
 				the_post_thumbnail('post-thumbnail', array(
 					'alt' => the_title_attribute( array(
 						'echo' => false,
 					) ),
 				) );
-			} else {PC::debug("template-tags else ".bloginfo('template_directory')."/images/default_image.png"); ?>
+			} else {PC::debug("template-tags else ".vu_echo_to_str(bloginfo('template_directory'))."/images/default_image.png"); ?>
 			<img src="<?php bloginfo('template_directory'); ?>/images/default_image.png" alt="<?php the_title(); ?>" />
 			<?php } 
 			?>

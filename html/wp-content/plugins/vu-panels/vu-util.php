@@ -21,6 +21,19 @@ function vu_log($message) {
 }
 
 /**
+ * Catch a printing function and return a string instead
+ * @param  function $func
+ * @return string output
+ */
+function vu_echo_to_str($func){
+    ob_start();
+    $func();
+    $output = ob_get_clean();
+    ob_end_flush();
+    return $output ;
+}
+
+/**
  * Check if a post is a custom post type.
  * @param  mixed $post Post object, ID, array, or post type as a string/array of strings
  * @return boolean
