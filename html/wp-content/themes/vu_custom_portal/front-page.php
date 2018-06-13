@@ -21,14 +21,12 @@ get_header();
 		<main id="main" class="site-main">
 
 		<?php
+		vu_pc_debug("vu_custom front-page.php printing");
 		if ( have_posts() ) :
 
 			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
-
-				global $post; //#TEMP
-				vu_pc_debug("vu_custom front-page.php printing");
 				/*
 				 * Include the Post-Type-specific template for the content.
 				 * If you want to override this in a child theme, then include a file
