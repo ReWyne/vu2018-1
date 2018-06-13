@@ -141,7 +141,7 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 						'echo' => false,
 					) ),
 				) );
-			} else { ?>
+			} else {PC::debug("template-tags else ".bloginfo('template_directory')."/images/default_image.png"); ?>
 			<img src="<?php bloginfo('template_directory'); ?>/images/default_image.png" alt="<?php the_title(); ?>" />
 			<?php } 
 			?>
