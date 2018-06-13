@@ -28,8 +28,7 @@ get_header();
 				the_post();
 
 				global $post; //#TEMP
-				vu_log("vu_custom front-page.php printing: $post->post_name");
-				PC::debug("vu_custom front-page.php printing: $post->post_name\n");
+				vu_pc_debug("vu_custom front-page.php printing");
 				/*
 				 * Include the Post-Type-specific template for the content.
 				 * If you want to override this in a child theme, then include a file
