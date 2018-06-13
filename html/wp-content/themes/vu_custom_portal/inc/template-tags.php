@@ -134,7 +134,7 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 		<?php else : ?>
 
 		<a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
-			<?php PC::debug("before if");
+			<?php
 			if ( has_post_thumbnail() ) {global $post;PC::debug("template-tags $post->post_name if ".vu_echo_to_str('bloginfo', 'template_directory')."/images/default_image.png");
 				the_post_thumbnail('post-thumbnail', array(
 					'alt' => the_title_attribute( array(
@@ -143,7 +143,7 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 				) );
 			} else {global $post;PC::debug("template-tags $post->post_name else ".vu_echo_to_str('bloginfo', 'template_directory')."/images/default_image.png"); ?>
 			<img src="<?php bloginfo('template_directory'); ?>/images/default_image.png" alt="<?php the_title(); ?>" />
-			<?php } PC::debug("after else");
+			<?php }
 			?>
 		</a>
 

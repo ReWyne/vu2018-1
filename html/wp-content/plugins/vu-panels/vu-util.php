@@ -53,7 +53,7 @@ function vu_echo_to_str($func, ...$params){
     ob_start();
     $func(...$params);
     $output = ob_get_clean();
-    ob_end_flush();
+    //ob_end_flush(); //unneeded, should be flushed when function returns
     return $output ;
 }
 
