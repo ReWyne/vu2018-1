@@ -135,7 +135,7 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 
 		<a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
 			<?php 
-			if ( has_post_thumbnail() ) {
+			if ( has_post_thumbnail() ) {PC::debug("template-tags if ".bloginfo('template_directory')."/images/default_image.png");
 				the_post_thumbnail('post-thumbnail', array(
 					'alt' => the_title_attribute( array(
 						'echo' => false,
