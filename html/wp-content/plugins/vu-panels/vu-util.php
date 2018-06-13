@@ -20,6 +20,11 @@ function vu_log($message) {
   }
 }
 
+/**
+ * Print message or object to console via PC::debug, with some extra info added
+ * @param  mixed $messgae String
+ * @return void
+ */
 function vu_pc_debug($message, $args){
     global $post;
     global $vu_pc_dbg_counter;
@@ -37,7 +42,7 @@ function vu_pc_debug($message, $args){
         $output .= "[no post]".$separator;
     }
 
-    $output .= $vu_pc_dbg_counter.$separator.implode(", ", $args);
+    $output .= "counter: ".$vu_pc_dbg_counter.$separator.implode(", ", $args);
 
     PC::debug($output);
     return;

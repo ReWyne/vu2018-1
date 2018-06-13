@@ -142,7 +142,7 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 					) ),
 				) );
 			} else {global $post;PC::debug("template-tags $post->post_name else ".vu_echo_to_str('bloginfo', 'template_directory')."/images/default_image.png"); ?>
-			<img src="<?php bloginfo('template_directory'); ?>/images/default_image.png" alt="<?php the_title(); ?>" />
+			<img src="<?php bloginfo('template_directory'); ?>/images/default_image.png" alt="<?php the_title(); ?>" class="wp-post-image" />
 			<?php }
 			?>
 		</a>
