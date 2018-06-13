@@ -120,11 +120,11 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 	 * element when on single views.
 	 */
 	function vu_custom_portal_post_thumbnail() {
-		if ( post_password_required() || is_attachment() || ! has_post_thumbnail() ) {
+		if ( post_password_required() || is_attachment() || (is_singular() && ! has_post_thumbnail()) ) {
 			return;
 		}
 
-		if ( is_singular() ) :
+		if ( is_singular() && has_post_thumbnail() ) :
 			?>
 
 			<div class="post-thumbnail">

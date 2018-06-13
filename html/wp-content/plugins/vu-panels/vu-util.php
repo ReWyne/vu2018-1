@@ -20,6 +20,29 @@ function vu_log($message) {
   }
 }
 
+function vu_pc_debug($message, $args){
+    global $post;
+    global $vu_pc_dbg_counter;
+    if(!isset($vu_pc_dbg_counter)){$vu_pc_dbg_counter = 0;}
+    ++$vu_pc_dbg_counter;
+
+    $separator = " | ";
+
+    $output = $message.$separator;
+    
+    if (isset($post)){
+        $output .= $post->post_name.$separator;
+    }
+    else{
+        $output .= "[no post]".$separator;
+    }
+
+    $output .= $vu_pc_dbg_counter.$separator.implode(", ", $args);
+
+    PC::debug($output);
+    return;
+}
+
 /**
  * Catch a printing function and return a string instead
  * @param  function $func, $params
