@@ -1003,7 +1003,7 @@ fallback vars cause runtime slowdown,
 and IE11 doesn't support var() at all
 https://dt.azadicdn.com/wp-content/uploads/2013/06/slow_internet_explorer_comic.jpg?200*/
 :root{
-	--link-height: 100px;
+	--link-height: 80px;
 }
 
 html{
@@ -1108,19 +1108,18 @@ article .entry-content p{
 	margin-top:0px;
 }
 
-/* make links smol*/
+/*padding*/
 .type-link{
 	padding:5px;
 	padding-top:10px;
 	padding-bottom:10px;
-	max-width:300px;
 }
 
 /*link-grid-specific stuff*/
 main.site-main  {
 	display: grid;
 	grid-gap: 15px;
-	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	grid-template-rows: repeat(2, var(--link-height));
 }
 
@@ -1150,11 +1149,19 @@ article.type-link .entry-title {
 	margin:0px;
 	margin-left:calc(var(--link-height) - 20px);
 	overflow:hidden;
+	font-weight: 500;
 }
 
-.entry-content p, address{
+/*link subtext*/
+.type-link .entry-content p{
 	margin-bottom: 0px;
 	margin-left:calc(var(--link-height) - 20px);
+	font-weight:300;
+	font-size: 15px;
+}
+
+address{
+	margin-bottom: 0px;
 }
 
 /*make links fully clickable*/
