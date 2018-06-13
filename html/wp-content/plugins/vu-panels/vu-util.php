@@ -22,8 +22,9 @@ function vu_log($message) {
 
 /**
  * Catch a printing function and return a string instead
- * @param  function $func
+ * @param  function $func, $params
  * @return string output
+ * example usage: vu_echo_to_str('echoing_function', $arg1, $arg2);
  */
 function vu_echo_to_str($func, ...$params){
     ob_start();
