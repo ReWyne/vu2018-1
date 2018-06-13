@@ -19,7 +19,10 @@
 			the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
 		endif;
 		vu_pc_debug("content-link echoing");
-		echo '<a class="entry-link" href="' . esc_url( get_post_meta($post->ID, "link_url_value", true) ) . '" rel="external">'.'</a>';
+		?>
+		<a class="entry-link" href="<?php esc_url( get_post_meta($post->ID, "link_url_value", true) ) . '" rel="external">'; ?></a>
+		<?php
+		//echo '<a class="entry-link" href="' . esc_url( get_post_meta($post->ID, "link_url_value", true) ) . '" rel="external">'.'</a>';
 		if ( 'link' === get_post_type() && is_singular() ) :
 			?>
 			<div class="entry-meta">
