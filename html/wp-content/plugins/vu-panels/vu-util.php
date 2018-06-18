@@ -26,6 +26,9 @@ function vu_log($message) {
  * @return void
  */
 function vu_pc_debug($message, ...$args){
+    
+    if ( WP_DEBUG === false ) return;
+
     global $post;
     global $vu_pc_dbg_counter;
     if(!isset($vu_pc_dbg_counter)){$vu_pc_dbg_counter = 0;}

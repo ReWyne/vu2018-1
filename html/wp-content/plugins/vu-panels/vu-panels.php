@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 define( 'TESTING', true ); //just use WP_DEBUG instead
 
 include 'vu-util.php';
+include 'vu-permissions.php';
 
 global $vu_panels_vars;
 
@@ -124,7 +125,7 @@ function vu_generate_link_posts( $query ) {
 //   $out = '';
 
 //   $args = array( 
-//       'numberposts' => '6', 
+//       'numberposts' => '99', 
 //       'post_status' => 'publish', 
 //       'post_type' => 'link' ,
 //   );
