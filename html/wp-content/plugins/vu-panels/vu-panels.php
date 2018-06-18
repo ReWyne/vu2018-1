@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 define( 'TESTING', true ); //just use WP_DEBUG instead
 
-include_once dirname( __FILE__ ) . 'vu-util.php';
-include_once dirname( __FILE__ ) . 'vu-permissions.php';
+include 'vu-util.php';
+include 'vu-permissions.php';
 
 global $vu_panels_vars;
 
