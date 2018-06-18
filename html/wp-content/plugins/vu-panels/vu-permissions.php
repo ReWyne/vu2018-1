@@ -7,18 +7,19 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 // 
 
 function vu_register_permissions(){
-	echo "TEST3";
 	//the intended capabilities of standard (non-admin) VU staff
-	vu_log("vu_register_permissions");
 	if(IS_WP_DEBUG){
+		vu_log("vu_register_permissions");
+
 		global $wp_roles;
 
 		if ( ! isset( $wp_roles ) )
     		$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		vu_pc_debug("full roles list 1: ", $t_all_roles);
+		vu_pc_debug("pre-adding full roles list: ", $t_all_roles);
 	}
+
 	add_role(
 		'vu_staff', //like editor, but without ability to modify pages/html
 		__( 'VU Staff' ),
@@ -50,10 +51,10 @@ function vu_register_permissions(){
     		$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		vu_log("full roles list 2: ", var_export($t_all_roles, true));
+		vu_pc_debug("post-adding full roles list: ", $t_all_roles);
 	}
 	// //if we want out own admin role
-	// $t_role = get_role('admin');
+	// $t_role = get_role('administrator');
 	// $admin_caps = $t_role['capabilities'];
 	// //list of capabilities we're adding to the vanilla admin role
 	// array_push($t_caps,'vu_user_group_assign_terms','vu_user_group_edit_terms');
@@ -62,21 +63,10 @@ function vu_register_permissions(){
 	// 	__( 'VU Admin' ),
 	// 	$admin_caps
 	// );
-
-	$t_role = get_role('super-admin');
-	if($t_role = null){ //#TEMP
-		global $wp_roles;
-
-		if ( ! isset( $wp_roles ) )
-    		$wp_roles = new WP_Roles();
-
-		$t_all_roles = $wp_roles->get_names();
-		vu_pc_debug("'super-admin' role DNE, full list: ", $t_all_roles);
-	}
 	
 	register_taxonomy(
 		'vu_user_group',
-		'post',
+		'user',
 		array(
 			'label' => __( 'VU User Group' ),
 			//'rewrite' => array( 'slug' => 'person' ),
