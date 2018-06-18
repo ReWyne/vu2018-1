@@ -10,7 +10,7 @@ function vu_register_permissions(){
 	echo "TEST3";
 	//the intended capabilities of standard (non-admin) VU staff
 	vu_log("vu_register_permissions");
-	if(WP_DEBUUG){
+	if(IS_WP_DEBUG){
 		global $wp_roles;
 
 		if ( ! isset( $wp_roles ) )
@@ -43,7 +43,7 @@ function vu_register_permissions(){
 			//'unfiltered_html' => false, //definitely not
 		)
 	);
-	if(WP_DEBUUG){
+	if(IS_WP_DEBUG){
 		global $wp_roles;
 
 		if ( ! isset( $wp_roles ) )
