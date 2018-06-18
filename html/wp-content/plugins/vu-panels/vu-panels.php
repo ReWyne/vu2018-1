@@ -26,7 +26,7 @@ abstract class vu_UserType {
 }
 
 // register_activation_hook's in other files
-include_once dirname( __FILE__ ) . '/vu-permissions.php.php';
+include_once dirname( __FILE__ ) . '/vu-permissions.php';
 register_activation_hook( __FILE__, 'vu_register_permissions' );
 
 //link post type
