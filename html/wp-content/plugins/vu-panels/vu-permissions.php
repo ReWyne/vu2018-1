@@ -50,7 +50,7 @@ function vu_register_permissions(){
     		$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		vu_log("full roles list: ", explode($t_all_roles, ", "));
+		vu_log("full roles list: ", explode(", ", $t_all_roles));
 	}
 	// //if we want out own admin role
 	// $t_role = get_role('admin');

@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
  * @return boolean success
  */
 function vu_log($message) {
-  if ( WP_DEBUG === true ) {
+  if ( defined('WP_DEBUG') && true === WP_DEBUG ) {
       if ( is_array($message) || is_object($message) ) {
           error_log( print_r($message, true) );
       } else {
@@ -27,7 +27,7 @@ function vu_log($message) {
  */
 function vu_pc_debug($message, ...$args){
     
-    if ( WP_DEBUG === false ) return;
+    if ( !defined('WP_DEBUG') || false === WP_DEBUG ) return;
 
     global $post;
     global $vu_pc_dbg_counter;
@@ -45,7 +45,7 @@ function vu_pc_debug($message, ...$args){
         $output .= "[no post]".$separator;
     }
 
-    $output .= "counter: ".$vu_pc_dbg_counter.$separator.implode(", ", $args);
+    $output .= "counter: ".$vu_pc_dbg_counter.$separator.vu_echo_to_str('print_r', $args);
 
     PC::debug($output);
     return;
