@@ -17,7 +17,7 @@ function vu_register_permissions(){
     		$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		vu_pc_debug("full roles list: ", $t_all_roles);
+		vu_pc_debug("full roles list 1: ", $t_all_roles);
 	}
 	add_role(
 		'vu_staff', //like editor, but without ability to modify pages/html
@@ -50,7 +50,7 @@ function vu_register_permissions(){
     		$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		vu_log("full roles list: ", explode(", ", $t_all_roles));
+		vu_log("full roles list 2: ", var_export($t_all_roles, true));
 	}
 	// //if we want out own admin role
 	// $t_role = get_role('admin');

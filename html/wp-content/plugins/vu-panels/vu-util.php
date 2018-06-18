@@ -45,7 +45,7 @@ function vu_pc_debug($message, ...$args){
         $output .= "[no post]".$separator;
     }
 
-    $output .= "counter: ".$vu_pc_dbg_counter.$separator.var_export($args); //for nicer formatting, use vu_echo_to_str('print_r', $args)
+    $output .= "counter: ".$vu_pc_dbg_counter.$separator.var_export($args, true); //for nicer formatting, use vu_echo_to_str('print_r', $args)
 
     PC::debug($output);
     return;
