@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 define( 'TESTING', true ); //just use WP_DEBUG instead
 
-include 'vu-util.php';
-include 'vu-permissions.php';
+include_once dirname( __FILE__ ) . 'vu-util.php';
+include_once dirname( __FILE__ ) . 'vu-permissions.php';
 
 global $vu_panels_vars;
 
@@ -25,6 +25,10 @@ abstract class vu_UserType {
 //    const Parents = 'Parents';
 }
 
+// register_activation_hook's in other files
+register_activation_hook( __FILE__, 'vu_register_permissions' );
+
+//link post type
 class vu_LinkPostType {
 
   function __construct() {

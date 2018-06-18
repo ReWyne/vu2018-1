@@ -1,7 +1,7 @@
 <?php
-echo "TEST1";
+
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
-echo "TEST2";
+
 // 
 // This file encompasses the user taxonomy and user permissions handling/meta boxes
 // 
@@ -87,4 +87,3 @@ function vu_register_permissions(){
 		)
 	);
 }
-register_activation_hook( __FILE__, 'vu_register_permissions' );
