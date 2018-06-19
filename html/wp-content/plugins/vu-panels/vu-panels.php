@@ -16,10 +16,11 @@ define( 'IS_WP_DEBUG', defined('WP_DEBUG') && true === WP_DEBUG );
 
 include 'vu-util.php';
 include 'vu-permissions.php';
+include 'vu-db.php'
 
 global $vu_panels_vars;
 
-abstract class vu_UserType {
+abstract class vu_user_type {
   const Admins = 'Admins';
   const Professors = 'Faculty';
   const Students = 'Students';
@@ -31,12 +32,12 @@ include_once dirname( __FILE__ ) . '/vu-permissions.php';
 register_activation_hook( __FILE__, 'vu_register_permissions' );
 
 //link post type
-class vu_LinkPostType {
+class vu_link_post_type {
 
   function __construct() {
-      //add_action( 'init', array($this, 'register_link_post_type')); //changed to run once
-      add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
-      add_action( 'save_post', array($this,'save_link_url'));
+    //add_action( 'init', array($this, 'register_link_post_type')); //changed to run once
+    add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
+    add_action( 'save_post', array($this,'save_link_url'));
   }
 
   static function register_link_post_type() {
@@ -59,7 +60,7 @@ class vu_LinkPostType {
         'show_ui' => true,
         'show_in_admin_bar' => true, //defaults to show_ui
         'menu_position' => 5,
-        'register_meta_box_cb' => array($this,'add_link_custom_fields'),
+        'register_meta_box_cb' => array('vu_link_post_type','add_link_custom_fields'), //would use $this if func weren't static
         'supports' => array( 'title', 'editor', 'thumbnail' ),
         'taxonomies' => array('post_tag', 'category'),
         //'menu_icon' => 'dashicons-editor-unlink',
@@ -77,34 +78,40 @@ class vu_LinkPostType {
   //Display the contents of the custom meta box
   function links_url_custom_field_display(){
     vu_log("links_url_custom_field_display");
-      wp_nonce_field( 'link_save', 'link_url_nonce' );
-      $value = get_post_meta(get_the_ID(), 'link_url_value', true);
-      echo '<label for="link_url">';
-      echo 'URL for external link :';
-      echo '</label> ';
-      echo '<input type="text" id="link_url_field" name="link_url_value" value="' . esc_url( $value ) . '" size="60" />';
+    wp_nonce_field( 'link_save', 'link_url_nonce' );
+    $value = get_post_meta(get_the_ID(), 'link_url_value', true);
+    echo '<label for="link_url">';
+    echo 'URL for external link :';
+    echo '</label> ';
+    echo '<input type="text" id="link_url_field" name="link_url_value" value="' . esc_url( $value ) . '" size="60" />';
   }
 
   //Save the meta value entered
   function save_link_url( $post_id ) {
     vu_log("save_link_url");
-      // Check if nonce is set
-      if ( ! isset( $_POST['link_url_nonce'] ) ) {
-        return $post_id;
-      }
 
-      if ( ! wp_verify_nonce( $_POST['link_url_nonce'], 'link_save' ) ) {
-        return $post_id;
-      }
+    //only save meta value if hitting submit
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+      return $post_id;  
+    }
 
-      // Check that the logged in user has permission to edit this post
-      if ( ! current_user_can( 'edit_post' ) ) {
-        return $post_id;
-      }
+    // Check if nonce is set
+    if ( ! isset( $_POST['link_url_nonce'] ) ) {
+      return $post_id;
+    }
 
-      $link_url_value = sanitize_text_field( $_POST['link_url_value'] );
+    if ( ! wp_verify_nonce( $_POST['link_url_nonce'], 'link_save' ) ) {
+      return $post_id;
+    }
 
-      update_post_meta( $post_id, 'link_url_value', $link_url_value );
+    // Check that the logged in user has permission to edit this post
+    if ( ! current_user_can( 'edit_post' ) ) {
+      return $post_id;
+    }
+
+    $link_url_value = sanitize_text_field( $_POST['link_url_value'] );
+
+    update_post_meta( $post_id, 'link_url_value', $link_url_value );
   }
 
 }
