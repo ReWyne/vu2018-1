@@ -16,7 +16,7 @@ define( 'IS_WP_DEBUG', defined('WP_DEBUG') && true === WP_DEBUG );
 
 include 'vu-util.php';
 include 'vu-permissions.php';
-include 'vu-db.php'
+include 'vu-db.php';
 
 global $vu_panels_vars;
 
