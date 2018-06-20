@@ -20,13 +20,6 @@ include 'vu-db.php';
 
 global $vu_panels_vars;
 
-abstract class vu_user_type {
-  const Admins = 'Admins';
-  const Professors = 'Faculty';
-  const Students = 'Students';
-//    const Parents = 'Parents';
-}
-
 // register_activation_hook's in other files
 include_once dirname( __FILE__ ) . '/vu-permissions.php';
 register_activation_hook( __FILE__, 'vu_register_permissions' );
