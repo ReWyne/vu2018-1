@@ -120,7 +120,7 @@ function vu_alter_user_group_taxonomy() {
 }
 
 	/**
-	 * Display the contents of the custom meta box
+	 * Display the contents of the alter_user_group_taxonomy meta box
 	 * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
 	 * @param  none
 	 * @return none
@@ -136,12 +136,16 @@ function vu_alter_user_group_taxonomy() {
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
 
     <label for="psw"><b>Group Permissions :</b></label>
-      <select name="vu_augt_role_value" id="vu_augt_role_select">
-        <option value="subscriber">User</option>
-        <option value="vu_department">Department</option>
-        <option value="administrator">Admin</option>
-        <option value="administrator">options should be PHP generated</option>
-      </select>
+	  <select name="vu_augt_role_value" id="vu_augt_role_select">';
+		global $wp_roles;
+		if ( ! isset( $wp_roles ) )
+    		$wp_roles = new WP_Roles();
+
+		$t_all_roles = $wp_roles->get_names();
+		foreach($t_all_roles as $role){
+			echo '<option value="'.$role.'">'.$role.'</option>';
+		}
+echo '</select>
     <button type="submit">Submit</button>
   </div>
 </form>';
