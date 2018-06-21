@@ -5,6 +5,13 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 //utility functions
 
+abstract class vu_dbg_typ
+{
+    const err_log = 'err_log';
+    const pc_dbg = 'pc_dbg';
+}
+
+
 /**
  * Print message or object to error_log
  * @param  mixed $messgae String, object, or array
@@ -22,10 +29,19 @@ function vu_log($message) {
 
 /**
  * Print message or object to console via PC::debug, with some extra info added
- * @param  mixed $messgae String
+ * @param  mixed $message String
  * @return void
  */
 function vu_pc_debug($message, ...$args){
+    vu_debug_msg($message, array(vu_dbg_typ::pc_dbg), ...$args);
+}
+
+/**
+ * Print debug message via some output
+ * @param  mixed String $message, array of enums (err_log, pc_dbg) $logger, other classes to output ...$args
+ * @return void
+ */
+function vu_debug_msg($message, $loggers, ...$args){
     
     if ( ! IS_WP_DEBUG ) return;
 
@@ -45,9 +61,12 @@ function vu_pc_debug($message, ...$args){
         $output .= "[no post]".$separator;
     }
 
-    $output .= "counter: ".$vu_pc_dbg_counter.$separator.vu_echo_to_str('print_r', $args); //or more conventionally, var_export($args, true) 
+    $output .= "counter: ".$vu_pc_dbg_counter.$separator.print_r($args, true); //or more conventionally, var_export($args, true) 
 
-    PC::debug($output);
+    if(in_array(vu_dbg_typ::pc_dbg,$loggers))
+        PC::debug($output);
+    if(in_array(vu_dbg_typ::err_log,$loggers))
+        vu_log($output);
     return;
 }
 

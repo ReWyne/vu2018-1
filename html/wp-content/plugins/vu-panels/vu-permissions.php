@@ -23,7 +23,7 @@ function vu_register_permissions(){
     		$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		vu_pc_debug("pre-adding full roles list: ", $t_all_roles);
+		vu_debug("pre-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
 	}
 
 	add_role(
@@ -57,7 +57,7 @@ function vu_register_permissions(){
     		$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		vu_pc_debug("post-adding full roles list: ", $t_all_roles);
+		vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
 	}
 	// //if we want out own admin role
 	// $t_role = get_role('administrator');
