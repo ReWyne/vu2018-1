@@ -34,7 +34,7 @@ class vu_link_post_type {
   }
 
   /*static*/ function register_link_post_type() {
-    vu_log("register_link_post_type");
+    //vu_log("register_link_post_type");
     register_post_type( 'link',
       array(
         'labels' => array(
@@ -53,7 +53,7 @@ class vu_link_post_type {
         'show_ui' => true,
         'show_in_admin_bar' => true, //defaults to show_ui
         'menu_position' => 5,
-        'register_meta_box_cb' => 'add_link_custom_fields', //would use $this if func weren't static
+        'register_meta_box_cb' => array($this,'add_link_custom_fields'), //would use $this if func weren't static
         'supports' => array( 'title', 'editor', 'thumbnail' ),
         'taxonomies' => array('post_tag', 'category'),
         //'menu_icon' => 'dashicons-editor-unlink',
