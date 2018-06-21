@@ -12,8 +12,8 @@ abstract class vu_permission_level {
 	const Basic = 'subscriber';
   }
 
+  //called via register_activation_hook
 function vu_register_permissions(){
-	//the intended capabilities of standard (non-admin) VU staff
 	if(IS_WP_DEBUG){
 		vu_log("vu_register_permissions");
 
@@ -26,6 +26,7 @@ function vu_register_permissions(){
 		vu_debug("pre-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
 	}
 
+	//the intended capabilities of standard (non-admin) VU staff
 	add_role(
 		'vu_department', //like editor, but without ability to modify pages/html
 		__( 'VU Department' ),
@@ -77,10 +78,10 @@ function vu_register_permissions(){
 			'label' => __( 'VU User Group' ),
 			//'rewrite' => array( 'slug' => 'person' ),
 			'capabilities' => array(
-				'manage_terms' => 'vu_user_group_manage_terms',
-				'assign_terms' => 'vu_user_group_assign_terms', //ability to add users to groups in this taxonomy; recommended restricted to admins
-				'edit_terms' => 'vu_user_group_edit_terms', //ability to add groups to this taxonomy; recommended restricted to admins
-				'delete_terms' => 'vu_user_group_delete_terms',
+				'manage_terms' => 'manage_vu_user_groups',
+				'assign_terms' => 'assign_vu_user_groups', //ability to add users to groups in this taxonomy; recommended restricted to admins
+				'edit_terms' => 'edit_vu_user_groups', //ability to add groups to this taxonomy; recommended restricted to admins
+				'delete_terms' => 'delete_vu_user_groups',
 			),
 			'map_meta_cap' => true,
 			'hierarchical' => false,
@@ -89,14 +90,14 @@ function vu_register_permissions(){
 			'query_var' => true,
 		)
 	);
+		//explicitly add new caps to the appropriate role(s); at best, this fixes a php notice
+		// $admins = get_role( 'administrator' );
 
-	//since our taxonomy has new caps, add them to the appropriate role(s)
-	$admins = get_role( 'administrator' );
-
-	$admins->add_cap( 'vu_user_group_manage_terms' );
-	$admins->add_cap( 'vu_user_group_assign_terms' ); 
-	$admins->add_cap( 'vu_user_group_edit_terms' );
-	$admins->add_cap( 'vu_user_group_delete_terms' );
+		// $admins->add_cap( 'manage_vu_user_groups' );
+		// $admins->add_cap( 'assign_vu_user_groups' ); 
+		// $admins->add_cap( 'edit_vu_user_groups' );
+		// $admins->add_cap( 'delete_vu_user_groups' );
+	
 }
 
 /**
