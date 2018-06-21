@@ -77,15 +77,26 @@ function vu_register_permissions(){
 			'label' => __( 'VU User Group' ),
 			//'rewrite' => array( 'slug' => 'person' ),
 			'capabilities' => array(
+				'manage_terms' => 'vu_user_group_manage_terms',
 				'assign_terms' => 'vu_user_group_assign_terms', //ability to add users to groups in this taxonomy; recommended restricted to admins
 				'edit_terms' => 'vu_user_group_edit_terms', //ability to add groups to this taxonomy; recommended restricted to admins
+				'delete_terms' => 'vu_user_group_delete_terms',
 			),
+			'map_meta_cap' => true,
 			'hierarchical' => false,
 			'show_ui' => true,
 			'show_admin_column' => true,
 			'query_var' => true,
 		)
 	);
+
+	//since our taxonomy has new caps, add them to the appropriate role(s)
+	// $admins = get_role( 'administrator' );
+
+	// $admins->add_cap( 'vu_user_group_manage_terms' );
+	// $admins->add_cap( 'vu_user_group_assign_terms' ); 
+	// $admins->add_cap( 'vu_user_group_edit_terms' );
+	// $admins->add_cap( 'vu_user_group_delete_terms' );
 }
 
 /**
