@@ -33,7 +33,7 @@ class vu_link_post_type {
     add_action( 'save_post', array($this,'save_link_url'));
   }
 
-  static function register_link_post_type() {
+  /*static*/ function register_link_post_type() {
     vu_log("register_link_post_type");
     register_post_type( 'link',
       array(
