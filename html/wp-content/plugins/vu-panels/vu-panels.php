@@ -23,7 +23,7 @@ include 'vu-db.php';
 global $vu_panels_vars;
 
 // register_activation_hook's in other files
-//include_once dirname( __FILE__ ) . '/vu-permissions.php';
+include_once dirname( __FILE__ ) . '/vu-permissions.php';
 register_activation_hook( __FILE__, 'vu_register_permissions' );
 
 echo "test2";
