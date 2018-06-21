@@ -91,12 +91,12 @@ function vu_register_permissions(){
 	);
 
 	//since our taxonomy has new caps, add them to the appropriate role(s)
-	// $admins = get_role( 'administrator' );
+	$admins = get_role( 'administrator' );
 
-	// $admins->add_cap( 'vu_user_group_manage_terms' );
-	// $admins->add_cap( 'vu_user_group_assign_terms' ); 
-	// $admins->add_cap( 'vu_user_group_edit_terms' );
-	// $admins->add_cap( 'vu_user_group_delete_terms' );
+	$admins->add_cap( 'vu_user_group_manage_terms' );
+	$admins->add_cap( 'vu_user_group_assign_terms' ); 
+	$admins->add_cap( 'vu_user_group_edit_terms' );
+	$admins->add_cap( 'vu_user_group_delete_terms' );
 }
 
 /**
