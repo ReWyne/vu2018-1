@@ -116,8 +116,7 @@ $link_post_type = new vu_link_post_type();
 add_action( 'pre_get_posts', 'vu_generate_link_posts' );
 
 function vu_generate_link_posts( $query ) {
-  error_log('vu_generate_link_posts');
-  vu_log('vu_generate_link_posts');
+//  vu_log('vu_generate_link_posts');
 
     if( $query->is_main_query() && $query->is_home() ) {
       $query->set( 'post_type', array('link') );
