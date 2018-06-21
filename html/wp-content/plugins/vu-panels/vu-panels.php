@@ -9,8 +9,6 @@
  * License: GPL2 or later
  */
 
-echo "test0";
-
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 define( 'TESTING', true ); //just use WP_DEBUG instead
@@ -25,8 +23,6 @@ global $vu_panels_vars;
 // register_activation_hook's in other files
 include_once dirname( __FILE__ ) . '/vu-permissions.php';
 register_activation_hook( __FILE__, 'vu_register_permissions' );
-
-echo "test2";
 
 //link post type
 class vu_link_post_type {
@@ -113,10 +109,9 @@ class vu_link_post_type {
 
 }
 
-echo "test3";
 register_activation_hook( __FILE__, array('vu_link_post_type', 'register_link_post_type') );
 $link_post_type = new vu_link_post_type();
-echo "test4";
+
 // add links custom post type to the front page main loop via hooks
 add_action( 'pre_get_posts', 'vu_generate_link_posts' );
 
