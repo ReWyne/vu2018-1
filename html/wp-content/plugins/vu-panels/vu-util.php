@@ -62,7 +62,11 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
         $output .= "[no post]".$separator;
     }
 
-    $output .= "counter: ".$vu_pc_dbg_counter.$separator.print_r($args, true); //or more conventionally, var_export($args, true) 
+    $output .= "counter: ".$vu_pc_dbg_counter;
+    
+    if($args){
+        $output .= $separator.print_r($args, true); //or more conventionally, var_export($args, true) 
+    }
 
     if(in_array(vu_debug_type::pc_dbg,$loggers))
         PC::debug($output);
