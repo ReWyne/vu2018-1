@@ -17,14 +17,8 @@ abstract class vu_debug_type
  * @param  mixed $messgae String, object, or array
  * @return boolean success
  */
-function vu_log($message) {
-  if ( IS_WP_DEBUG ) {
-      if ( is_array($message) || is_object($message) ) {
-          error_log( print_r($message, true) );
-      } else {
-          error_log( $message );
-      }
-  }
+function vu_log($message, ...$args) {
+    vu_debug($message, array(vu_debug_type::err_log), ...$args);
 }
 
 /**
@@ -41,7 +35,7 @@ function vu_pc_debug($message, ...$args){
  * @param  mixed String $message, array of enums (err_log, pc_dbg) $logger, other classes to output ...$args
  * @return void
  */
-function vu_debug($message, $loggers, ...$args){
+function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     
     if ( ! IS_WP_DEBUG ) return;
 
@@ -52,8 +46,15 @@ function vu_debug($message, $loggers, ...$args){
 
     $separator = " | ";
 
-    $output = $message.$separator;
-    
+    $output;
+
+    //if you just threw an object into the first arg, quietly handle it without complaining
+    if ( is_array($message) || is_object($message) ) {
+        $output = print_r($message, true).$separator;
+    } else {
+        $output = $message.$separator;
+    }
+
     if (isset($post)){
         $output .= $post->post_name.$separator;
     }
@@ -66,7 +67,7 @@ function vu_debug($message, $loggers, ...$args){
     if(in_array(vu_debug_type::pc_dbg,$loggers))
         PC::debug($output);
     if(in_array(vu_debug_type::err_log,$loggers))
-        vu_log($output);
+        error_log($output);
     return;
 }
 
