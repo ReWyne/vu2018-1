@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 global $vu_db_version;
-$vu_db_version = '1.0';
+$vu_db_version = '1.001';
 
 /**
  * Update vu_db if vu_db_versione is new
@@ -39,7 +39,7 @@ function vu_db_install_ug2r() {
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table_name (
-            tax_group tinytext NOT NULL,
+            tax_group varchar(100) NOT NULL,
             group_role tinytext NOT NULL,
             PRIMARY KEY  (tax_group)
         ) $charset_collate;";
