@@ -114,8 +114,8 @@ class vu_link_post_type {
 }
 
 echo "test3";
-register_activation_hook( __FILE__, array('vu_LinkPostType', 'register_link_post_type') );
-$link_post_type = new vu_LinkPostType();
+register_activation_hook( __FILE__, array('vu_link_post_type', 'register_link_post_type') );
+$link_post_type = new vu_link_post_type();
 echo "test4";
 // add links custom post type to the front page main loop via hooks
 add_action( 'pre_get_posts', 'vu_generate_link_posts' );
