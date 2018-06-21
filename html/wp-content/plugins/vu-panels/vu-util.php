@@ -64,7 +64,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
 
     $output .= "counter: ".$vu_pc_dbg_counter;
     
-    if($args){
+    if(!empty($args)){
         $output .= $separator.print_r($args, true); //or more conventionally, var_export($args, true) 
     }
 
