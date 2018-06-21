@@ -137,7 +137,8 @@ function vu_alter_user_group_taxonomy() {
 
     <label for="psw"><b>Group Permissions :</b></label>
 	  <select name="vu_augt_role_value" id="vu_augt_role_select">';
-		global $wp_roles;
+	  //generate options for our drop-down select
+	  global $wp_roles;
 		if ( ! isset( $wp_roles ) )
     		$wp_roles = new WP_Roles();
 

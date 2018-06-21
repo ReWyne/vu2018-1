@@ -28,7 +28,7 @@ register_activation_hook( __FILE__, 'vu_register_permissions' );
 class vu_link_post_type {
 
   function __construct() {
-    //add_action( 'init', array($this, 'register_link_post_type')); //changed to run once
+    add_action( 'init', array($this, 'register_link_post_type')); //changed to run once
     add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
     add_action( 'save_post', array($this,'save_link_url'));
   }
@@ -109,7 +109,7 @@ class vu_link_post_type {
 
 }
 
-register_activation_hook( __FILE__, array('vu_link_post_type', 'register_link_post_type') );
+//register_activation_hook( __FILE__, array('vu_link_post_type', 'register_link_post_type') );
 $link_post_type = new vu_link_post_type();
 
 // add links custom post type to the front page main loop via hooks
