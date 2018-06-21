@@ -81,31 +81,30 @@ class vu_link_post_type {
 
   //Save the meta value entered
   function save_link_url( $post_id ) {
-    vu_debug("save_link_url");
+    vu_log("save_link_url ", $post_id);
 
     //only save meta value if hitting submit
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
       return $post_id;  
     }
-    vu_debug("save_link_url");
+
     // Check if nonce is set
     if ( ! isset( $_POST['link_url_nonce'] ) ) {
       return $post_id;
     }
-    vu_debug("save_link_url");
+
     if ( ! wp_verify_nonce( $_POST['link_url_nonce'], 'link_save' ) ) {
       return $post_id;
     }
-    vu_debug("save_link_url");
+
     // Check that the logged in user has permission to edit this post
     if ( ! current_user_can( 'edit_post' ) ) {
       return $post_id;
     }
-    vu_debug("save_link_url");
+
     $link_url_value = sanitize_text_field( $_POST['link_url_value'] );
-    vu_debug("save_link_url");
+
     update_post_meta( $post_id, 'link_url_value', $link_url_value );
-    vu_debug("save_link_url");
   }
 
 }
