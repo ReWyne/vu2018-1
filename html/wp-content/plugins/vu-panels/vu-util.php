@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 //utility functions
 
-abstract class vu_dbg_typ
+abstract class vu_debug_type
 {
     const err_log = 'err_log';
     const pc_dbg = 'pc_dbg';
@@ -33,7 +33,7 @@ function vu_log($message) {
  * @return void
  */
 function vu_pc_debug($message, ...$args){
-    vu_debug_msg($message, array(vu_dbg_typ::pc_dbg), ...$args);
+    vu_debug($message, array(vu_debug_type::pc_dbg), ...$args);
 }
 
 /**
@@ -41,7 +41,7 @@ function vu_pc_debug($message, ...$args){
  * @param  mixed String $message, array of enums (err_log, pc_dbg) $logger, other classes to output ...$args
  * @return void
  */
-function vu_debug_msg($message, $loggers, ...$args){
+function vu_debug($message, $loggers, ...$args){
     
     if ( ! IS_WP_DEBUG ) return;
 
@@ -63,9 +63,9 @@ function vu_debug_msg($message, $loggers, ...$args){
 
     $output .= "counter: ".$vu_pc_dbg_counter.$separator.print_r($args, true); //or more conventionally, var_export($args, true) 
 
-    if(in_array(vu_dbg_typ::pc_dbg,$loggers))
+    if(in_array(vu_debug_type::pc_dbg,$loggers))
         PC::debug($output);
-    if(in_array(vu_dbg_typ::err_log,$loggers))
+    if(in_array(vu_debug_type::err_log,$loggers))
         vu_log($output);
     return;
 }
