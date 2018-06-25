@@ -29,7 +29,7 @@ class vu_link_post_type {
 
   function __construct() {
     add_action( 'init', array($this, 'register_link_post_type')); //TODO: find way to make this run once and still work? register_activation_hook method didn't work
-    add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
+    add_action( 'add_meta_boxes_link', array($this,'add_link_custom_fields' )); //calls the function in this class
     add_action( 'save_post', array($this,'save_link_url'));
   }
 
