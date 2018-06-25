@@ -121,7 +121,8 @@ function vu_term_exists($term, $taxonomy){
  */
 add_action( 'add_meta_boxes', 'vu_alter_user_group_taxonomy' );
 function vu_alter_user_group_taxonomy() {
-    $screens = ['users'];
+	$screens = ['users'];
+	vu_debug("vu_alter_user_group_taxonomy");
     foreach ($screens as $screen) {
         add_meta_box(
             'vu_alter_user_group_taxonomy',           // Unique ID
@@ -148,9 +149,9 @@ function vu_alter_user_group_taxonomy() {
 	 * @return none
 	 */
   function vu_alter_user_group_taxonomy_display(){
-    vu_log("vu_alter_user_group_taxonomy_display");
+    vu_debug("vu_alter_user_group_taxonomy_display");
 	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
-	
+
     echo '<div class="container">
     <label for="vu_augt_group"><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
