@@ -137,7 +137,6 @@ function vu_alter_user_group_taxonomy() {
 
 
 //add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
-add_action( 'save_post', array($this,'save_link_url'));
 
 
 
@@ -172,8 +171,9 @@ echo '</select>
   </div>';
   }
 
+  //register_activation_hook( __FILE__, array('save_vu_alter_usr_grp_taxPostType', 'register_vu_alter_usr_grp_tax_post_type') );
   //Save the meta value entered
-  register_activation_hook( __FILE__, array('vu_vu_alter_usr_grp_taxPostType', 'register_vu_alter_usr_grp_tax_post_type') );
+  add_action( 'save_post', array($this,'save_link_url'));
 
   function save_vu_alter_usr_grp_tax_url( $post_id ) {
     vu_log("save_vu_alter_usr_grp_tax_url");
