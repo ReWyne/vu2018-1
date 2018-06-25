@@ -123,6 +123,7 @@ add_action( 'add_meta_boxes', 'vu_alter_user_group_taxonomy' );
 function vu_alter_user_group_taxonomy() {
 	$screens = ['users'];
 	vu_debug("vu_alter_user_group_taxonomy");
+	error_log("tttt");
     foreach ($screens as $screen) {
         add_meta_box(
             'vu_alter_user_group_taxonomy',           // Unique ID
