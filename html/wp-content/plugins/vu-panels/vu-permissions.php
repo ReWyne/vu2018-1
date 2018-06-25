@@ -173,7 +173,7 @@ echo '</select>
 
   //register_activation_hook( __FILE__, array('save_vu_alter_usr_grp_taxPostType', 'register_vu_alter_usr_grp_tax_post_type') );
   //Save the meta value entered
-  add_action( 'save_post', array($this,'save_link_url'));
+//  add_action( 'save_post', array($this,'save_link_url'));
 
   function save_vu_alter_usr_grp_tax_url( $post_id ) {
     vu_log("save_vu_alter_usr_grp_tax_url");
