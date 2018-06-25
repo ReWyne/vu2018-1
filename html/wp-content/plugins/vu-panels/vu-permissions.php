@@ -90,7 +90,7 @@ function vu_register_permissions(){
 			'query_var' => true,
 		)
 	);
-		//explicitly add new caps to the appropriate role(s); at best, this fixes a php notice
+		//explicitly add new caps to the appropriate role(s), if necessary
 		// $admins = get_role( 'administrator' );
 
 		// $admins->add_cap( 'manage_vu_user_groups' );
@@ -121,15 +121,26 @@ function vu_term_exists($term, $taxonomy){
  */
 add_action( 'add_meta_boxes', 'vu_alter_user_group_taxonomy' );
 function vu_alter_user_group_taxonomy() {
-    add_meta_box( 
-        'vu_alter_user_group_taxonomy',
-        __( 'Modfy vu_user_group Taxonomy', 'vu_textdomain' ),
-        'vu_alter_user_group_taxonomy_content', // display function
-        'user', // screen to display on
-        'normal', // display area
-        'high' // display priority
-    );
+    $screens = ['user'];
+    foreach ($screens as $screen) {
+        add_meta_box(
+            'vu_alter_user_group_taxonomy',           // Unique ID
+            __( 'Modfy vu_user_group Taxonomy', 'vu_textdomain' ),  // Box title
+            'vu_alter_user_group_taxonomy_display',  // Content callback, must be of type callable
+			$screen,                   // screen to display on
+			'normal', // display area
+        	'high' // display priority
+        );
+    }
 }
+
+
+
+//add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
+add_action( 'save_post', array($this,'save_link_url'));
+
+
+
 
 	/**
 	 * Display the contents of the alter_user_group_taxonomy meta box
@@ -139,16 +150,14 @@ function vu_alter_user_group_taxonomy() {
 	 */
   function vu_alter_user_group_taxonomy_display(){
     vu_log("vu_alter_user_group_taxonomy_display");
-	wp_nonce_field( 'vu_alter_usr_grp_tax_save', 'vu_alter_usr_grp_tax_nonce' );
+	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
 	
-
-    echo '<form action="action_page.php">
- <div class="container">
+    echo '<div class="container">
     <label for="vu_augt_group"><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
 
     <label for="psw"><b>Group Permissions :</b></label>
-	  <select name="vu_augt_role_value" id="vu_augt_role_select">';
+	  <select name="vu_augt_role_value" id="vu_augt_role_select" class="postbox">';
 	  //generate options for our drop-down select
 	  global $wp_roles;
 		if ( ! isset( $wp_roles ) )
@@ -160,8 +169,7 @@ function vu_alter_user_group_taxonomy() {
 		}
 echo '</select>
     <button type="submit">Submit</button>
-  </div>
-</form>';
+  </div>';
   }
 
   //Save the meta value entered

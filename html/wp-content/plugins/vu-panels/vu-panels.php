@@ -28,7 +28,7 @@ register_activation_hook( __FILE__, 'vu_register_permissions' );
 class vu_link_post_type {
 
   function __construct() {
-    add_action( 'init', array($this, 'register_link_post_type')); //changed to run once
+    add_action( 'init', array($this, 'register_link_post_type')); //TODO: find way to make this run once and still work? register_activation_hook method didn't work
     add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
     add_action( 'save_post', array($this,'save_link_url'));
   }
@@ -65,7 +65,7 @@ class vu_link_post_type {
   //Callback from register_post_type
   function add_link_custom_fields() {
     vu_log("add_link_custom_fields");
-    add_meta_box( 'meta_id', 'link_url_value', array($this, 'links_url_custom_field_display'), 'link', 'normal', 'high' );
+    add_meta_box( 'link_meta_id', 'link_url_value', array($this, 'links_url_custom_field_display'), 'link', 'normal', 'high' );
   }
 
   //Display the contents of the custom meta box
@@ -81,7 +81,7 @@ class vu_link_post_type {
 
   //Save the meta value entered
   function save_link_url( $post_id ) {
-    vu_log("save_link_url ", $post_id);
+    vu_log("save_link_url pID ", $post_id);
 
     //only save meta value if hitting submit
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
