@@ -160,7 +160,7 @@ function vu_alter_user_group_taxonomy_display(){
 	
 	echo '<div class="postbox container">';
 	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
-    echo '<label for="vu_augt_group"><p><b>User Group to add :</b></label>
+    echo '<label for="vu_augt_group"><p><p><p><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
 
     <label for="psw"><p><b>Group Permissions :</b></label>
