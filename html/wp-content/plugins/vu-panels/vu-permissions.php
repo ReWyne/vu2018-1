@@ -140,17 +140,17 @@ function vu_term_exists($term, $taxonomy){
 
 
 
-	/**
-	 * Display the contents of the alter_user_group_taxonomy meta box
-	 * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
-	 * @param  none
-	 * @return none
-	 */
-add_action( 'admin_print_footer_scripts-users', 'vu_alter_user_group_taxonomy_display' ); //calls the function in this class
+/**
+ * Display the contents of the alter_user_group_taxonomy meta box
+ * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
+ * @param  none
+ * @return none
+ */
+//TODO: currently called on all admin pages
+add_action( 'admin_print_footer_scripts', 'vu_alter_user_group_taxonomy_display' ); //calls the function in this class
 function vu_alter_user_group_taxonomy_display(){	
 	global $pagenow;
 	if ($pagenow != 'users.php') {
-		vu_debug("vu_alter_user_group_taxonomy_display NOT users.php");
 		return;	
 		}
 	vu_debug("vu_alter_user_group_taxonomy_display IS users.php");
