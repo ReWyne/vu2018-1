@@ -90,14 +90,13 @@ function vu_register_permissions(){
 			'query_var' => true,
 		)
 	);
-		//explicitly add new caps to the appropriate role(s), if necessary
+		//explicitly add new caps to the appropriate role(s), if necessary (it shouldn't be)
 		// $admins = get_role( 'administrator' );
 
 		// $admins->add_cap( 'manage_vu_user_groups' );
 		// $admins->add_cap( 'assign_vu_user_groups' ); 
 		// $admins->add_cap( 'edit_vu_user_groups' );
 		// $admins->add_cap( 'delete_vu_user_groups' );
-	
 }
 
 /**
@@ -113,28 +112,26 @@ function vu_term_exists($term, $taxonomy){
 	return false;
 }
 
-/**
- * Create dialog box for adding/removing terms from the vu_user_group.
- * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
- * @param  none
- * @return none
- */
-add_action( 'add_meta_boxes', 'vu_alter_user_group_taxonomy' );
-function vu_alter_user_group_taxonomy() {
-	$screens = ['users'];
-	vu_debug("vu_alter_user_group_taxonomy");
-	error_log("tttt");
-    foreach ($screens as $screen) {
-        add_meta_box(
-            'vu_alter_user_group_taxonomy',           // Unique ID
-            __( 'Modfy vu_user_group Taxonomy', 'vu_textdomain' ),  // Box title
-            'vu_alter_user_group_taxonomy_display',  // Content callback, must be of type callable
-			$screen,                   // screen to display on
-			'normal', // display area
-        	'high' // display priority
-        );
-    }
-}
+// /**
+//  * Create dialog box for adding/removing terms from the vu_user_group.
+//  * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
+//  * @param  none
+//  * @return none
+//  */
+// add_action( 'add_meta_boxes', 'vu_alter_user_group_taxonomy' );
+// function vu_alter_user_group_taxonomy() {
+// 	$screens = ['users'];
+//     foreach ($screens as $screen) {
+//         add_meta_box(
+//             'vu_alter_user_group_taxonomy',           // Unique ID
+//             __( 'Modfy vu_user_group Taxonomy', 'vu_textdomain' ),  // Box title
+//             'vu_alter_user_group_taxonomy_display',  // Content callback, must be of type callable
+// 			$screen,                   // screen to display on
+// 			'normal', // display area
+//         	'high' // display priority
+//         );
+//     }
+// }
 
 
 
@@ -149,12 +146,23 @@ function vu_alter_user_group_taxonomy() {
 	 * @param  none
 	 * @return none
 	 */
-  function vu_alter_user_group_taxonomy_display(){
-    vu_debug("vu_alter_user_group_taxonomy_display");
-	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
+add_action( 'admin_print_footer_scripts-users', 'vu_alter_user_group_taxonomy_display' ); //calls the function in this class
+function vu_alter_user_group_taxonomy_display(){
+	vu_debug("vu_alter_user_group_taxonomy_display");
+	
+	global $pagenow;
+	if ($pagenow != 'users.php') {
+		return;	
+		}
 
-    echo '<div class="container">
-    <label for="vu_augt_group"><b>User Group to add :</b></label>
+
+
+
+	
+
+	echo '<div class="container">';
+	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
+    echo '<label for="vu_augt_group"><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
 
     <label for="psw"><b>Group Permissions :</b></label>
@@ -171,7 +179,7 @@ function vu_alter_user_group_taxonomy() {
 echo '</select>
     <button type="submit">Submit</button>
   </div>';
-  }
+}
 
   //register_activation_hook( __FILE__, array('save_vu_alter_usr_grp_taxPostType', 'register_vu_alter_usr_grp_tax_post_type') );
   //Save the meta value entered
