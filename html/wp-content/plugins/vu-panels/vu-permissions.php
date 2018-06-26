@@ -161,10 +161,10 @@ function vu_alter_user_group_taxonomy_display(){
 	echo 'USERS_METABOX';
 	echo '<div class="container">';
 	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
-    echo '<label for="vu_augt_group"><b>User Group to add :</b></label>
+    echo '<label for="vu_augt_group"><p><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
 
-    <label for="psw"><b>Group Permissions :</b></label>
+    <label for="psw"><p><b>Group Permissions :</b></label>
 	  <select name="vu_augt_role_value" id="vu_augt_role_select" class="postbox">';
 	  //generate options for our drop-down select
 	  global $wp_roles;
