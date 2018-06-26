@@ -159,7 +159,7 @@ function vu_alter_user_group_taxonomy_display(){
 
 
 	
-
+	echo 'USERS_METABOX';
 	echo '<div class="container">';
 	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
     echo '<label for="vu_augt_group"><b>User Group to add :</b></label>
