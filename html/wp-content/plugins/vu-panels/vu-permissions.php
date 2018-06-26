@@ -146,15 +146,14 @@ function vu_term_exists($term, $taxonomy){
 	 * @param  none
 	 * @return none
 	 */
-add_action( 'admin_print_footer_scripts-users', 'vu_alter_user_group_taxonomy_display' ); //calls the function in this class
-function vu_alter_user_group_taxonomy_display(){
-	vu_debug("vu_alter_user_group_taxonomy_display");
-	
+add_action( 'admin_print_footer_scripts', 'vu_alter_user_group_taxonomy_display' ); //calls the function in this class
+function vu_alter_user_group_taxonomy_display(){	
 	global $pagenow;
 	if ($pagenow != 'users.php') {
+		vu_debug("vu_alter_user_group_taxonomy_display NOT users.php");
 		return;	
 		}
-
+	vu_debug("vu_alter_user_group_taxonomy_display IS users.php");
 
 
 
