@@ -150,17 +150,24 @@ function vu_term_exists($term, $taxonomy){
 add_action( 'manage_users_extra_tablenav', 'vu_alter_user_group_taxonomy_display' ); //calls the function in this class
 function vu_alter_user_group_taxonomy_display(){	
 	global $pagenow;
+	global $vu_alter_user_group_taxonomy_display_count;
 	if ($pagenow != 'users.php') {
 		return;	
 		}
 	vu_debug("vu_alter_user_group_taxonomy_display IS users.php");
-
+	if(!isset($vu_alter_user_group_taxonomy_display_count)){
+		$vu_alter_user_group_taxonomy_display_count = 1;
+		return;
+	}
+	else{
+		$vu_alter_user_group_taxonomy_display_count++;
+	}
 
 
 	
-	echo '<div class="postbox container">';
+	echo '<div class="postbox container" style="margin-top:30px; padding-left:10px; padding-right:10px;">';
 	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
-    echo '<label for="vu_augt_group"><p><p><p><b>User Group to add :</b></label>
+    echo '<label for="vu_augt_group"><p><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
 
     <label for="psw"><p><b>Group Permissions :</b></label>
