@@ -157,10 +157,12 @@ function vu_alter_user_group_taxonomy_display(){
 	vu_debug("vu_alter_user_group_taxonomy_display IS users.php");
 	if(!isset($vu_alter_user_group_taxonomy_display_count)){
 		$vu_alter_user_group_taxonomy_display_count = 1;
+		vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 		return;
 	}
 	else{
 		$vu_alter_user_group_taxonomy_display_count++;
+		vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 	}
 
 
