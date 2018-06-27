@@ -154,17 +154,15 @@ function vu_alter_user_group_taxonomy_display(){
 	if ($pagenow != 'users.php') {
 		return;	
 		}
-	vu_debug("vu_alter_user_group_taxonomy_display IS users.php");
+		
 	if(!isset($vu_alter_user_group_taxonomy_display_count)){
 		$vu_alter_user_group_taxonomy_display_count = 1;
-		vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 		return;
 	}
 	else{
 		$vu_alter_user_group_taxonomy_display_count++;
-		vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 	}
-
+	vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 
 	
 	echo '<div class="postbox container" style="margin-top:30px; padding-left:10px; padding-right:10px;">';
@@ -220,9 +218,7 @@ echo '</select>
   }
 
 
-
-
-
+  
 
 /**
  * Create dialog box for adding/removing user groups from a user.
@@ -230,14 +226,42 @@ echo '</select>
  * @param  none
  * @return none
  */
-add_action( 'add_meta_boxes', 'product_price_box' );
-function product_price_box() {
-    // add_meta_box( 
-    //     'product_price_box',
-    //     __( 'Product Price', 'myplugin_textdomain' ),
-    //     'product_price_box_content',
-    //     'product',
-    //     'side',
-    //     'high'
-    // );
+add_action( 'show_user_profile', 'vu_show_extra_profile_fields' );
+add_action( 'edit_user_profile', 'vu_show_extra_profile_fields' );
+function vu_show_extra_profile_fields() {
+	?>
+	<h3>Extra profile information</h3>
+
+	<table class="form-table">
+
+		<tr>
+			<th><label for="twitter">Twitter</label></th>
+
+			<td>
+				<input type="text" name="twitter" id="twitter" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
+				<span class="description">Please enter your Twitter username.</span>
+			</td>
+		</tr>
+
+	</table>
+	<?php 
+}
+
+/**
+ * Save user groups added/removed from a user.
+ * Note that this may result in changing the user's role.
+ * @param  $user_id
+ * @return none
+ */
+add_action( 'personal_options_update', 'vu_save_extra_profile_fields' );
+add_action( 'edit_user_profile_update', 'vu_save_extra_profile_fields' );
+function vu_save_extra_profile_fields( $user_id ) {
+
+	if ( !current_user_can( 'edit_user', $user_id ) )
+		return $user_id;
+
+	// TODO: nonce validating code here 
+
+	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
+	update_usermeta( $user_id, 'twitter', $_POST['twitter'] );
 }
