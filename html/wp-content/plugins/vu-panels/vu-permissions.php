@@ -195,14 +195,14 @@ echo '</select>
 ';
 }
 
+add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 function vu_selectively_enqueue_admin_scripts( $hook ) {
     if ( 'users.php' != $hook && 'profile.php' != $hook ) {
         return;
     }
 	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
-	error_log("enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
+	error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
 }
-add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 
 /**
  * Compute what role a user should have by looking at what vu_user_group terms it has and getting the associated roles from user_group_to_role
