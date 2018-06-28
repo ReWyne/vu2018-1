@@ -1,5 +1,6 @@
 //vu_alter_user_group_taxonomy submit
 $(document).ready(function(){
+	alert("js is working");
     $("#vu_augt_button").click(function(){
 		var clickBtnValue = $(this).val();
         var ajaxurl ="' . get_template_directory_uri() . '/vu-users-permissions-ajax.php",
