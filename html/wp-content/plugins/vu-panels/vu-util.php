@@ -67,7 +67,9 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     if(!empty($args)){
         $output .= $separator.print_r($args, true); //or more conventionally, var_export($args, true) 
     }
-
+    if($loggers == '' || $loggers == 'all' || $loggers == 'default' || $loggers == 'both'){
+        $loggers = array('err_log','pc_dbg');
+    }
     if(in_array(vu_debug_type::pc_dbg,$loggers))
         PC::debug($output);
     if(in_array(vu_debug_type::err_log,$loggers))

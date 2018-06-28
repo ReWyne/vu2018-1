@@ -105,7 +105,7 @@ function vu_register_permissions(){
  * @return boolean
  */
 function vu_term_exists($term, $taxonomy){
-	$exists = term_exists( $term, 'post_tag' );
+	$exists = term_exists( $term, $taxonomy );
 	if ( $exists !== 0 && $exists !== null ){
 		return true;
 	}
@@ -167,55 +167,116 @@ function vu_alter_user_group_taxonomy_display(){
 	
 	echo '<div class="postbox container" style="margin-top:30px; padding-left:10px; padding-right:10px;">';
 	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
-    echo '<label for="vu_augt_group"><p><b>User Group to add :</b></label>
+    echo '<p><label for="vu_augt_group"><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
 
-    <label for="psw"><p><b>Group Permissions :</b></label>
+    <p><label for="psw"><b>Group Permissions :</b></label>
 	  <select name="vu_augt_role_value" id="vu_augt_role_select" class="postbox">';
 	  //generate options for our drop-down select
 	  global $wp_roles;
 		if ( ! isset( $wp_roles ) )
     		$wp_roles = new WP_Roles();
 
-		$t_all_roles = $wp_roles->get_names();
-		foreach($t_all_roles as $role){
-			echo '<option value="'.$role.'">'.$role.'</option>';
+		// $t_all_roles = $wp_roles->get_names();
+		// foreach($t_all_roles as $role){
+		// 	echo '<option value="'.$role.'">'.$role.'</option>';
+		// }
+
+
+		$t_all_roles = $wp_roles->$roles;
+		foreach($t_all_roles as $key => $role){
+			echo '<option value="'.$key.'">'.$role->name.'</option>';
 		}
 echo '</select>
-    <button type="submit">Submit</button>
-  </div>';
+    <button type="submit" name="vu_augt_submit" value="vu_augt_submit" class=name="vu_augt_button">Submit</button>
+	<span id="vu_augt_return" style="font-family: monospace; font-color: red;"></span>
+  </div>
+  $(document).ready(function(){
+    $(".vu_augt_button").click(function(){
+		var clickBtnValue = $(this).val();
+        var ajaxurl ="' . get_template_directory_uri() . '/vu-users-permissions-ajax.php",
+		data =  {"action": clickBtnValue,
+				 "group": $("vu_augt_group_value").val(),
+				 "role": $("#vu_augt_role_select").val()};
+        $.post(ajaxurl, data, function (response) {
+			// Response div goes here.
+			$("#vu_augt_return").html(response["vu_augt_return"]);
+        });
+    });
+
+});';
 }
 
-  //register_activation_hook( __FILE__, array('save_vu_alter_usr_grp_taxPostType', 'register_vu_alter_usr_grp_tax_post_type') );
-  //Save the meta value entered
+/**
+ * Compute what role a user should have by looking at what vu_user_group terms it has and getting the associated roles from user_group_to_role
+ * Recommend setting the user's role right after
+ * @param  object $user
+ * @return string $role
+ */
+function vu_get_user_role($user = ''){
+	if('' === $user){
+		$user = wp_get_current_user();
+	}
+	$terms = get_the_terms( $user, 'vu_user_group');
+	vu_debug("vu_get_user_role terms for $user: ", '', $terms);
+
+	$permission_level = 0;
+	$permission_role = '';
+
+	foreach($terms as $term => $data){
+		$role = vu_db_get_ug2r_role($term);
+		if($role === vu_permission_level::Admin){
+			$permission_level = 2;
+			$permission_role = $role;
+		}
+		else if($role === vu_permission_level::Department && vu_permission_level < 2){
+			$permission_level = 1;
+			$permission_role = $role;
+		}
+		else if($role === vu_permission_level::Basic && vu_permission_level < 1){
+			$permission_level = 0;
+			$permission_role = $role;
+		}
+		else{
+			vu_debug("vu_get_user_role error, got role $role for term ",'',$term);
+		}
+	}
+	return $permission_role;
+}
+
 //  add_action( 'save_post', array($this,'save_link_url'));
+// /**
+//  * Save the submitted contents from the alter_user_group_taxonomy meta box
+//  * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
+//  * @param  none
+//  * @return none
+//  */
+//   function save_vu_alter_usr_grp_tax_url( $post_id ) {
+//     vu_log("save_vu_alter_usr_grp_tax_url");
 
-  function save_vu_alter_usr_grp_tax_url( $post_id ) {
-    vu_log("save_vu_alter_usr_grp_tax_url");
+//     //only save meta value if hitting submit
+//     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+//       return $post_id;  
+//     }
 
-    //only save meta value if hitting submit
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
-      return $post_id;  
-    }
+//     // Check if nonce is set
+//     if ( ! isset( $_POST['vu_alter_usr_grp_tax_url_nonce'] ) ) {
+//       return $post_id;
+//     }
 
-    // Check if nonce is set
-    if ( ! isset( $_POST['vu_alter_usr_grp_tax_url_nonce'] ) ) {
-      return $post_id;
-    }
+//     if ( ! wp_verify_nonce( $_POST['vu_alter_usr_grp_tax_url_nonce'], 'vu_alter_usr_grp_tax_save' ) ) {
+//       return $post_id;
+//     }
 
-    if ( ! wp_verify_nonce( $_POST['vu_alter_usr_grp_tax_url_nonce'], 'vu_alter_usr_grp_tax_save' ) ) {
-      return $post_id;
-    }
+//     // Check that the logged in user has permission to edit this post
+//     if ( ! current_user_can( 'edit_post' ) ) {
+//       return $post_id;
+//     }
 
-    // Check that the logged in user has permission to edit this post
-    if ( ! current_user_can( 'edit_post' ) ) {
-      return $post_id;
-    }
+//     $vu_alter_usr_grp_tax_url_value = sanitize_text_field( $_POST['vu_alter_usr_grp_tax_url_value'] );
 
-    $vu_alter_usr_grp_tax_url_value = sanitize_text_field( $_POST['vu_alter_usr_grp_tax_url_value'] );
-
-    update_post_meta( $post_id, 'vu_alter_usr_grp_tax_url_value', $vu_alter_usr_grp_tax_url_value );
-  }
+//     update_post_meta( $post_id, 'vu_alter_usr_grp_tax_url_value', $vu_alter_usr_grp_tax_url_value );
+//   }
 
 
   
@@ -228,7 +289,7 @@ echo '</select>
  */
 add_action( 'show_user_profile', 'vu_show_extra_profile_fields' );
 add_action( 'edit_user_profile', 'vu_show_extra_profile_fields' );
-function vu_show_extra_profile_fields() {
+function vu_show_extra_profile_fields( $user ) {
 	?>
 	<h3>Extra profile information</h3>
 
