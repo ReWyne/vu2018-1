@@ -200,7 +200,7 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
         return;
     }
 	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
-	debug_log("enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
+	error_log("enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
 }
 add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 
