@@ -9,6 +9,7 @@ $(document).ready(function(){
         $.post(ajaxurl, data, function (response) {
 			// Response div
 			$("#vu_augt_return").html(response["vu_augt_return"]);
+			alert("response came thru");
         });
     });
 });
