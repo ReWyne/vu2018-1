@@ -200,8 +200,8 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
     if ( 'users.php' != $hook && 'profile.php' != $hook ) {
         return;
     }
-	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
-	error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
+	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
+	error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
 }
 
 /**
