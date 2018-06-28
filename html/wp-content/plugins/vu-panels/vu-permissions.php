@@ -183,28 +183,17 @@ function vu_alter_user_group_taxonomy_display(){
 		// }
 
 
-		$t_all_roles = $wp_roles->$roles;
+		$t_all_roles = $wp_roles->roles;
+		vu_debug("t_all_roles",'',$t_all_roles);
 		foreach($t_all_roles as $key => $role){
+			vu_debug("t_all_roles kv:",'',$key,$role->name);
 			echo '<option value="'.$key.'">'.$role->name.'</option>';
 		}
 echo '</select>
-    <button type="submit" name="vu_augt_submit" value="vu_augt_submit" class=name="vu_augt_button">Submit</button>
+    <button type="submit" name="vu_augt_submit" value="vu_augt_submit" id"vu_augt_button">Submit</button>
 	<span id="vu_augt_return" style="font-family: monospace; font-color: red;"></span>
   </div>
-  $(document).ready(function(){
-    $(".vu_augt_button").click(function(){
-		var clickBtnValue = $(this).val();
-        var ajaxurl ="' . get_template_directory_uri() . '/vu-users-permissions-ajax.php",
-		data =  {"action": clickBtnValue,
-				 "group": $("vu_augt_group_value").val(),
-				 "role": $("#vu_augt_role_select").val()};
-        $.post(ajaxurl, data, function (response) {
-			// Response div goes here.
-			$("#vu_augt_return").html(response["vu_augt_return"]);
-        });
-    });
-
-});';
+';
 }
 
 /**
