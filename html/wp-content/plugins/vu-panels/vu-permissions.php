@@ -165,7 +165,7 @@ function vu_alter_user_group_taxonomy_display(){
 	vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 
 	
-	echo '<p><div class="postbox container" style="margin-top:40px; padding-left:10px; padding-right:10px; clear:both;">';
+	echo '<div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">';
 	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
     echo '<label for="vu_augt_group"><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
