@@ -165,7 +165,8 @@ function vu_alter_user_group_taxonomy_display(){
 	vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 
 	
-	echo '<div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">';
+	echo '
+  <div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">';
 	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
     echo '<label for="vu_augt_group"><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
@@ -193,6 +194,15 @@ echo '</select>
   </div>
 ';
 }
+
+function vu_selectively_enqueue_admin_scripts( $hook ) {
+    if ( 'users.php' != $hook && 'profile.php' != $hook ) {
+        return;
+    }
+	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
+	debug_log("enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-scripts.js');
+}
+add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 
 /**
  * Compute what role a user should have by looking at what vu_user_group terms it has and getting the associated roles from user_group_to_role

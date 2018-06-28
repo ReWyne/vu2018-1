@@ -135,9 +135,7 @@ function vu_custom_portal_scripts() {
 
 	wp_enqueue_script( 'vu_theme_js', get_template_directory_uri() . '/js/scripts.js');
 	
-	wp_enqueue_script( 'vu_plugin_js', dirname(get_template_directory_uri()) . '/plugins/vu-panels/js/vu-scripts.js');
-	error_log("enqueue script " . dirname(get_template_directory_uri(), 2) . '/plugins/vu-panels/js/vu-scripts.js');
-
+	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . '/plugins/vu-panels/js/vu-scripts.js');
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
