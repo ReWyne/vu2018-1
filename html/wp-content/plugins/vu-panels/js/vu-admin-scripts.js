@@ -1,9 +1,11 @@
 //vu_alter_user_group_taxonomy submit
 function vu_alter_user_group_taxonomy_submit(){
 		var clickBtnValue = $(this).val();
+		console.log(clickBtnValue);
 		var spath = document.location.pathname;
 		spath = path.split("/").slice(0,-2).join("/"); //go up two directory levels
 		spath += "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php"; //go to function's dir
+		console.log(spath);
 		data =  {"action": clickBtnValue,
 				 "group": $("vu_augt_group_value").val(),
 				 "role": $("#vu_augt_role_select").val()};
