@@ -192,7 +192,7 @@ echo '</select>
     <button type="button" name="vu_augt_submit" value="vu_augt_submit" id"vu_augt_button">Submit</button>
 	<span id="vu_augt_return" style="font-family:monospace; font-color:red;"></span>
   </div>
-';
+'; //button attr used instead of submit to prevent page reload without the js preventDefault() call
 }
 
 add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
