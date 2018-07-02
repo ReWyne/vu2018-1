@@ -1,7 +1,7 @@
 //vu_alter_user_group_taxonomy submit
 $(document).ready(function(){
 	
-    $("#vu_augt_button").onclick(function(){
+    document.getElementById('button').onclick(function(){
 		alert ("button clicked");
 		var clickBtnValue = $(this).val();
 		var spath = document.location.pathname;
