@@ -162,7 +162,7 @@ function vu_alter_user_group_taxonomy_display(){
 	else{
 		$vu_alter_user_group_taxonomy_display_count++;
 	}
-	vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
+	//vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 
 	
 	echo '
@@ -195,13 +195,19 @@ echo '</select>
 '; //button attr used instead of submit to prevent page reload without the js preventDefault() call
 }
 
+
+/**
+ * Add js scripts to permissions management
+ * @param  none
+ * @return none
+ */
 add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 function vu_selectively_enqueue_admin_scripts( $hook ) {
     if ( 'users.php' != $hook && 'profile.php' != $hook ) {
         return;
     }
 	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
-	error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
+	//error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
 }
 
 /**

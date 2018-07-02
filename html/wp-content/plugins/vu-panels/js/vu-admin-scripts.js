@@ -8,6 +8,7 @@ function vu_alter_user_group_taxonomy_submit(){
 				 "group": $("#vu_augt_group_field").val(),
 				 "role": $("#vu_augt_role_select").val()};
 		console.log(data);
+		console.log("vu_alter_user_group_taxonomy_submit", data, spath);
         $.post(spath, data, function (response) {
 			// Response div
 			$("#vu_augt_return").html(response["vu_augt_return"]);
