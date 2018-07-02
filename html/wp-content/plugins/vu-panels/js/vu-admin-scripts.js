@@ -5,12 +5,9 @@ $(document).ready(function(){
 	var path = document.location.pathname;
 	console.log(path);
 	console.log('test');
-	var spath = path.split("/")
+	var spath = path.split("/").slice(0,-2).join("/");
 	console.log(spath);
-	spath.pop();
-	spath.pop();
-	console.log(spath);
-	spath = "/" + spath.join("/") + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
+	spath + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
 	console.log(spath);
 	
     $("#vu_augt_button").click(function(){
