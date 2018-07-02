@@ -5,7 +5,11 @@ $(document).ready(function(){
 	var path = document.location.pathname;
 	console.log(path);
 	console.log('test');
-	var spath = path.split("/").slice(0,-2).join("/");
+	var spath = path.split("/");
+	console.log(spath);
+	spath = spath.slice(0,-2);
+	console.log(spath);
+	spath = spath.join("/");
 	console.log(spath);
 	spath + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
 	console.log(spath);
