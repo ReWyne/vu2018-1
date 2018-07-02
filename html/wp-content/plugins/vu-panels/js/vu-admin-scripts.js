@@ -3,8 +3,9 @@ $(document).ready(function(){
 	//var fso=new ActiveXObject("Scripting.FileSystemObject");
 	//var path=fso.GetAbsolutePathName(".");
 	var path = document.location.pathname;
-	alert(path);
-	fso=null;
+	spath = path.split("/").pop().pop().join("/");
+	spath = "/" + spath + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
+	alert(spath);
 	
     $("#vu_augt_button").click(function(){
 		var clickBtnValue = $(this).val();
