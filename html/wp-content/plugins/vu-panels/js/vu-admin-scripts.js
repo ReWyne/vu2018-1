@@ -7,7 +7,8 @@ $(document).ready(function(){
 	console.log('test');
 	var spath = path.split("/")
 	console.log(spath);
-	spath.pop().pop();
+	spath.pop();
+	spath.pop();
 	console.log(spath);
 	spath = "/" + spath.join("/") + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
 	console.log(spath);
