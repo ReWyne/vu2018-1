@@ -4,7 +4,7 @@ $(document).ready(function(){
 	//var path=fso.GetAbsolutePathName(".");
 	var path = document.location.pathname;
 	console.log(path);
-	console.log(test);
+	console.log('test');
 	var spath = path.split("/").pop().pop();
 	console.log(spath);
 	spath = "/" + spath.join("/") + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
