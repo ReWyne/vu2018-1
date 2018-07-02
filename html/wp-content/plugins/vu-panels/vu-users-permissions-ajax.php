@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 include 'vu-permissions.php';
-
+error_log("vu-users-permissions-ajax ERROR_LOG");
 vu_debug("vu-users-permissions-ajax.php ","",$_POST); // print
 if (isset($_POST['action'])) {
     switch ($_POST['action']) {
