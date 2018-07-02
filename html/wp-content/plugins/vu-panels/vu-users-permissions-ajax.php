@@ -1,5 +1,7 @@
 <?php
 
+error_log("vu-users-permissions-ajax accessing");
+
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 include 'vu-permissions.php';

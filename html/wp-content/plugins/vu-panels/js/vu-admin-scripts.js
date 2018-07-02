@@ -10,8 +10,7 @@ function vu_alter_user_group_taxonomy_submit(){
 		console.log(data);
         $.post(spath, data, function (response) {
 			// Response div
-			//$("#vu_augt_return").html(response["vu_augt_return"]);
-			$("#vu_augt_return").html("test response");
+			$("#vu_augt_return").html(response["vu_augt_return"]);
 			alert("response came thru");
         });
   
