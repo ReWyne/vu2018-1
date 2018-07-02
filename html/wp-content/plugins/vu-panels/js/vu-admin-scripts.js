@@ -2,6 +2,7 @@
 $(document).ready(function(){
 	//var fso=new ActiveXObject("Scripting.FileSystemObject");
 	//var path=fso.GetAbsolutePathName(".");
+	alert("test js");
 	var path = document.location.pathname;
 	spath = path.split("/").pop().pop().join("/");
 	spath = "/" + spath + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
