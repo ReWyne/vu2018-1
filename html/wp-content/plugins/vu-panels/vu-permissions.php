@@ -189,7 +189,7 @@ function vu_alter_user_group_taxonomy_display(){
 			echo '<option value="'.$key.'">'.$role['name'].'</option>';
 		}
 echo '</select>
-    <button type="button" name="vu_augt_submit" value="vu_augt_submit" id"vu_augt_button">Submit</button>
+    <button type="button" name="vu_augt_submit" value="vu_augt_submit" id"vu_augt_button" onclick="vu_alter_user_group_taxonomy_submit()">Submit</button>
 	<span id="vu_augt_return" style="font-family:monospace; font-color:red;"></span>
   </div>
 '; //button attr used instead of submit to prevent page reload without the js preventDefault() call
