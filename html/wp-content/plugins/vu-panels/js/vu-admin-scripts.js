@@ -1,7 +1,8 @@
 //vu_alter_user_group_taxonomy submit
 $(document).ready(function(){
-	var fso=new ActiveXObject("Scripting.FileSystemObject");
-	var path=fso.GetAbsolutePathName(".");
+	//var fso=new ActiveXObject("Scripting.FileSystemObject");
+	//var path=fso.GetAbsolutePathName(".");
+	var path = document.location.pathname;
 	alert(path);
 	fso=null;
 	
