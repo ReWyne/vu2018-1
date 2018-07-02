@@ -4,9 +4,10 @@ $(document).ready(function(){
 	//var path=fso.GetAbsolutePathName(".");
 	var path = document.location.pathname;
 	alert(path);
-	var spath = path.split("/").pop().pop().join("/");
+	alert(test);
+	var spath = path.split("/").pop().pop();
 	alert(spath);
-	spath = "/" + spath + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
+	spath = "/" + spath.join("/") + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
 	alert(spath);
 	
     $("#vu_augt_button").click(function(){
