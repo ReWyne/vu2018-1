@@ -224,10 +224,10 @@
 					}
 				}
 
-				// to check wp_woocommerce_session cookie
+				// to check woocommerce_items_in_cart
 				foreach ((array)$_COOKIE as $cookie_key => $cookie_value){
-					if(preg_match("/^wp\_woocommerce\_session/", $cookie_key)){
-						//"<!-- \$_COOKIE['wp_woocommerce_session'] has been set -->";
+					//if(preg_match("/^wp\_woocommerce\_session/", $cookie_key)){
+					if(preg_match("/^woocommerce\_items\_in\_cart/", $cookie_key)){
 						ob_start(array($this, "cdn_rewrite"));
 						
 						return 0;
@@ -261,7 +261,7 @@
 					$wpca_enabled = (isset($wpca_settings_general['general_plugin_status']) && $wpca_settings_general['general_plugin_status'] == '1');
 
 					if($wpca_enabled){
-						if(!isset($_COOKIE["wpca_consent"]) || (isset($_COOKIE["wpca_consent"]) && $_COOKIE["wpca_consent"] == 0)){
+						if(!isset($_COOKIE["wpca_consent"]) || (isset($_COOKIE["wpca_consent"]) && $_COOKIE["wpca_consent"] == 0) || (isset($_COOKIE["wpca_cc"]) && $_COOKIE["wpca_cc"] != 'functional,analytical,social-media,advertising,other')){
 							ob_start(array($this, "cdn_rewrite"));
 							
 							return 0;
@@ -273,6 +273,16 @@
 					ob_start(array($this, "cdn_rewrite"));
 
 					return 0;
+				}
+
+				if(isset($_COOKIE) && isset($_COOKIE["wptouch-pro-view"])){
+					if($this->is_wptouch_smartphone()){
+						if($_COOKIE["wptouch-pro-view"] == "desktop"){
+							ob_start(array($this, "cdn_rewrite"));
+
+							return 0;
+						}
+					}
 				}
 
 				if(preg_match("/\?/", $_SERVER["REQUEST_URI"]) && !preg_match("/\/\?fdx\_switcher\=true/", $_SERVER["REQUEST_URI"])){ // for WP Mobile Edition
@@ -578,8 +588,6 @@
 				return $buffer;
 			}else if($this->is_json($buffer)){
 				return $buffer;
-			}else if(isset($_COOKIE["wptouch-pro-view"])){
-				return $buffer."<!-- \$_COOKIE['wptouch-pro-view'] has been set -->";
 			}else if($this->isPasswordProtected($buffer)){
 				return $buffer."<!-- Password protected content has been detected -->";
 			}else if($this->isWpLogin($buffer)){
@@ -760,12 +768,20 @@
 		public function cdn_rewrite($content){
 			if($this->cdn){
 				$content = preg_replace_callback("/(srcset|src|href|data-bg-url|data-lazyload|data-source-url|data-srcsmall|data-srclarge|data-srcfull|data-slide-img|data-lazy-original)\s{0,2}\=[\'\"]([^\'\"]+)[\'\"]/i", array($this, 'cdn_replace_urls'), $content);
+
 				//url()
 				$content = preg_replace_callback("/(url)\(([^\)\>]+)\)/i", array($this, 'cdn_replace_urls'), $content);
+
 				//{"concatemoji":"http:\/\/your_url.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7"}
 				$content = preg_replace_callback("/\{\"concatemoji\"\:\"[^\"]+\"\}/i", array($this, 'cdn_replace_urls'), $content);
+				
 				//<script>var loaderRandomImages=["https:\/\/www.site.com\/wp-content\/uploads\/2016\/12\/image.jpg"];</script>
 				$content = preg_replace_callback("/[\"\']([^\'\"]+)[\"\']\s*\:\s*[\"\']https?\:\\\\\/\\\\\/[^\"\']+[\"\']/i", array($this, 'cdn_replace_urls'), $content);
+
+				// <script>
+				// jsFileLocation:"//domain.com/wp-content/plugins/revslider/public/assets/js/"
+				// </script>
+				$content = preg_replace_callback("/(jsFileLocation)\s*\:[\"\']([^\"\']+)[\"\']/i", array($this, 'cdn_replace_urls'), $content);
 			}
 
 			return $content;
