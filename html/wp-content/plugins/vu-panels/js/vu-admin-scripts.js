@@ -3,7 +3,9 @@ $(document).ready(function(){
 	//var fso=new ActiveXObject("Scripting.FileSystemObject");
 	//var path=fso.GetAbsolutePathName(".");
 	var path = document.location.pathname;
+	alert(path);
 	var spath = path.split("/").pop().pop().join("/");
+	alert(spath);
 	spath = "/" + spath + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
 	alert(spath);
 	
