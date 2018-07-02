@@ -1,7 +1,7 @@
 //vu_alter_user_group_taxonomy submit
 function vu_alter_user_group_taxonomy_submit(){
 	
-    $("#vu_augt_button").click(function(){
+   
 		alert ("button clicked");
 		var clickBtnValue = $(this).val();
 		var spath = document.location.pathname;
@@ -15,7 +15,7 @@ function vu_alter_user_group_taxonomy_submit(){
 			$("#vu_augt_return").html(response["vu_augt_return"]);
 			alert("response came thru");
         });
-    });
+  
 };
 
 // $(document).ready(function(){
