@@ -3,12 +3,12 @@ $(document).ready(function(){
 	//var fso=new ActiveXObject("Scripting.FileSystemObject");
 	//var path=fso.GetAbsolutePathName(".");
 	var path = document.location.pathname;
-	alert(path);
-	alert(test);
+	console.log(path);
+	console.log(test);
 	var spath = path.split("/").pop().pop();
-	alert(spath);
+	console.log(spath);
 	spath = "/" + spath.join("/") + "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php";
-	alert(spath);
+	console.log(spath);
 	
     $("#vu_augt_button").click(function(){
 		var clickBtnValue = $(this).val();
