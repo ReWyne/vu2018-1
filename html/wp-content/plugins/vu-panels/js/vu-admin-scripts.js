@@ -1,8 +1,5 @@
 //vu_alter_user_group_taxonomy submit
 function vu_alter_user_group_taxonomy_submit(){
-	
-   
-		alert ("button clicked");
 		var clickBtnValue = $(this).val();
 		var spath = document.location.pathname;
 		spath = path.split("/").slice(0,-2).join("/"); //go up two directory levels
@@ -10,6 +7,7 @@ function vu_alter_user_group_taxonomy_submit(){
 		data =  {"action": clickBtnValue,
 				 "group": $("vu_augt_group_value").val(),
 				 "role": $("#vu_augt_role_select").val()};
+		console.log(data);
         $.post(spath, data, function (response) {
 			// Response div
 			$("#vu_augt_return").html(response["vu_augt_return"]);
