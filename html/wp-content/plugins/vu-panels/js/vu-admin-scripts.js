@@ -2,6 +2,7 @@
 $(document).ready(function(){
 	
     $("#vu_augt_button").click(function(){
+		alert ("button clicked");
 		var clickBtnValue = $(this).val();
 		var spath = document.location.pathname;
 		spath = path.split("/").slice(0,-2).join("/"); //go up two directory levels
