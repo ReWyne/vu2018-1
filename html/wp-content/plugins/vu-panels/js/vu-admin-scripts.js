@@ -1,6 +1,6 @@
 //vu_alter_user_group_taxonomy submit
 function vu_alter_user_group_taxonomy_submit(){
-		var clickBtnValue = $(this).val();
+		var clickBtnValue = $("#vu_augt_button").val();
 		console.log(clickBtnValue);
 		var spath = document.location.pathname;
 		spath = path.split("/").slice(0,-2).join("/"); //go up two directory levels
