@@ -1,14 +1,14 @@
-setup server
-setup apache
-setup mysql
-migrate files
-setup wordpress
+- setup server
+- setup apache
+- setup mysql
+- migrate files
+- setup wordpress
 
 
 
 
 
-[jk we're not doing this; too much trouble]
+~~[jk we're not doing this; too much trouble]
 setup js stuff
 	sudo curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 	sudo nvm install node
@@ -18,4 +18,4 @@ setup js stuff
 	sudo npm install --global gulp-cli
 	sudo npm install -g browser-sync
 	cd wp-content/themes/understrap
-	sudo npm install
+	sudo npm install~~

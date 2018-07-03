@@ -9,19 +9,18 @@
  * License: GPL2 or later
  */
 
-defined( 'ABSPATH' ) or die(); //exit if accessed directly
+defined( 'ABSPATH' ) or die(); //canonical way to exit if accessed directly
 
 define( 'TESTING', true ); //just use WP_DEBUG instead
 define( 'IS_WP_DEBUG', defined('WP_DEBUG') && true === WP_DEBUG );
 
-include 'vu-util.php';
-include 'vu-permissions.php';
-include 'vu-db.php';
+include_once dirname( __FILE__ ) . '/vu-util.php';
+include_once dirname( __FILE__ ) . '/vu-permissions.php';
+include_once dirname( __FILE__ ) . '/vu-db.php';
 
 global $vu_panels_vars;
 
 // register_activation_hook's in other files
-include_once dirname( __FILE__ ) . '/vu-permissions.php';
 register_activation_hook( __FILE__, 'vu_register_permissions' );
 
 //link post type
