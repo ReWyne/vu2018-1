@@ -112,90 +112,6 @@ function vu_term_exists($term, $taxonomy){
 	return false;
 }
 
-// /**
-//  * Create dialog box for adding/removing terms from the vu_user_group.
-//  * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
-//  * @param  none
-//  * @return none
-//  */
-// add_action( 'add_meta_boxes', 'vu_alter_user_group_taxonomy' );
-// function vu_alter_user_group_taxonomy() {
-// 	$screens = ['users'];
-//     foreach ($screens as $screen) {
-//         add_meta_box(
-//             'vu_alter_user_group_taxonomy',           // Unique ID
-//             __( 'Modfy vu_user_group Taxonomy', 'vu_textdomain' ),  // Box title
-//             'vu_alter_user_group_taxonomy_display',  // Content callback, must be of type callable
-// 			$screen,                   // screen to display on
-// 			'normal', // display area
-//         	'high' // display priority
-//         );
-//     }
-// }
-
-
-
-//add_action( 'add_meta_boxes', array($this,'add_link_custom_fields' )); //calls the function in this class
-
-
-
-
-/**
- * Display the contents of the alter_user_group_taxonomy meta box
- * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
- * @param  none
- * @return none
- */
-//TODO: currently called on all admin pages
-add_action( 'manage_users_extra_tablenav', 'vu_alter_user_group_taxonomy_display' ); //calls the function in this class
-function vu_alter_user_group_taxonomy_display(){	
-	global $pagenow;
-	global $vu_alter_user_group_taxonomy_display_count;
-	if ($pagenow != 'users.php') {
-		return;	
-		}
-		
-	if(!isset($vu_alter_user_group_taxonomy_display_count)){
-		$vu_alter_user_group_taxonomy_display_count = 1;
-		return;
-	}
-	else{
-		$vu_alter_user_group_taxonomy_display_count++;
-	}
-	//vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
-
-	
-	echo '
-  <div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">';
-	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' );
-    echo '<label for="vu_augt_group"><b>User Group to add :</b></label>
-    <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
-
-    <p><label for="psw"><b>Group Permissions :</b></label>
-	  <select name="vu_augt_role_value" id="vu_augt_role_select" class="postbox">';
-	  //generate options for our drop-down select
-	  global $wp_roles;
-		if ( ! isset( $wp_roles ) )
-    		$wp_roles = new WP_Roles();
-
-		// $t_all_roles = $wp_roles->get_names();
-		// foreach($t_all_roles as $role){
-		// 	echo '<option value="'.$role.'">'.$role.'</option>';
-		// }
-
-
-		$t_all_roles = $wp_roles->roles;
-		foreach($t_all_roles as $key => $role){
-			echo '<option value="'.$key.'">'.$role['name'].'</option>';
-		}
-echo '</select>
-    <button type="button" name="vu_augt_submit" value="vu_augt_submit" id="vu_augt_button" onclick="vu_alter_user_group_taxonomy_submit()">Submit</button>
-	<span id="vu_augt_return" style="font-family:monospace; font-color:red;"></span>
-  </div>
-'; //button attr used instead of submit to prevent page reload without the js preventDefault() call
-}
-
-
 /**
  * Add js scripts to permissions management
  * @param  none
@@ -209,6 +125,7 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
 	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
 	//error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
 }
+
 
 /**
  * Compute what role a user should have by looking at what vu_user_group terms it has and getting the associated roles from user_group_to_role
@@ -245,87 +162,4 @@ function vu_get_user_role($user = ''){
 		}
 	}
 	return $permission_role;
-}
-
-//  add_action( 'save_post', array($this,'save_link_url'));
-// /**
-//  * Save the submitted contents from the alter_user_group_taxonomy meta box
-//  * Note that the role associated with each term is stored in a separate table on the database, user_group_to_role
-//  * @param  none
-//  * @return none
-//  */
-//   function save_vu_alter_usr_grp_tax_url( $post_id ) {
-//     vu_log("save_vu_alter_usr_grp_tax_url");
-
-//     //only save meta value if hitting submit
-//     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
-//       return $post_id;  
-//     }
-
-//     // Check if nonce is set
-//     if ( ! isset( $_POST['vu_alter_usr_grp_tax_url_nonce'] ) ) {
-//       return $post_id;
-//     }
-
-//     if ( ! wp_verify_nonce( $_POST['vu_alter_usr_grp_tax_url_nonce'], 'vu_alter_usr_grp_tax_save' ) ) {
-//       return $post_id;
-//     }
-
-//     // Check that the logged in user has permission to edit this post
-//     if ( ! current_user_can( 'edit_post' ) ) {
-//       return $post_id;
-//     }
-
-//     $vu_alter_usr_grp_tax_url_value = sanitize_text_field( $_POST['vu_alter_usr_grp_tax_url_value'] );
-
-//     update_post_meta( $post_id, 'vu_alter_usr_grp_tax_url_value', $vu_alter_usr_grp_tax_url_value );
-//   }
-
-
-  
-
-/**
- * Create dialog box for adding/removing user groups from a user.
- * Note that this may result in changing the user's role.
- * @param  none
- * @return none
- */
-add_action( 'show_user_profile', 'vu_show_extra_profile_fields' );
-add_action( 'edit_user_profile', 'vu_show_extra_profile_fields' );
-function vu_show_extra_profile_fields( $user ) {
-	?>
-	<h3>Extra profile information</h3>
-
-	<table class="form-table">
-
-		<tr>
-			<th><label for="twitter">Twitter</label></th>
-
-			<td>
-				<input type="text" name="twitter" id="twitter" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
-				<span class="description">Please enter your Twitter username.</span>
-			</td>
-		</tr>
-
-	</table>
-	<?php 
-}
-
-/**
- * Save user groups added/removed from a user.
- * Note that this may result in changing the user's role.
- * @param  $user_id
- * @return none
- */
-add_action( 'personal_options_update', 'vu_save_extra_profile_fields' );
-add_action( 'edit_user_profile_update', 'vu_save_extra_profile_fields' );
-function vu_save_extra_profile_fields( $user_id ) {
-
-	if ( !current_user_can( 'edit_user', $user_id ) )
-		return $user_id;
-
-	// TODO: nonce validating code here 
-
-	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
-	update_usermeta( $user_id, 'twitter', $_POST['twitter'] );
-}
+}  
