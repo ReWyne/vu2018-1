@@ -5,12 +5,12 @@ function vu_alter_user_group_taxonomy_submit(){
 		// var spath = document.location.pathname; //get current path
 		// spath = spath.split("/").slice(0,-2).join("/"); //go up two directory levels
 		// spath += "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php"; //go to target function's dir
-		data =  JSON.stringify({"action": clickBtnValue,
+		data =  {"action": clickBtnValue,
 				 "group": $("#vu_augt_group_field").val(),
-				 "role": $("#vu_augt_role_select").val()});
+				 "role": $("#vu_augt_role_select").val()};
 		console.log(data);
-		console.log("vu_alter_user_group_taxonomy_submit\n", data, "\n"+spath);
-        $.post(spath, data, function (response) {
+		console.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
+        $.post(spath, JSON.stringify(data), function (response) {
 			// Response div
 			$("#vu_augt_return").html(response["vu_augt_return"]);
 			alert("response came thru");
