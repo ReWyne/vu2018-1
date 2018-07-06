@@ -26,7 +26,7 @@ include_once dirname( __FILE__ ) . '/vu-choose-user-initial-group.php';
 global $vu_panels_vars;
 
 // register_activation_hook's in other files
-register_activation_hook( __FILE__, 'vu_register_permissions' );
+// register_activation_hook( __FILE__, 'vu_register_permissions' );
 
 //link post type
 class vu_link_post_type {

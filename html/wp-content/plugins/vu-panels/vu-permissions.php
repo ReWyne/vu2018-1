@@ -12,7 +12,7 @@ abstract class vu_permission_level {
 	const Basic = 'subscriber';
   }
 
-  //called via register_activation_hook
+add_action( 'init', 'vu_register_permissions', 0 );
 function vu_register_permissions(){
 	if(IS_WP_DEBUG){
 		vu_log("vu_register_permissions");
@@ -25,7 +25,6 @@ function vu_register_permissions(){
 		$t_all_roles = $wp_roles->get_names();
 		vu_debug("pre-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
 	}
-	error_log("pre-adding full roles list: " . print_r(array('err_log', 'pc_dbg'),true) . print_r($t_all_roles,true));
 	//the intended capabilities of standard (non-admin) VU staff
 	add_role(
 		'vu_department', //like editor, but without ability to modify pages/html
