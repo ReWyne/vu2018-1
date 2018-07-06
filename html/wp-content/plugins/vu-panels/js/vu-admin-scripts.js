@@ -11,8 +11,7 @@ function vu_alter_user_group_taxonomy_submit(){
 			// Response div
 			var rsp = response;
 			console.log(rsp);
-			//rsp = rsp.split("\\n").join("<br />"); //replace() is buggy
-			rsp = rsp.replace("/\\n/g","__BREAK__");
+			rsp = rsp.split("\\n").join("<br />"); //replace() is buggy
 			console.log(rsp);
 			$("#vu_augt_return").html(rsp);
         });
