@@ -25,6 +25,7 @@ function vu_register_permissions(){
 		$t_all_roles = $wp_roles->get_names();
 		vu_debug("pre-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
 	}
+	error_log("vu_register_permissions");
 	//the intended capabilities of standard (non-admin) VU staff
 	add_role(
 		'vu_department', //like editor, but without ability to modify pages/html
