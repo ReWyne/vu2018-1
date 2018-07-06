@@ -14,18 +14,17 @@ abstract class vu_permission_level {
 
 add_action( 'init', 'vu_register_permissions', 0 );
 function vu_register_permissions(){
-	if(IS_WP_DEBUG){
-		vu_log("vu_register_permissions");
+	// if(IS_WP_DEBUG){
+	// 	vu_log("vu_register_permissions");
 
-		global $wp_roles;
+	// 	global $wp_roles;
 
-		if ( ! isset( $wp_roles ) )
-    		$wp_roles = new WP_Roles();
+	// 	if ( ! isset( $wp_roles ) )
+    // 		$wp_roles = new WP_Roles();
 
-		$t_all_roles = $wp_roles->get_names();
-		vu_debug("pre-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
-	}
-	error_log("vu_register_permissions");
+	// 	$t_all_roles = $wp_roles->get_names();
+	// 	vu_debug("pre-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
+	// }
 	//the intended capabilities of standard (non-admin) VU staff
 	add_role(
 		'vu_department', //like editor, but without ability to modify pages/html
@@ -51,16 +50,17 @@ function vu_register_permissions(){
 			//'unfiltered_html' => false, //definitely not
 		)
 	);
-	if(IS_WP_DEBUG){
-		global $wp_roles;
+	// if(IS_WP_DEBUG){
+	// 	global $wp_roles;
 
-		if ( ! isset( $wp_roles ) )
-    		$wp_roles = new WP_Roles();
+	// 	if ( ! isset( $wp_roles ) )
+    // 		$wp_roles = new WP_Roles();
 
-		$t_all_roles = $wp_roles->get_names();
-		vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
-	}
-	// //if we want out own admin role
+	// 	$t_all_roles = $wp_roles->get_names();
+	// 	vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
+	// }
+
+	// //if we want our own admin role
 	// $t_role = get_role('administrator');
 	// $admin_caps = $t_role['capabilities'];
 	// //list of capabilities we're adding to the vanilla admin role

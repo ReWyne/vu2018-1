@@ -101,7 +101,7 @@ function vu_alter_user_group_taxonomy_process_request(){
         }
         else {
             $t = print_r(wp_insert_term( $vu_augt_value, 'vu_user_group' ), true);
-            $_POST['vu_augt_return'] = "WARNING: Term $t was replaced. This may change the roles (permissions) of existing users";
+            $_POST['vu_augt_return'] = "WARNING: Term was replaced with return value '''$t''' This may change the roles (permissions) of existing users";
         }
         vu_debug( "vu_augt_submit" );
 
