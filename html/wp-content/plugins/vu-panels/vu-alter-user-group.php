@@ -64,10 +64,10 @@ echo '</select>
  */
 if(is_admin()){
     add_action('wp_ajax_vu_alter_user_group_taxonomy_process_request', 'vu_alter_user_group_taxonomy_process_request');
-    vu_debug("wp_ajax_vu_alter_user_group_taxonomy_process_request");
+    vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
 }
 function vu_alter_user_group_taxonomy_process_request(){
-	vu_log( "The vu_augt_submit function is called.");
+	vu_debug( "The vu_augt_submit function is called.");
     if (isset($_POST['group']) && isset($_POST['group'])) {
         // //only save meta value if hitting submit
         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
