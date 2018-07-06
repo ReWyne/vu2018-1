@@ -64,7 +64,7 @@ echo '</select>
  */
 if(is_admin()){
     add_action('wp_ajax_vu_alter_user_group_taxonomy_process_request', 'vu_alter_user_group_taxonomy_process_request');
-    vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
+    //vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
 }
 function vu_alter_user_group_taxonomy_process_request(){
 	vu_debug( "The vu_augt_submit function is called.");

@@ -122,11 +122,11 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
     if ( 'users.php' != $hook && 'profile.php' != $hook ) {
         return;
     }
-	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
+	wp_enqueue_script( 'vu_plugin_admin_js', plugins_url( '/js/vu-admin-scripts.js', __FILE__ ), array('jquery'));
 	//error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
 
 	// in JavaScript, accessed as (ex) ajax_object.ajax_url
-	wp_localize_script( 'ajax-script', 'ajax_object',
+	wp_localize_script( 'vu_plugin_admin_js', 'ajax_object',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
 
 }
