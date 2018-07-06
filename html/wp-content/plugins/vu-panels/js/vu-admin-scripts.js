@@ -7,7 +7,7 @@ function vu_alter_user_group_taxonomy_submit(){
 		data =  {"action": "vu_alter_user_group_taxonomy_process_request",
 				 "group": $("#vu_augt_group_field").val(),
 				 "role": $("#vu_augt_role_select").val(),
-				 "vu_augt_nonce": $("#vu_augt_nonce")};
+				 "vu_augt_nonce": $("#vu_augt_nonce").val()};
 		console.log(data);
 		console.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
         $.post(spath, data, function (response) {
