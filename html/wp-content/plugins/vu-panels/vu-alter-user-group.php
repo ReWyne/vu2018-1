@@ -113,6 +113,7 @@ function vu_alter_user_group_taxonomy_process_request(){
         $_POST['vu_augt_return'] = "Error: Nothing submitted";
     }
     vu_debug( $_POST['vu_augt_return'] );
+    echo $_POST['vu_augt_return'];
     wp_die();
 }
 
