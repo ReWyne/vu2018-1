@@ -10,7 +10,7 @@ function vu_alter_user_group_taxonomy_submit(){
 				 "role": $("#vu_augt_role_select").val()};
 		console.log(data);
 		console.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
-        $.post(spath, JSON.stringify(data), function (response) {
+        $.post(spath, data, function (response) {
 			// Response div
 			$("#vu_augt_return").html(response["vu_augt_return"]);
 			alert("response came thru");
