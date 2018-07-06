@@ -59,7 +59,7 @@ function vu_db_install_ug2r() {
  */
 function vu_db_replace_ug2r_data($tax_group, $group_role) {
 	global $wpdb;
-	vu_log("vu_db_replace_ug2r_data called with params: $tax_group, $group_role");
+	vu_debug("vu_db_replace_ug2r_data called with params: $tax_group, $group_role");
 	$table_name = $wpdb->prefix . 'user_group_to_role';
     $insert_data = array( 
         'tax_group' => $tax_group, 

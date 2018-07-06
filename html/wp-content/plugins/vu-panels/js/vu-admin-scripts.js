@@ -9,12 +9,7 @@ function vu_alter_user_group_taxonomy_submit(){
 		console.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
         $.post(spath, data, function (response) {
 			// Response div
-			var rsp = response;
-			console.log(rsp);
-			//rsp = rsp.split("\\n").join("<br />"); //replace() is buggy
-			rsp = rsp.replace(/\\n/g,"<br />");
-			console.log(rsp);
-			$("#vu_augt_return").html(rsp);
+			$("#vu_augt_return").html(response.replace(/\\n/g,"<br />"));
         });
   
 };
