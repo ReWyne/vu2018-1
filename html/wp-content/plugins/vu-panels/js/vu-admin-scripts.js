@@ -9,8 +9,8 @@ function vu_alter_user_group_taxonomy_submit(){
 		console.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
         $.post(spath, data, function (response) {
 			// Response div
-			$("#vu_augt_return").html(response["vu_augt_return"]);
-			alert("response came thru");
+			console.log(response["vu_augt_return"]);
+			$("#vu_augt_return").html("response came thru");
         });
   
 };
