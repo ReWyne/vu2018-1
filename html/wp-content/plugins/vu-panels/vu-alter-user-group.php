@@ -57,7 +57,6 @@ echo '</select>
 '; //button attr used instead of submit to prevent page reload without the js preventDefault() call
 }
 
-
 /**
  * Process an admin's request to alter the user group taxonomy
  * @param  none

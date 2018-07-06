@@ -124,6 +124,11 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
     }
 	wp_enqueue_script( 'vu_plugin_js', plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
 	//error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
+
+	// in JavaScript, accessed as (ex) ajax_object.ajax_url
+	wp_localize_script( 'ajax-script', 'ajax_object',
+		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
+
 }
 
 
