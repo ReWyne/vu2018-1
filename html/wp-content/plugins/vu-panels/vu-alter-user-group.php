@@ -51,7 +51,7 @@ function vu_alter_user_group_taxonomy_display(){
 			echo '<option value="'.$key.'">'.$role['name'].'</option>';
 		}
 echo '</select>
-    <button type="button" name="vu_augt_submit" value="vu_augt_submit" id="vu_augt_button" onclick="vu_alter_user_group_taxonomy_submit()">Submit</button>
+    <button type="button" name="vu_augt_submit" value="vu_alter_user_group_taxonomy_process_request" id="vu_augt_button" onclick="vu_alter_user_group_taxonomy_submit()">Submit</button>
 	<span id="vu_augt_return" style="font-family:monospace; font-color:red;"></span>
   </div>
 '; //button attr used instead of submit to prevent page reload without the js preventDefault() call
@@ -68,7 +68,7 @@ if(is_admin()){
 }
 function vu_alter_user_group_taxonomy_process_request(){
 	vu_debug( "The vu_augt_submit function is called.");
-    if (isset($_POST['group']) && isset($_POST['group'])) {
+    if ( isset($_POST['group']) ) {
         // //only save meta value if hitting submit
         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
         //     return $post_id;  
