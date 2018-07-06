@@ -67,7 +67,6 @@ if(is_admin()){
     //vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
 }
 function vu_alter_user_group_taxonomy_process_request(){
-    vu_debug( "vu_augt_submit" );
     if ( isset($_POST['group']) ) {
         // //only save meta value if hitting submit
         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
@@ -75,22 +74,18 @@ function vu_alter_user_group_taxonomy_process_request(){
         // }
         $_POST['vu_augt_return'] = "Error: Permissions validation failed";
         // Check if nonce is set
-        vu_debug( "checking nonce" );
         if ( ! isset( $_POST['vu_augt_nonce'] ) ) {
             return $_POST;
         }
-        vu_debug( "vu_augt_submit" );
 
         if ( ! wp_verify_nonce( $_POST['vu_augt_nonce'], 'vu_augt_save' ) ) {
             return $_POST;
         }
-        vu_debug( "vu_augt_submit" );
 
         // Check that the logged in user has permission to mess with permissions data
         if ( ! current_user_can( 'promote_users' ) ) {
             return $_POST;
         }
-        vu_debug( "vu_augt_submit" );
 
         // This is the actual inserting part
         // insert term
@@ -103,14 +98,13 @@ function vu_alter_user_group_taxonomy_process_request(){
             $t = print_r(wp_insert_term( $vu_augt_value, 'vu_user_group' ), true);
             $_POST['vu_augt_return'] = "WARNING: Term was replaced with return value '''$t''' This may change the roles (permissions) of existing users";
         }
-        vu_debug( "vu_augt_submit" );
 
         // fun backend stuff
         // IMPORTANT: 'administrator' is both a role and a protected term in the vu_user_group taxonomy
         // You're not allowed to modify it because otherwise you could lock all admins out of being able to modify the site.
         if($vu_augt_value === vu_permission_level::Admin){
             $_POST['vu_augt_return'] = 'Error: Modifying the '.vu_permission_level::Admin.' group is prohibited';
-            exit;
+            wp_die();
         }
         vu_db_replace_ug2r_data($vu_augt_value, $_POST['role']);
         // //update_post_meta( $post_id, 'vu_alter_usr_grp_tax_url_value', $vu_alter_usr_grp_tax_url_value );
