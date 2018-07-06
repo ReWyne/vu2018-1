@@ -75,6 +75,7 @@ function vu_alter_user_group_taxonomy_process_request(){
         // }
         $_POST['vu_augt_return'] = "Error: Permissions validation failed";
         // Check if nonce is set
+        vu_debug( "checking nonce" );
         if ( ! isset( $_POST['vu_augt_nonce'] ) ) {
             return $_POST;
         }
