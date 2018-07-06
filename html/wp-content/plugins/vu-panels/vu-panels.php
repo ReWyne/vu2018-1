@@ -96,7 +96,7 @@ class vu_link_post_type {
     if ( ! isset( $_POST['link_url_nonce'] ) ) {
       return $post_id;
     }
-
+    vu_debug($_POST['link_url_nonce']);
     if ( ! wp_verify_nonce( $_POST['link_url_nonce'], 'link_save' ) ) {
       return $post_id;
     }

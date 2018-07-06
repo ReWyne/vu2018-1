@@ -1,13 +1,13 @@
 //vu_alter_user_group_taxonomy submit
 function vu_alter_user_group_taxonomy_submit(){
-		var clickBtnValue = $("#vu_augt_button").val();
 		var spath = ajax_object.ajax_url;
 		// var spath = document.location.pathname; //get current path
 		// spath = spath.split("/").slice(0,-2).join("/"); //go up two directory levels
 		// spath += "/wp-content/plugins/vu-panels/vu-users-permissions-ajax.php"; //go to target function's dir
 		data =  {"action": "vu_alter_user_group_taxonomy_process_request",
 				 "group": $("#vu_augt_group_field").val(),
-				 "role": $("#vu_augt_role_select").val()};
+				 "role": $("#vu_augt_role_select").val(),
+				 "vu_augt_nonce": $("#vu_augt_nonce")};
 		console.log(data);
 		console.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
         $.post(spath, data, function (response) {
