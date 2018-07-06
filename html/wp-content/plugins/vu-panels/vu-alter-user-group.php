@@ -67,7 +67,7 @@ if(is_admin()){
     //vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
 }
 function vu_alter_user_group_taxonomy_process_request(){
-	vu_debug( "The vu_augt_submit function is called.");
+    vu_debug( "vu_augt_submit" );
     if ( isset($_POST['group']) ) {
         // //only save meta value if hitting submit
         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
@@ -78,16 +78,19 @@ function vu_alter_user_group_taxonomy_process_request(){
         if ( ! isset( $_POST['vu_augt_nonce'] ) ) {
             return $_POST;
         }
-    
+        vu_debug( "vu_augt_submit" );
+
         if ( ! wp_verify_nonce( $_POST['vu_augt_nonce'], 'vu_augt_save' ) ) {
             return $_POST;
         }
-    
+        vu_debug( "vu_augt_submit" );
+
         // Check that the logged in user has permission to mess with permissions data
         if ( ! current_user_can( 'promote_users' ) ) {
             return $_POST;
         }
-    
+        vu_debug( "vu_augt_submit" );
+
         // This is the actual inserting part
         // insert term
         $vu_augt_value = sanitize_key( $_POST['group'] );
@@ -99,6 +102,7 @@ function vu_alter_user_group_taxonomy_process_request(){
             $t = print_r(wp_insert_term( $vu_augt_value, 'vu_user_group' ), true);
             $_POST['vu_augt_return'] = "WARNING: Term $t was replaced. This may change the roles (permissions) of existing users";
         }
+        vu_debug( "vu_augt_submit" );
 
         // fun backend stuff
         // IMPORTANT: 'administrator' is both a role and a protected term in the vu_user_group taxonomy
