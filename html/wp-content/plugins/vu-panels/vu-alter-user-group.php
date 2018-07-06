@@ -52,7 +52,7 @@ function vu_alter_user_group_taxonomy_display(){
 		}
 echo '</select>
     <button type="button" name="vu_augt_submit" value="vu_augt_submit" id="vu_augt_button" onclick="vu_alter_user_group_taxonomy_submit()">Submit</button>
-	<span id="vu_augt_return" style="font-family:monospace; font-color:red;"></span>
+	<span id="vu_augt_return" style="font-family:monospace; color:red; white-space:pre"></span>
   </div>
 '; //button attr used instead of submit to prevent page reload without the js preventDefault() call
 }
