@@ -14,6 +14,7 @@ function vu_update_db_check() {
     global $vu_db_version;
     $opt = get_site_option( 'vu_db_version' );
     if ( !$opt || $opt != $vu_db_version ) { //get_site_option returns false if option DNE
+        vu_debug("Updating db version...");
         vu_db_install_ug2r();
     }
 }
