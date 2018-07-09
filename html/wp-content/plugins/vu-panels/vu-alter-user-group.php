@@ -87,25 +87,26 @@ function vu_alter_user_group_taxonomy_process_request(){
             return $_POST;
         }
 
-        // This is the actual inserting part
-        // insert term
         $vu_augt_value = sanitize_key( $_POST['group'] );
 
+        // IMPORTANT: 'administrator' is both a role and (in this case) a protected term in the vu_user_group taxonomy
+        // You're not allowed to modify it because otherwise you could lock all admins out of being able to modify the site.
+        if($vu_augt_value === 'vu_administrator'){
+            $_POST['vu_augt_return'] = 'Error: Modifying the '.'vu_administrator'.' group is prohibited';
+            wp_die();
+        }
+
+        // This is the actual inserting part
+        // insert term
         if ( ! vu_term_exists( $vu_augt_value, 'vu_user_group' ) ){
             $_POST['vu_augt_return'] = "Successully inserted term: " . print_r(wp_insert_term( $vu_augt_value, 'vu_user_group' ), true);
         }
         else {
-            $t = print_r(wp_insert_term( $vu_augt_value, 'vu_user_group' ), true);
+            $t = print_r(wp_update_term( $vu_augt_value, 'vu_user_group' ), true);
             $_POST['vu_augt_return'] = "WARNING: Term was replaced with return value '''$t''' This may change the roles (permissions) of existing users";
         }
 
         // fun backend stuff
-        // IMPORTANT: 'administrator' is both a role and a protected term in the vu_user_group taxonomy
-        // You're not allowed to modify it because otherwise you could lock all admins out of being able to modify the site.
-        if($vu_augt_value === vu_permission_level::Admin){
-            $_POST['vu_augt_return'] = 'Error: Modifying the '.vu_permission_level::Admin.' group is prohibited';
-            wp_die();
-        }
         vu_db_replace_ug2r_data($vu_augt_value, $_POST['role']);
         // //update_post_meta( $post_id, 'vu_alter_usr_grp_tax_url_value', $vu_alter_usr_grp_tax_url_value );
     }

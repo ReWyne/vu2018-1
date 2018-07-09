@@ -2,10 +2,13 @@
 
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
+//include_once dirname( __FILE__ ) . '/vu-db.php';
+
 // 
 // This file encompasses the vu_user_group taxonomy and user permissions handling/meta boxes
 // 
 
+//list of available roles
 abstract class vu_permission_level {
 	const Admin = 'administrator';
 	const Department = 'vu_department';
@@ -90,6 +93,13 @@ function vu_register_permissions(){
 			'query_var' => true,
 		)
 	);
+
+	if ( ! vu_term_exists( 'admini', 'vu_user_group' ) ){
+		$outpt = "Inserted admin vu_user_group: " . print_r(wp_insert_term( 'vu_administrator', 'vu_user_group' ), true);
+		vu_debug($output);
+		
+		vu_db_replace_ug2r_data('vu_administrator', vu_permission_level::Admin);
+	}
 		//explicitly add new caps to the appropriate role(s), if necessary (it shouldn't be)
 		// $admins = get_role( 'administrator' );
 
