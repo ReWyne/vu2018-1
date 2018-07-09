@@ -25,8 +25,8 @@ function vu_alter_user_group_taxonomy_submit(){
 				"group": $("#vu_augt_group_field").val(),
 				"role": $("#vu_augt_role_select").val(),
 				"vu_augt_nonce": $("#vu_augt_nonce").val()};
-	console.log(data);
-	console.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
+	debug.log(data);
+	debug.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
 	$.post(spath, data, function (response) {
 		// Response div
 		$("#vu_augt_return").html(response.replace(/\\n/g,"<br />"));
