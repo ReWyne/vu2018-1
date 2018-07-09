@@ -95,7 +95,7 @@ function vu_register_permissions(){
 	);
 
 	if ( ! vu_term_exists( 'admini', 'vu_user_group' ) ){
-		$outpt = "Inserted admin vu_user_group: " . print_r(wp_insert_term( 'vu_administrator', 'vu_user_group' ), true);
+		$output = "Inserted admin vu_user_group: " . print_r(wp_insert_term( 'vu_administrator', 'vu_user_group' ), true);
 		vu_debug($output);
 		
 		vu_db_replace_ug2r_data('vu_administrator', vu_permission_level::Admin);
