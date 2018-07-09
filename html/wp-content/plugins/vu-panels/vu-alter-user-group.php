@@ -2,7 +2,7 @@
 
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
-include_once dirname( __FILE__ ) . '/vu-permissions.php';
+//include_once dirname( __FILE__ ) . '/vu-permissions.php';
 
 /**
  * Display the contents of the alter_user_group_taxonomy meta box

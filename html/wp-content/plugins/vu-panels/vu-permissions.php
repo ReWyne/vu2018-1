@@ -137,7 +137,7 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
 
 	// in JavaScript, accessed as (ex) ajax_object.ajax_url
 	wp_localize_script( 'vu_plugin_admin_js', 'ajax_object',
-		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
+		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'IS_WP_DEBUG' => (IS_WP_DEBUG === true) ) );
 
 }
 
