@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
  * @return none
  */
 global $pagenow;
-if(is_admin() && $pagenow == 'users.php'){
+if(is_admin() && $pagenow == 'users.php' && current_user_can(vu_permission_level::Admin)){
 	add_action( 'manage_users_extra_tablenav', 'vu_alter_user_group_taxonomy_display' );
 }
 function vu_alter_user_group_taxonomy_display(){	
@@ -27,15 +27,16 @@ function vu_alter_user_group_taxonomy_display(){
 	//vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
 
 	
-	echo '
-  <div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">';
-	wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' ); echo '
+?>
+  <div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">
+	<?php wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' ) ?>
 	<label for="vu_augt_group"><b>User Group to add :</b></label>
     <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
 
     <p><label for="psw"><b>Group Permissions :</b></label>
 	  <select name="vu_augt_role_value" id="vu_augt_role_select" class="postbox">';
-	  //generate options for our drop-down select
+	  <?php
+      //generate options for our drop-down select
 	  global $wp_roles;
 		if ( ! isset( $wp_roles ) )
     		$wp_roles = new WP_Roles();
@@ -45,16 +46,16 @@ function vu_alter_user_group_taxonomy_display(){
 		// 	echo '<option value="'.$role.'">'.$role.'</option>';
 		// }
 
-
 		$t_all_roles = $wp_roles->roles;
 		foreach($t_all_roles as $key => $role){
 			echo '<option value="'.$key.'">'.$role['name'].'</option>';
-		}
-echo '</select>
+        }
+        ?>
+</select>
     <button type="button" name="vu_augt_submit" value="vu_augt_submit" id="vu_augt_button" onclick="vu_alter_user_group_taxonomy_submit()">Submit</button>
 	<span id="vu_augt_return" style="font-family:monospace; color:red; white-space:pre"></span>
   </div>
-'; //button attr used instead of submit to prevent page reload without the js preventDefault() call
+<?php //button attr used instead of submit to prevent page reload without the js preventDefault() call
 }
 
 /**
@@ -62,7 +63,7 @@ echo '</select>
  * @param  none
  * @return none
  */
-if(is_admin()){
+if(is_admin() && curret_user_can(vu_permission_level::Admin)){
     add_action('wp_ajax_vu_alter_user_group_taxonomy_process_request', 'vu_alter_user_group_taxonomy_process_request');
     //vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
 }
@@ -91,19 +92,19 @@ function vu_alter_user_group_taxonomy_process_request(){
 
         // IMPORTANT: 'administrator' is both a role and (in this case) a protected term in the vu_user_group taxonomy
         // You're not allowed to modify it because otherwise you could lock all admins out of being able to modify the site.
-        if($vu_augt_value === 'vu_administrator'){
-            $_POST['vu_augt_return'] = 'Error: Modifying the '.'vu_administrator'.' group is prohibited';
+        if($vu_augt_value === VU_ADMIN_GROUP){
+            $_POST['vu_augt_return'] = 'Error: Modifying the '.VU_ADMIN_GROUP.' group is prohibited';
             wp_die();
         }
 
         // This is the actual inserting part
         // insert term
         if ( ! vu_term_exists( $vu_augt_value, 'vu_user_group' ) ){
-            $_POST['vu_augt_return'] = "Successully inserted term: " . print_r(wp_insert_term( $vu_augt_value, 'vu_user_group' ), true);
+            $_POST['vu_augt_return'] = "Successully inserted term with return value: " . print_r(wp_insert_term( $vu_augt_value, 'vu_user_group' ), true);
         }
         else {
             $t = print_r(wp_update_term( term_exists($vu_augt_value), 'vu_user_group' ), true);
-            $_POST['vu_augt_return'] = "WARNING: Term was replaced with return value '''$t''' This may change the roles (permissions) of existing users";
+            $_POST['vu_augt_return'] = "WARNING: Term was replaced with return value: '''$t''' This may change the roles (permissions) of existing users";
         }
 
         // fun backend stuff

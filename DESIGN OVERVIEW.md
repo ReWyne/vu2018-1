@@ -45,8 +45,8 @@ The site's display is handled by the **vu_custom_portal** theme.
     - **Notes:** 
     - **Related files:** js/vu-admin-scripts.js
     - **Key related functions:** 
-- `vu-add-group-for-user.php`
-    - **Description:** Allows admins to add user groups to a specific user from that user's profile.php page
+- `vu-change-groups-for-user.php`
+    - **Description:** Allows admins to add/remove user groups for a specific user from that user's profile.php page
     - **Key functions:** 
     - **Notes:** 
     - **Related files:** 

@@ -15,6 +15,8 @@ abstract class vu_permission_level {
 	const Basic = 'subscriber';
   }
 
+define("VU_ADMIN_GROUP", "vu_admin");
+
 add_action( 'init', 'vu_register_permissions', 0 );
 function vu_register_permissions(){
 	// if(IS_WP_DEBUG){
@@ -85,11 +87,11 @@ function vu_register_permissions(){
 		)
 	);
 
-	if ( ! vu_term_exists( 'vu_administrator', 'vu_user_group' ) ){
-		$output = "Inserted admin vu_user_group: " . print_r(wp_insert_term( 'vu_administrator', 'vu_user_group' ), true);
+	if ( ! vu_term_exists( VU_ADMIN_GROUP, 'vu_user_group' ) ){
+		$output = "Inserted admin vu_user_group: " . print_r(wp_insert_term( VU_ADMIN_GROUP, 'vu_user_group' ), true);
 		vu_debug($output);
 		
-		vu_db_replace_ug2r_data('vu_administrator', vu_permission_level::Admin);
+		vu_db_replace_ug2r_data(VU_ADMIN_GROUP, vu_permission_level::Admin);
 	}
 		//explicitly add new caps to the appropriate role(s), if necessary (it shouldn't be)
 		// $admins = get_role( 'administrator' );
@@ -185,3 +187,42 @@ function vu_get_user_role($user = ''){
 	}
 	return $permission_role;
 }  
+
+
+/**
+ * Block access to posts that the user should not have access to based on their user group membership
+ * TODO
+ * @param  none
+ * @return none
+ */
+add_action( 'admin_init', 'my_custom_dashboard_access_handler');
+ 
+function my_custom_dashboard_access_handler() {
+ 
+   // Exit if the user cannot edit any posts
+   if ( is_admin() && ! current_user_can( 'delete_posts' ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX )) {
+      wp_redirect( home_url() );
+      exit;
+   }
+
+   //Exit if the user cannot edit *this* post, due to lacking group membership.
+
+   global $post;
+	$id = $post->ID;
+
+	
+// 	//reference
+//    /* Get the meta key. */
+//    $meta_key = 'smashing_flautist_access';
+
+//    /* Get the meta value of the custom field key. */
+//    $meta_value = get_post_meta( $post_id, $meta_key, true );
+
+//    /* If a new meta value was added and there was no previous value, add it. */
+//    if ( $new_meta_value && '' == $meta_value )
+//       {
+//       add_post_meta( $post_id, $meta_key, $new_meta_value, true );
+//       $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'private' WHERE ID = ".$post_id." AND post_type ='post'"));
+//       }
+	
+}
