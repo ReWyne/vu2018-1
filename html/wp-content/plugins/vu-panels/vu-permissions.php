@@ -53,20 +53,6 @@ function vu_register_permissions(){
 			//'unfiltered_html' => false, //definitely not
 		)
 	);
-	if(IS_WP_DEBUG){
-		global $wp_roles;
-
-		if ( ! isset( $wp_roles ) )
-    		$wp_roles = new WP_Roles();
-
-		$t_all_roles = $wp_roles->get_names();
-		vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
-
-		$terms = get_terms( array(
-			'taxonomy' => 'vu_user_group',
-			'hide_empty' => false,  ) );
-		vu_debug("vu_user_group current terms: ", '', $terms);
-	}
 
 	// //if we want our own admin role
 	// $t_role = get_role('administrator');
@@ -112,6 +98,22 @@ function vu_register_permissions(){
 		// $admins->add_cap( 'assign_vu_user_groups' ); 
 		// $admins->add_cap( 'edit_vu_user_groups' );
 		// $admins->add_cap( 'delete_vu_user_groups' );
+
+	if(IS_WP_DEBUG){
+		global $wp_roles;
+
+		if ( ! isset( $wp_roles ) )
+			$wp_roles = new WP_Roles();
+
+		$t_all_roles = $wp_roles->get_names();
+		vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
+
+		$terms = get_terms( array(
+			'taxonomy' => 'vu_user_group',
+			'hide_empty' => false,  ) );
+		vu_debug("vu_user_group current terms: ", '', $terms);
+	}
+
 }
 
 /**
