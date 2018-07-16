@@ -11,11 +11,12 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
  * @param  none
  * @return none
  */
-if(curret_user_can(vu_permission_level::Admin)){
-	add_action( 'show_user_profile', 'vu_show_extra_profile_fields' );
-	add_action( 'edit_user_profile', 'vu_show_extra_profile_fields' );
-}
+
+add_action( 'show_user_profile', 'vu_show_extra_profile_fields' );
+add_action( 'edit_user_profile', 'vu_show_extra_profile_fields' );
+
 function vu_show_extra_profile_fields( $user ) {
+	if( ! current_user_can(vu_permission_level::Admin, $user->ID)){return;}
 	?>
 	<h3>User Group Management (Admin Only)</h3>
 
@@ -50,10 +51,8 @@ function vu_show_extra_profile_fields( $user ) {
  * @param  $user_id
  * @return none
  */
-if(curret_user_can(vu_permission_level::Admin)){
-	add_action( 'personal_options_update', 'vu_change_groups_for_user_process_request' );
-	add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_request' );
-}
+add_action( 'personal_options_update', 'vu_change_groups_for_user_process_request' );
+add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_request' );
 function vu_change_groups_for_user_process_request( $user_id ) {
 
 	if ( !current_user_can( vu_permission_level::Admin, $user_id ) )
