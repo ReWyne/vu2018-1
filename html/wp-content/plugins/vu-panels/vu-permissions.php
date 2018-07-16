@@ -197,7 +197,7 @@ function vu_get_user_role($user = ''){
  */
 add_action( 'admin_init', 'my_custom_dashboard_access_handler');
  
-function my_custom_dashboard_access_handler() {
+function vu_custom_dashboard_access_handler() {
  
    // Exit if the user cannot edit any posts
    if ( is_admin() && ! current_user_can( 'delete_posts' ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX )) {
@@ -226,3 +226,23 @@ function my_custom_dashboard_access_handler() {
 //       }
 	
 }
+
+/**
+ * Prevent posts that the user does not have permission to modify from showing up on the All Posts page
+ * TODO
+ * @param  none
+ * @return none
+ */
+add_action('restrict_manage_posts', 'rudr_filter_by_the_author');
+function vu_filter_by_the_author() {
+	$params = array(
+		'name' => 'author', // this is the "name" attribute for filter <select>
+		'show_option_all' => 'All authors' // label for all authors (display posts without filter)
+	);
+ 
+	if ( isset($_GET['user']) )
+		$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
+ 
+	wp_dropdown_users( $params ); // print the ready author list
+}
+ 

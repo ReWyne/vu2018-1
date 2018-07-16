@@ -28,18 +28,18 @@ function vu_show_extra_profile_fields( $user ) {
 			$terms = get_terms( array(
 				'taxonomy' => 'vu_user_group',
 				'hide_empty' => false,  ) );
-			foreach($terms as $term_object){
-				echo '<input type="checkbox" name="checkboxvar[]" value="'.$term_object["term_id"].'">'.$term_object["name"].'<br>';
+			//get our Set (unique values; no keys) of the user's user groups
+			$my_user_groups = json_decode( get_the_author_meta( 'vu_my_ugs_array', $user->ID ), false );
+			vu_debug("\$my_user_groups: ",'',$my_user_groups);
+			foreach($terms as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
+				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object["term_id"].'" '. $my_user_groups.contains($term_object["term_id"]) ? 'checked' : '' .'>'.$term_object["name"].'<br>';
 			}
 			?>
 			<span class="description">Change which groups this user is a member of. WARNING: this may change the user's role (permissions)!</span>
-			<span id="vu_cgfu_return" style="font-family:monospace; color:red; white-space:pre"></span>
+			<span id="vu_cgfu_return" class="vu-ajax-return" style="font-family:monospace; color:red; white-space:pre"></span>
 			</td>
 				<input type="text" name="User Groups" id="vu_cgfu_title" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
-			
-
 		</tr>
-
 	</table>
 	<?php 
 }
@@ -51,24 +51,30 @@ function vu_show_extra_profile_fields( $user ) {
  * @return none
  */
 if(curret_user_can(vu_permission_level::Admin)){
-	add_action( 'personal_options_update', 'vu_save_extra_profile_fields' );
-	add_action( 'edit_user_profile_update', 'vu_save_extra_profile_fields' );
+	add_action( 'personal_options_update', 'vu_change_groups_for_user_process_request' );
+	add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_request' );
 }
-function vu_save_extra_profile_fields( $user_id ) {
+function vu_change_groups_for_user_process_request( $user_id ) {
 
 	if ( !current_user_can( vu_permission_level::Admin, $user_id ) )
 		return $user_id;
 
 	vu_debug("vu_cgfu verifying nonce...");
 
-	// TODO: nonce validating code here 
+	// Nonce validating code here 
 	if ( ! wp_verify_nonce( $_POST['vu_cgfu_nonce'], 'vu_cgfu_save' ) ) {
 		return $user_id;
 	  }
 	vu_debug("Verified!");
 
+	// TODO: get checkbox data from frontend and process it into a Set
+	$frontend_array = ['test','groups'];
 
-
+	$new_ugs_array = new Set();
+	foreach($frontend_array as $group){
+		$new_ugs_array.add($group);
+	}
+	vu_debug('\$new_ugs_array: ','',$new_ugs_array);
 	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
-	update_usermeta( $user_id, 'twitter', $_POST['twitter'] );
+	update_user_meta( $user_id, 'vu_my_ugs_array', $new_ugs_array );
 }

@@ -1200,10 +1200,10 @@ https://stackoverflow.com/questions/18739937/how-to-keep-footer-at-bottom-of-scr
 
 /*italics looks bad w/ ©*/
 .site-info a, .site-info address {
-	font-style:normal;
-	text-align:center;
+	font-style: normal;
+	text-align: center;
 	vertical-align: middle;
-	color:white;
+	color: white;
 }
 
 /* Opera Fix thanks to Maleika (Kohoutec) */
@@ -1214,3 +1214,13 @@ body:before {
 	width: 0;
 	margin-top: -32767px;
   }/*
+
+/*--------------------------------------------------------------
+# ADMIN PAGE STUFF
+--------------------------------------------------------------*/
+
+span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
+	font-family: monospace; 
+	color: red; 
+	white-space: pre;
+}
