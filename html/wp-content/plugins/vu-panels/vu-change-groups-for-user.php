@@ -37,8 +37,8 @@ function vu_show_extra_profile_fields( $user ) {
 			vu_debug("\$my_user_groups: ",'',$my_user_groups);
 			foreach($all_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 				vu_debug('\$term_object: ','',$term_object);
-				vu_debug('\$term_object["term_id"]: ','',$term_object["term_id"]);
-				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object["term_id"].'" '. $my_user_groups.contains($term_object["term_id"]) ? 'checked' : '' .'>'.$term_object["name"].'<br>';
+				vu_debug('\$term_object["term_id"]: ','',$term_object->term_id);
+				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->term_id.'" '. $my_user_groups.contains($term_object->term_id) ? 'checked' : '' .'>'.$term_object->name.'<br>';
 			}
 			?>
 			<span class="description">Change which groups this user is a member of. WARNING: this may change the user's role (permissions)!</span>
