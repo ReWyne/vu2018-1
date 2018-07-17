@@ -34,6 +34,8 @@ function vu_show_extra_profile_fields( $user ) {
 			vu_debug('\$user->ID: ','',$user->ID);
 			vu_debug('\get_the_author_meta( "vu_my_ugs_array", $user->ID ): ','',get_the_author_meta( 'vu_my_ugs_array', $user->ID ));
 			$my_user_groups = json_decode( get_the_author_meta( 'vu_my_ugs_array', $user->ID ), false );
+			vu_debug($my_user_groups);
+			if($my_user_groups == ''){$my_user_groups = new Set();}
 			vu_debug("\$my_user_groups: ",'',$my_user_groups);
 			foreach($all_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 				vu_debug('\$term_object: ','',$term_object);
