@@ -198,14 +198,21 @@ function vu_get_user_role($user = ''){
 add_action( 'admin_init', 'vu_custom_dashboard_access_handler');
  
 function vu_custom_dashboard_access_handler() {
- 
+	global $pagenow;
+
+	if($pagenow != 'post.php'){
+		exit;
+	}
+
    // Exit if the user cannot edit any posts
-   if ( is_admin() && ! current_user_can( 'delete_posts' ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX )) {
+   if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX )) {
       wp_redirect( home_url() );
       exit;
    }
 
    //Exit if the user cannot edit *this* post, due to lacking group membership.
+
+
 
    global $post;
 	$id = $post->ID;
