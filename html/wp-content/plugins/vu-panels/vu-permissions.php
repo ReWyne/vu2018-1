@@ -195,7 +195,7 @@ function vu_get_user_role($user = ''){
  * @param  none
  * @return none
  */
-add_action( 'admin_init', 'my_custom_dashboard_access_handler');
+add_action( 'admin_init', 'vu_custom_dashboard_access_handler');
  
 function vu_custom_dashboard_access_handler() {
  

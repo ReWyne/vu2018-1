@@ -68,7 +68,6 @@ function vu_alter_user_group_taxonomy_display(){
 add_action('wp_ajax_vu_alter_user_group_taxonomy_process_request', 'vu_alter_user_group_taxonomy_process_request');
 //vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
 function vu_alter_user_group_taxonomy_process_request(){
-    vu_debug("vu_alter_user_group_taxonomy_process_request $_POST: ",'',$_POST);
     if ( isset($_POST['group']) ) {
         // //only save meta value if hitting submit
         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
