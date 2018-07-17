@@ -8,6 +8,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 /**
  * Create dialog box for adding/removing user groups from a user.
  * Note that this may result in changing the user's role.
+ * The additional user metadata vu_my_ugs_array replicates a Set. Arranged like so: array("my_first_group"=>true, "my_second_group"=>true, ... )
  * @param  none
  * @return none
  */
@@ -34,13 +35,12 @@ function vu_show_extra_profile_fields( $user ) {
 			vu_debug('\$user->ID: ','',$user->ID);
 			vu_debug('\get_the_author_meta( "vu_my_ugs_array", $user->ID ): ','',get_the_author_meta( 'vu_my_ugs_array', $user->ID ));
 			$my_user_groups = json_decode( get_the_author_meta( 'vu_my_ugs_array', $user->ID ), false );
-			vu_debug($my_user_groups);
-			if($my_user_groups == ''){$my_user_groups = new Set();}
+			if($my_user_groups === NULL){$my_user_groups = array();}
 			vu_debug("\$my_user_groups: ",'',$my_user_groups);
 			foreach($all_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 				vu_debug('\$term_object: ','',$term_object);
 				vu_debug('\$term_object["term_id"]: ','',$term_object->term_id);
-				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->term_id.'" '. $my_user_groups.contains($term_object->term_id) ? 'checked' : '' .'>'.$term_object->name.'<br>';
+				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->name.'" '. array_key_exists($term_object->name, $my_user_groups) ? 'checked' : '' .'>'.$term_object->name.'<br>';
 			}
 			?>
 			<span class="description">Change which groups this user is a member of. WARNING: this may change the user's role (permissions)!</span>
@@ -77,7 +77,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	// TODO: get checkbox data from frontend and process it into a Set
 	$frontend_array = ['test','groups'];
 
-	$new_ugs_array = new Set();
+	$new_ugs_array = array();
 	foreach($frontend_array as $group){
 		$new_ugs_array.add($group);
 	}
