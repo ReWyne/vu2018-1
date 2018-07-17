@@ -46,11 +46,14 @@ function vu_show_extra_profile_fields( $user ) {
 			<span class="description">Change which groups this user is a member of. WARNING: this may change the user's role (permissions)!</span>
 			<span id="vu_cgfu_return" class="vu-ajax-return" style="font-family:monospace; color:red; white-space:pre"></span>
 			</td>
-				<input type="text" name="User Groups" id="vu_cgfu_title" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
+
 		</tr>
 	</table>
 	<?php 
 }
+<<<'EOT'
+<input type="text" name="User Groups" id="vu_cgfu_title" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
+EOT;
 
 /**
  * Save user groups added/removed from a user.
