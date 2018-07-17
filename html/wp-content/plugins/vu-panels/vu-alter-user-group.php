@@ -10,11 +10,13 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
  * @param  none
  * @return none
  */
-global $pagenow;
-if(is_admin() && $pagenow == 'users.php' && current_user_can(vu_permission_level::Admin)){
-	add_action( 'manage_users_extra_tablenav', 'vu_alter_user_group_taxonomy_display' );
-}
+add_action( 'manage_users_extra_tablenav', 'vu_alter_user_group_taxonomy_display' );
 function vu_alter_user_group_taxonomy_display(){	
+    global $pagenow;
+    if( ! (is_admin() && $pagenow == 'users.php' && current_user_can(vu_permission_level::Admin))){
+        return;
+    }
+
 	global $vu_alter_user_group_taxonomy_display_count;
 		
 	if(!isset($vu_alter_user_group_taxonomy_display_count)){ //manage_users_extra_tablenav hook shows up twice; we only want to add onto the second time
@@ -63,10 +65,8 @@ function vu_alter_user_group_taxonomy_display(){
  * @param  none
  * @return none
  */
-if(is_admin() && curret_user_can(vu_permission_level::Admin)){
-    add_action('wp_ajax_vu_alter_user_group_taxonomy_process_request', 'vu_alter_user_group_taxonomy_process_request');
-    //vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
-}
+add_action('wp_ajax_vu_alter_user_group_taxonomy_process_request', 'vu_alter_user_group_taxonomy_process_request');
+//vu_log("wp_ajax_vu_alter_user_group_taxonomy_process_request");
 function vu_alter_user_group_taxonomy_process_request(){
     vu_debug("vu_alter_user_group_taxonomy_process_request $_POST: ",'',$_POST);
     if ( isset($_POST['group']) ) {
@@ -85,7 +85,7 @@ function vu_alter_user_group_taxonomy_process_request(){
         }
 
         // Check that the logged in user has permission to mess with permissions data
-        if ( ! current_user_can( 'promote_users' ) ) {
+        if ( ! is_admin() || ! current_user_can( 'promote_users' ) ) {
             return $_POST;
         }
 
