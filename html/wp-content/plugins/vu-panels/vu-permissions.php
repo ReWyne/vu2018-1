@@ -201,7 +201,7 @@ function vu_custom_dashboard_access_handler() {
 	global $pagenow;
 
 	if($pagenow != 'post.php'){
-		exit;
+		return;
 	}
 
    // Exit if the user cannot edit any posts
