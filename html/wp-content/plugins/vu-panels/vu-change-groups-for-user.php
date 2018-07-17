@@ -26,15 +26,17 @@ function vu_show_extra_profile_fields( $user ) {
 			<th><label for="vu_cgfu_checkboxes">User Groups</label></th>
 			<td>
 			<?php
-			$terms = get_terms( array(
+			$all_user_groups = get_terms( array(
 				'taxonomy' => 'vu_user_group',
 				'hide_empty' => false,  ) );
+
 			//get our Set (unique values; no keys) of the user's user groups
 			vu_debug('\$user->ID: ','',$user->ID);
-			vu_debug('\get_the_author_meta( "vu_my_ugs_array", $user->ID ): ','',get_the_author_meta( 'vu_my_ugs_array', $user->ID[0] ));
+			vu_debug('\get_the_author_meta( "vu_my_ugs_array", $user->ID ): ','',get_the_author_meta( 'vu_my_ugs_array', $user->ID ));
 			$my_user_groups = json_decode( get_the_author_meta( 'vu_my_ugs_array', $user->ID ), false );
 			vu_debug("\$my_user_groups: ",'',$my_user_groups);
-			foreach($terms as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
+			foreach($all_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
+				vu_debug('\$term_object: ','',$term_object);
 				vu_debug('\$term_object["term_id"]: ','',$term_object["term_id"]);
 				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object["term_id"].'" '. $my_user_groups.contains($term_object["term_id"]) ? 'checked' : '' .'>'.$term_object["name"].'<br>';
 			}
@@ -79,5 +81,5 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	}
 	vu_debug('\$new_ugs_array: ','',$new_ugs_array);
 	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
-	update_user_meta( $user_id, 'vu_my_ugs_array', $new_ugs_array );
+	update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
 }
