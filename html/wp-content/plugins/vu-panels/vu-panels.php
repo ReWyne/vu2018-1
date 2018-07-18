@@ -11,6 +11,7 @@
 
 defined( 'ABSPATH' ) or die(); //canonical way to exit if accessed directly
 
+//WP_DEBUG* should already be defined
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
 define( 'WP_DEBUG_DISPLAY', true );
