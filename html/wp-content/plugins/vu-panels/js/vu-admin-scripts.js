@@ -33,24 +33,6 @@ function vu_alter_user_group_taxonomy_submit(){
 	});
 };
 
-function vu_change_groups_for_user_submit(){
-	var spath = ajax_object.ajax_url;
-	//$(":checkbox").each(function () {
-		//var ischecked = $(this).is(":checked");}
-	var groups_added = $("vu_cgfu_checkbox:checkbox:checked").map(function() { return this.id; }).get();
-	data =  {"action": "vu_change_groups_for_user_process_request",
-				"groups": $("#vu_augt_group_field").val(),
-				"role": $("#vu_augt_role_select").val(),
-				"vu_augt_nonce": $("#vu_augt_nonce").val()};
-	debug.log(data);
-	debug.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
-	$.post(spath, data, function (response) {
-		// Response div
-		$("#vu_augt_return").html(response.replace(/\\n/g,"<br />"));
-	});
-};
-
-
 // $(document).ready(function(){
 	
 //     $("#vu_augt_button").click(function(){
