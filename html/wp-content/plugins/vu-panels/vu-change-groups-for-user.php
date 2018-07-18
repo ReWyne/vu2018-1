@@ -30,11 +30,12 @@ function vu_show_extra_profile_fields( $user ) {
 			$all_user_groups = get_terms( array(
 				'taxonomy' => 'vu_user_group',
 				'hide_empty' => false,  ) );
-
+			
 			//get our array of the user's user groups
 			// vu_debug('\$user->ID: ','',$user->ID);
 			// vu_debug('\get_the_author_meta( "vu_my_ugs_array", $user->ID ): ','',get_the_author_meta( 'vu_my_ugs_array', $user->ID ));
 			$my_user_groups = json_decode( get_the_author_meta( 'vu_my_ugs_array', $user->ID ), false );
+			//$my_user_groups = wp_get_object_terms(, 'vu_user_group')
 			if($my_user_groups === NULL){$my_user_groups = array();}
 			// vu_debug("\$my_user_groups: ",'',$my_user_groups);
 			foreach($all_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
@@ -56,7 +57,7 @@ function vu_show_extra_profile_fields( $user ) {
 /**
  * Save user groups added/removed from a user.
  * Note that this may result in changing the user's role.
- * @param  $user_id
+ * @param  int|string $user_id
  * @return none
  */
 add_action( 'personal_options_update', 'vu_change_groups_for_user_process_request' );
@@ -89,4 +90,6 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 
 	echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
 	"\nUser role has been updated to: "/*TODO*/;
+
+	wp_die(); //#TEMP
 }
