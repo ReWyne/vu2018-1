@@ -11,10 +11,10 @@
 
 defined( 'ABSPATH' ) or die(); //canonical way to exit if accessed directly
 
-//WP_DEBUG* should already be defined
-define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', true );
-define( 'WP_DEBUG_DISPLAY', true );
+//WP_DEBUG* should already be defined in wp-settings.php
+// define( 'WP_DEBUG', true );
+// define( 'WP_DEBUG_LOG', true );
+// define( 'WP_DEBUG_DISPLAY', true );
 define( 'IS_WP_DEBUG', defined('WP_DEBUG') && true === WP_DEBUG );
 
 include_once dirname( __FILE__ ) . '/vu-util.php';
