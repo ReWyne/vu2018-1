@@ -31,7 +31,7 @@ function vu_show_extra_profile_fields( $user ) {
 				'taxonomy' => 'vu_user_group',
 				'hide_empty' => false,  ) );
 
-			//get our Set (unique values; no keys) of the user's user groups
+			//get our array of the user's user groups
 			vu_debug('\$user->ID: ','',$user->ID);
 			vu_debug('\get_the_author_meta( "vu_my_ugs_array", $user->ID ): ','',get_the_author_meta( 'vu_my_ugs_array', $user->ID ));
 			$my_user_groups = json_decode( get_the_author_meta( 'vu_my_ugs_array', $user->ID ), false );
@@ -40,6 +40,7 @@ function vu_show_extra_profile_fields( $user ) {
 			foreach($all_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 				vu_debug('\$term_object: ','',$term_object);
 				vu_debug('\$term_object["term_id"]: ','',$term_object->term_id);
+				vu_debug('<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->name.'" '. array_key_exists($term_object->name, $my_user_groups) ? 'checked' : '' .'>'.$term_object->name.'<br>');
 				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->name.'" '. array_key_exists($term_object->name, $my_user_groups) ? 'checked' : '' .'>'.$term_object->name.'<br>';
 			}
 			?>
