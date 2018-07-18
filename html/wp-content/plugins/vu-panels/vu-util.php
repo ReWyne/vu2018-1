@@ -48,13 +48,8 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
 
     $output;
 
-    //if $message is the (string) name of the variable to log
-    if($loggers == 'var'){
-        global $$message;
-        $output = "$".$message.": ".print_r($$message, true).$separator;
-    }
     //if you just threw an object into the first arg, quietly handle it without complaining
-    elseif ( is_array($message) || is_object($message) ) {
+    if ( is_array($message) || is_object($message) ) {
         $output = print_r($message, true).$separator;
     } else {
         $output = $message.$separator;
@@ -72,7 +67,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     if(!empty($args)){
         $output .= $separator.print_r($args, true); //or more conventionally, var_export($args, true) 
     }
-    if($loggers == '' || $loggers == 'all' || $loggers == 'default' || $loggers == 'both' || $loggers == 'var'){
+    if($loggers == '' || $loggers == 'all' || $loggers == 'default' || $loggers == 'both'){
         $loggers = array('err_log','pc_dbg');
     }
     if(in_array(vu_debug_type::pc_dbg,$loggers))
@@ -141,7 +136,7 @@ function vu_is_custom_post_type( $post = NULL )
 function vu_terms_array_to_set( $term_array, $term_field ){
     $setlike_array = array();
     foreach($term_array as $term_object){
-        $setlike_array["$term_object->$term_field"] = true;
+        $setlike_array[$term_object->$term_field] = true;
     }
     return $setlike_array;
 }
