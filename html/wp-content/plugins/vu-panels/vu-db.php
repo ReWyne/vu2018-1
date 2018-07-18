@@ -78,6 +78,7 @@ function vu_db_replace_ug2r_data($tax_group, $group_role) {
  * @return string $group_role
  */
 function vu_db_get_ug2r_role($tax_group) {
+	global $wpdb;
 
     $table_name = $wpdb->prefix . 'user_group_to_role';
 
