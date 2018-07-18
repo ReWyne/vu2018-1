@@ -119,7 +119,7 @@ function vu_register_permissions(){
 }
 
 /**
- * Return true if the string is an existing taxonomy term
+ * Boolean wrapper for wp's term_exists(). Return true if the string is an existing taxonomy term
  * @param  string $term, $taxonomy
  * @return boolean
  */

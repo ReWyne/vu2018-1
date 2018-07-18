@@ -52,9 +52,6 @@ function vu_show_extra_profile_fields( $user ) {
 	</table>
 	<?php 
 }
-<<<'EOT'
-<input type="text" name="User Groups" id="vu_cgfu_title" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
-EOT;
 
 /**
  * Save user groups added/removed from a user.
