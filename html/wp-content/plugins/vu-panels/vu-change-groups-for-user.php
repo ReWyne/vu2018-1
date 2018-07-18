@@ -92,5 +92,5 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 
 	// echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
 	// "\nUser role has been updated to: "/*TODO*/;
-	wp_die();
+	// wp_die();
 }
