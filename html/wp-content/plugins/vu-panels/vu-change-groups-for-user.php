@@ -41,10 +41,10 @@ function vu_show_extra_profile_fields( $user ) {
 			$my_user_groups = wp_get_object_terms($user->ID, 'vu_user_group');
 			vu_debug('\$my_user_groups: ','',$my_user_groups);
 
-			//#TEMP
-			wp_set_object_terms( $user->ID, array(15)/*terms by ID(int) or slug(string)*/, 'vu_user_group' );
-			$my_user_groups = wp_get_object_terms($user->ID, 'vu_user_group');
-			vu_debug('\$my_user_groups2: ','',$my_user_groups);
+			// //#TEMP
+			// wp_set_object_terms( $user->ID, array(15)/*terms by ID(int) or slug(string)*/, 'vu_user_group' );
+			// $my_user_groups = wp_get_object_terms($user->ID, 'vu_user_group');
+			// vu_debug('\$my_user_groups2: ','',$my_user_groups);
 
 			// parse $my_user_groups into a nice {"my_first_group"=>true, "my_second_group"=>true, ... } format to replicate a Set; avoids n^2 runtime and probably a bit easier to read
 			$my_parsed_ugs = vu_terms_array_to_set( $my_user_groups, "name" );
