@@ -40,10 +40,11 @@ function vu_show_extra_profile_fields( $user ) {
 			foreach($all_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 				vu_debug('\$term_object: ','',$term_object);
 				vu_debug('\$term_object["term_id"]: ','',$term_object->term_id);
+				vu_debug('<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->name.'" '.( array_key_exists($term_object->name, $my_user_groups) ? 'checked' : '  ' ).'>'.$term_object->name.'<br>');
 				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->name.'" '.( array_key_exists($term_object->name, $my_user_groups) ? 'checked' : '  ' ).'>'.$term_object->name.'<br>';
 			}
 			?>
-			<span class="description">Change which groups this user is a member of. WARNING: this may change the user's role (permissions)!</span>
+			<p class="description">Change which groups this user is a member of. WARNING: this may change the user's role (permissions)!</p>
 			<span id="vu_cgfu_return" class="vu-ajax-return" style="font-family:monospace; color:red; white-space:pre"></span>
 			</td>
 
@@ -77,14 +78,17 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	  }
 	vu_debug("Verified!");
 
-	// TODO: get checkbox data from frontend and process it into a Set
-	$frontend_array = ['test','groups'];
+	// get checkbox data from frontend and process it into a Set
+	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
 
+	// properly format array to go array('group'=>true, ...) instead of array('group', ...) for dat O(1) lookup
 	$new_ugs_array = array();
 	foreach($frontend_array as $group){
-		$new_ugs_array.add($group);
+		$new_ugs_array["$group"] = true;
 	}
 	vu_debug('\$new_ugs_array: ','',$new_ugs_array);
 	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
 	update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
+
+	wp_die();
 }
