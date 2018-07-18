@@ -90,6 +90,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
 	update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
 
-	echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array);
+	echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
+	"\nUser role has been updated to: "/*TODO*/;
 	wp_die();
 }

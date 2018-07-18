@@ -11,7 +11,9 @@
 
 defined( 'ABSPATH' ) or die(); //canonical way to exit if accessed directly
 
-define( 'TESTING', true ); //just use WP_DEBUG instead
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', true );
 define( 'IS_WP_DEBUG', defined('WP_DEBUG') && true === WP_DEBUG );
 
 include_once dirname( __FILE__ ) . '/vu-util.php';
