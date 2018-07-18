@@ -48,8 +48,13 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
 
     $output;
 
+    //if $message is the (string) name of the variable to log
+    if($loggers == 'var'){
+        global $$message;
+        $output = "$".$message.": ".print_r($$message, true).$separator;
+    }
     //if you just threw an object into the first arg, quietly handle it without complaining
-    if ( is_array($message) || is_object($message) ) {
+    elseif ( is_array($message) || is_object($message) ) {
         $output = print_r($message, true).$separator;
     } else {
         $output = $message.$separator;
@@ -67,7 +72,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     if(!empty($args)){
         $output .= $separator.print_r($args, true); //or more conventionally, var_export($args, true) 
     }
-    if($loggers == '' || $loggers == 'all' || $loggers == 'default' || $loggers == 'both'){
+    if($loggers == '' || $loggers == 'all' || $loggers == 'default' || $loggers == 'both' || $loggers == 'var'){
         $loggers = array('err_log','pc_dbg');
     }
     if(in_array(vu_debug_type::pc_dbg,$loggers))
@@ -93,7 +98,7 @@ function vu_echo_to_str($func, ...$params){
 
 /**
  * Check if a post is a custom post type.
- * @param  mixed $post Post object, ID, array, or post type as a string/array of strings
+ * @param  object|int|array|string $post Post object, ID, array, or post type as a string/array of strings
  * @return boolean
  */
 function vu_is_custom_post_type( $post = NULL )
@@ -126,3 +131,17 @@ function vu_is_custom_post_type( $post = NULL )
     return in_array( $current_post_type, $custom_types );
 }
 
+/**
+ * Convert WP_terms array into array suitable only for checking (in O(1)) if a term is present, based on the specified property.
+ * Ex return value - {"name1"=>true, "name2"=>true, ...} might then by checked by array_key_exists("name1", $output_array)
+ * @param  array $term_array
+ * @param  string $term_field ex - "name" or "term_id"
+ * @return array $setlike_array
+ */
+function vu_terms_array_to_set( $term_array, $term_field ){
+    $setlike_array = array();
+    foreach($term_array as $term_object){
+        $setlike_array["$term_object->$term_field"] = true;
+    }
+    return $setlike_array;
+}

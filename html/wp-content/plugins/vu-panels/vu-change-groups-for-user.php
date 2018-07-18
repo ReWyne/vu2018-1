@@ -8,7 +8,6 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 /**
  * Create dialog box for adding/removing user groups from a user.
  * Note that this may result in changing the user's role.
- * The additional user metadata vu_my_ugs_array replicates a Set. Arranged like so: array("my_first_group"=>true, "my_second_group"=>true, ... )
  * @param  none
  * @return none
  */
@@ -34,15 +33,30 @@ function vu_show_extra_profile_fields( $user ) {
 			//get our array of the user's user groups
 			// vu_debug('\$user->ID: ','',$user->ID);
 			// vu_debug('\get_the_author_meta( "vu_my_ugs_array", $user->ID ): ','',get_the_author_meta( 'vu_my_ugs_array', $user->ID ));
-			$my_user_groups = json_decode( get_the_author_meta( 'vu_my_ugs_array', $user->ID ), false );
-			//$my_user_groups = wp_get_object_terms(, 'vu_user_group')
-			if($my_user_groups === NULL){$my_user_groups = array();}
+			
+			// $my_user_groups = json_decode( get_the_author_meta( 'vu_my_ugs_array', $user->ID ), false );
+			// if($my_user_groups === NULL){$my_user_groups = array();}
+
+			// global $user_id;
+			$my_user_groups = wp_get_object_terms($user->ID, 'vu_user_group');
+			vu_debug('\$my_user_groups: ','',$my_user_groups);
+
+			//#TEMP
+			wp_set_object_terms( $user->ID, array(15)/*terms by ID(int) or slug(string)*/, 'vu_user_group' );
+			$my_user_groups = wp_get_object_terms($user->ID, 'vu_user_group');
+			vu_debug('\$my_user_groups2: ','',$my_user_groups);
+			vu_debug('my_user_groups','var');
+
+			// parse $my_user_groups into a nice {"my_first_group"=>true, "my_second_group"=>true, ... } format to replicate a Set; avoids n^2 runtime and probably a bit easier to read
+			$my_parsed_ugs = vu_terms_array_to_set( $my_user_groups, "name" );
+			vu_debug('my_parsed_ugs','var');
+
 			// vu_debug("\$my_user_groups: ",'',$my_user_groups);
 			foreach($all_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 				// vu_debug('\$term_object: ','',$term_object);
 				// vu_debug('\$term_object["term_id"]: ','',$term_object->term_id);
 				// vu_debug('<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->name.'" '.( array_key_exists($term_object->name, $my_user_groups) ? 'checked' : '  ' ).'>'.$term_object->name.'<br>');
-				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->name.'" '.( array_key_exists($term_object->name, $my_user_groups) ? 'checked' : '  ' ).'>'.$term_object->name.'<br>';
+				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->term_id.'" '.( array_key_exists($term_object->name, $my_parsed_ugs) ? 'checked' : '  ' ).'>'.$term_object->name.'<br>';
 			}
 			?>
 			<p class="description">Change which groups this user is a member of. WARNING: this may change the user's role (permissions)!</p>
@@ -57,7 +71,7 @@ function vu_show_extra_profile_fields( $user ) {
 /**
  * Save user groups added/removed from a user.
  * Note that this may result in changing the user's role.
- * @param  int|string $user_id
+ * @param  int $user_id
  * @return none
  */
 add_action( 'personal_options_update', 'vu_change_groups_for_user_process_request' );
@@ -76,20 +90,31 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	  }
 	vu_debug("Verified!");
 
-	// get checkbox data from frontend and process it into a Set
+	// get checkbox data from frontend
 	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
 
-	// properly format array to go array('group'=>true, ...) instead of array('group', ...) for dat O(1) lookup
-	$new_ugs_array = array();
-	foreach($frontend_array as $group){
-		$new_ugs_array["$group"] = true;
-	}
-	vu_debug('\$new_ugs_array: ','',$new_ugs_array);
-	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
-	update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
+	// // properly format array to go array('group'=>true, ...) instead of array('group', ...) for dat O(1) lookup
+	// $new_ugs_array = array();
+	// foreach($frontend_array as $group){
+	// 	$new_ugs_array["$group"] = true;
+	// }
 
-	echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
-	"\nUser role has been updated to: "/*TODO*/;
+	// vu_debug('\$new_ugs_array: ','',$new_ugs_array);
+	// update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
+
+	//update user group data
+	wp_set_object_terms( $user_id, $frontend_array, 'vu_user_group' );
+
+	// echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
+	// "\nUser role has been updated to: "/*TODO*/;
+
+	//update
+	$new_role = vu_get_user_role($user_id);
+	get_user_by('id', $user_id)->set_role($new_role);
+
+	echo "Successfully updated user's vu_my_ugs_array data entry to: ".wp_get_object_terms($user_id, 'vu_user_group').
+	"\nUser role has been updated to: $new_role";
+
 
 	wp_die(); //#TEMP
 }
