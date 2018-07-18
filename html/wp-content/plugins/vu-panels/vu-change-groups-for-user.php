@@ -67,30 +67,29 @@ add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_reque
 function vu_change_groups_for_user_process_request( $user_id ) {
 	 vu_debug("vu_alter_user_group_taxonomy_process_request \$_POST: ",'',$_POST);
 	
-	// if ( !current_user_can( vu_permission_level::Admin, $user_id ) )
-	// 	return $user_id;
+	if ( !current_user_can( vu_permission_level::Admin, $user_id ) )
+		return $user_id;
 
-	// vu_debug("vu_cgfu verifying nonce...");
+	vu_debug("vu_cgfu verifying nonce...");
 
-	// // Nonce validating code here 
-	// if ( ! wp_verify_nonce( $_POST['vu_cgfu_nonce'], 'vu_cgfu_save' ) ) {
-	// 	return $user_id;
-	//   }
-	// vu_debug("Verified!");
+	// Nonce validating code here 
+	if ( ! wp_verify_nonce( $_POST['vu_cgfu_nonce'], 'vu_cgfu_save' ) ) {
+		return $user_id;
+	  }
+	vu_debug("Verified!");
 
-	// // get checkbox data from frontend and process it into a Set
-	// $frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
+	// get checkbox data from frontend and process it into a Set
+	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
 
-	// // properly format array to go array('group'=>true, ...) instead of array('group', ...) for dat O(1) lookup
-	// $new_ugs_array = array();
-	// foreach($frontend_array as $group){
-	// 	$new_ugs_array["$group"] = true;
-	// }
-	// vu_debug('\$new_ugs_array: ','',$new_ugs_array);
-	// /* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
-	// update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
+	// properly format array to go array('group'=>true, ...) instead of array('group', ...) for dat O(1) lookup
+	$new_ugs_array = array();
+	foreach($frontend_array as $group){
+		$new_ugs_array["$group"] = true;
+	}
+	vu_debug('\$new_ugs_array: ','',$new_ugs_array);
+	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
+	update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
 
-	// echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
-	// "\nUser role has been updated to: "/*TODO*/;
-	 wp_die();
+	echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
+	"\nUser role has been updated to: "/*TODO*/;
 }
