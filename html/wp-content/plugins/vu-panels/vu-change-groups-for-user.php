@@ -92,6 +92,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	// get checkbox data from frontend
 	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
 	array_map(function($a) { return (int)$a; }, $frontend_array);
+	vu_debug("\$frontend_array: ",'',$frontend_array);
 
 	// // properly format array to go array('group'=>true, ...) instead of array('group', ...) for dat O(1) lookup
 	// $new_ugs_array = array();
