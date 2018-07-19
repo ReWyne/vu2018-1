@@ -118,7 +118,4 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 
 	echo "Successfully updated user's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, 'vu_user_group'),true).
 	"\n<br>User role has been updated to: $new_role";
-
-
-	wp_die(); //#TEMP
 }
