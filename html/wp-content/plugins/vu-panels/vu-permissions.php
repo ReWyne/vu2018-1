@@ -168,7 +168,7 @@ function vu_get_user_role($user = ''){
 	$permission_role = '';
 
 	foreach($terms as $term){
-		$role = vu_db_get_ug2r_role($term);
+		$role = vu_db_get_ug2r_role($term->name);
 		if($role === vu_permission_level::Admin){
 			$permission_level = 2;
 			$permission_role = $role;
@@ -182,7 +182,7 @@ function vu_get_user_role($user = ''){
 			$permission_role = $role;
 		}
 		else{
-			vu_debug("vu_get_user_role error, got role $role for term ",'',$term);
+			vu_debug("vu_get_user_role error, got role $role for term ",'',$term->name);
 		}
 	}
 	return $permission_role;
