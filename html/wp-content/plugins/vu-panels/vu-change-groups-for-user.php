@@ -91,6 +91,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 
 	// get checkbox data from frontend
 	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
+	array_map(function($a) { return (int)$a; }, $frontend_array);
 
 	// // properly format array to go array('group'=>true, ...) instead of array('group', ...) for dat O(1) lookup
 	// $new_ugs_array = array();
@@ -113,7 +114,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	vu_debug("$user_id would be set to role $new_role");
 
 	echo "Successfully updated user's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, 'vu_user_group'),true).
-	"\nUser role has been updated to: $new_role";
+	"\n<br>User role has been updated to: $new_role";
 
 
 	wp_die(); //#TEMP
