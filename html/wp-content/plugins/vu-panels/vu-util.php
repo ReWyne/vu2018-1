@@ -147,9 +147,10 @@ function vu_get_real_object_terms( $user, $taxonomy ){
     
     vu_debug("vu_get_real_object_terms");
     foreach($terms as &$term_object){
-        vu_debug(gettype($term_object->name[0]),'',$term_object->name[0]);
-        while(gettype($term_object->name[0]) === "integer"){
-            $term_object = get_term( $term_object->name[0], $taxonomy );
+        vu_debug(gettype($term_object->name),'',$term_object->name);
+        while(is_numeric($term_object->name)){
+            $term_object = get_term( $term_object->name, $taxonomy );
+            vu_debug("got term: ",'',$term_object);
         }
     }
 
