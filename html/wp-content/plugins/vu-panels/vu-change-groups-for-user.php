@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 add_action( 'show_user_profile', 'vu_show_extra_profile_fields' );
 add_action( 'edit_user_profile', 'vu_show_extra_profile_fields' );
-
+add_action( 'user_new_form', 'vu_show_extra_profile_fields' );
 function vu_show_extra_profile_fields( $user ) {
 	if( ! current_user_can(vu_permission_level::Admin, $user->ID)){return;}
 	?>
@@ -77,6 +77,7 @@ function vu_show_extra_profile_fields( $user ) {
  */
 add_action( 'personal_options_update', 'vu_change_groups_for_user_process_request' );
 add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_request' );
+add_action('user_register', 'vu_change_groups_for_user_process_request');
 function vu_change_groups_for_user_process_request( $user_id ) {
 	 vu_debug("vu_alter_user_group_taxonomy_process_request \$_POST: ",'',$_POST);
 	
@@ -113,9 +114,8 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 
 	//update
 	$new_role = vu_get_user_role($user_id);
-	//get_user_by('id', $user_id)->set_role($new_role);
-	vu_debug("$user_id would be set to role $new_role");
+	get_user_by('id', $user_id)->set_role($new_role);
 
-	vu_debug("Successfully updated user's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, 'vu_user_group'),true).
+	vu_debug("Successfully updated user $user_id's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, 'vu_user_group'),true).
 	"\n<br>User role has been updated to: $new_role");
 }

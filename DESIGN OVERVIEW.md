@@ -36,7 +36,7 @@ The site's display is handled by the **vu_custom_portal** theme.
 - `vu-permissions.php`
     - **Description:** Defines the base taxonomy, etc. information necessary for implementing the frontend and backend administrator panel features responsible for giving post access permissions by user group
     - **Key functions:** 
-    - **Notes:** 
+    - **Notes:** The **vu_user_group** taxonomy, like all taxonomies, creates new taxonomy terms whenever existing taxonomy terms attempt to be added to the user/post/etc, which merely reference the real thing. Call vu-util.php/vu_get_real_object_terms() to get the actual taxonomy terms attached to a post/taxonomy.
     - **Related files:** vu-alter-user-group.php, vu-add-group-for-user.php, vu.choose-user-initial-group.php
     - **Key related functions:** 
 - `vu-alter-user-group.php`

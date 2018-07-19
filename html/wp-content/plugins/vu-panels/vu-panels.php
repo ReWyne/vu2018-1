@@ -25,6 +25,7 @@ include_once dirname( __FILE__ ) . '/vu-permissions.php';
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-user.php';
 include_once dirname( __FILE__ ) . '/vu-alter-user-group.php';
 include_once dirname( __FILE__ ) . '/vu-choose-user-initial-group.php';
+include_once dirname( __FILE__ ) . '/vu-change-groups-for-post.php';
 
 global $vu_panels_vars;
 
