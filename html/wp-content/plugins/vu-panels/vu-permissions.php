@@ -182,7 +182,7 @@ function vu_get_user_role($user = ''){
 			$permission_role = $role;
 		}
 		else{
-			vu_debug("vu_get_user_role error, got role $role for term ",'',$term->name);
+			vu_debug("vu_get_user_role error, got role $role for term ".$term->name);
 		}
 	}
 	return $permission_role;
