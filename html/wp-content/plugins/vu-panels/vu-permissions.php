@@ -161,7 +161,7 @@ function vu_get_user_role($user = ''){
 	if('' === $user){
 		$user = wp_get_current_user();
 	}
-	$terms = get_the_terms( $user, 'vu_user_group');
+	$terms = wp_get_object_terms($user, 'vu_user_group');
 	vu_debug("vu_get_user_role terms for $user: ", '', $terms);
 
 	$permission_level = 0;
