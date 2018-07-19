@@ -38,7 +38,7 @@ function vu_show_extra_profile_fields( $user ) {
 			// if($my_user_groups === NULL){$my_user_groups = array();}
 
 			// global $user_id;
-			$my_user_groups = wp_get_object_terms($user->ID, 'vu_user_group');
+			$my_user_groups = vu_get_real_object_terms($user->ID, 'vu_user_group');
 			vu_debug('\$my_user_groups: ','',$my_user_groups);
 
 			// //#TEMP
@@ -92,7 +92,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	// get checkbox data from frontend
 	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
 	array_map(function($a) { return (int)$a; }, $frontend_array);
-	vu_debug("\$frontend_array: ",'',$frontend_array);
+	vu_debug("\$frontend_array + gettype([0]): ",'',$frontend_array, gettype($frontend_array[0]));
 
 	// // properly format array to go array('group'=>true, ...) instead of array('group', ...) for dat O(1) lookup
 	// $new_ugs_array = array();

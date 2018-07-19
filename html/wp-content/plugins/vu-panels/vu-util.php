@@ -14,8 +14,8 @@ abstract class vu_debug_type
 
 /**
  * Print message or object to error_log
- * @param  mixed $messgae String, object, or array
- * @return boolean success
+ * @param  mixed $message String, object, or array
+ * @return void
  */
 function vu_log($message, ...$args) {
     vu_debug($message, array(vu_debug_type::err_log), ...$args);
@@ -46,35 +46,30 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
 
     $separator = " | ";
 
-    $output;
+    //initial message
+    $output = print_r($message, true).$separator;
 
-    //if you just threw an object into the first arg, quietly handle it without complaining
-    if ( is_array($message) || is_object($message) ) {
-        $output = print_r($message, true).$separator;
-    } else {
-        $output = $message.$separator;
-    }
+    //post name, if applicable
+    $output .= (isset($post) ? $post->post_name : "[no post]").$separator;
 
-    if (isset($post)){
-        $output .= $post->post_name.$separator;
-    }
-    else{
-        $output .= "[no post]".$separator;
-    }
-
+    //number of times function has been called this page load
     $output .= "counter: ".$vu_pc_dbg_counter;
     
+    //print additional args
     if(!empty($args)){
-        $output .= $separator.print_r($args, true); //or more conventionally, var_export($args, true) 
+        $output .= $separator.print_r($args, true); //or var_export($args, true) 
     }
-    if($loggers == '' || $loggers == 'all' || $loggers == 'default' || $loggers == 'both'){
+
+    //handle shorthand methods of specifying output type
+    if( $loggers == '' || $loggers == 'all' || $loggers == 'default' || $loggers == 'both'){
         $loggers = array('err_log','pc_dbg');
     }
+
+    //output
     if(in_array(vu_debug_type::pc_dbg,$loggers))
         PC::debug($output);
     if(in_array(vu_debug_type::err_log,$loggers))
         error_log($output);
-    return;
 }
 
 /**
@@ -139,4 +134,25 @@ function vu_terms_array_to_set( $term_array, $term_field ){
         $setlike_array[$term_object->$term_field] = true;
     }
     return $setlike_array;
+}
+
+/**
+ * Get *original* WP_terms attached to object, dereferencing "pointer terms"
+ * @param  int|object $user
+ * @param  string $taxonomy
+ * @return array $real_terms_array
+ */
+function vu_get_real_object_terms( $user, $taxonomy ){
+    $terms = wp_get_object_terms($user, $taxonomy);
+    
+    vu_debug("vu_get_real_object_terms");
+    foreach($terms as &$term_object){
+        vu_debug(gettype($term_object->name),'',$term_object->name);
+        while(gettype($term_object->name) === "integer"){
+            $term_object = get_term( $term_object->name, $taxonomy );
+        }
+    }
+
+    vu_debug($terms);
+    return $terms;
 }
