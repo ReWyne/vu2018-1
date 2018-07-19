@@ -108,12 +108,12 @@ function vu_register_permissions(){
 			$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
+		//vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
 
 		$terms = get_terms( array(
 			'taxonomy' => 'vu_user_group',
 			'hide_empty' => false,  ) );
-		vu_debug("vu_user_group current terms: ", '', $terms);
+		//vu_debug("vu_user_group current terms: ", '', $terms);
 	}
 
 }
