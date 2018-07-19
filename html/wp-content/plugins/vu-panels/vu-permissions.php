@@ -33,7 +33,7 @@ function vu_register_permissions(){
 	//the intended capabilities of standard (non-admin) VU staff
 	add_role(
 		'vu_department', //like editor, but without ability to modify pages/html
-		__( 'VU Department' ),
+		__( 'VU Department', 'vu-panels' ),
 		array(
 			'read' => true,
 			'delete_posts' => true,
@@ -71,7 +71,7 @@ function vu_register_permissions(){
 		'vu_user_group',
 		array('user','post'),
 		array(
-			'label' => __( 'VU User Group' ),
+			'label' => __( 'VU User Group', 'vu-panels' ),
 			//'rewrite' => array( 'slug' => 'person' ),
 			'capabilities' => array(
 				'manage_terms' => 'manage_vu_user_groups',
