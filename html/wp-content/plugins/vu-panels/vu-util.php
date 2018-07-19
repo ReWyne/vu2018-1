@@ -145,15 +145,15 @@ function vu_terms_array_to_set( $term_array, $term_field ){
 function vu_get_real_object_terms( $user, $taxonomy ){
     $terms = wp_get_object_terms($user, $taxonomy);
     
-    vu_debug("vu_get_real_object_terms");
+    //vu_debug("vu_get_real_object_terms");
     foreach($terms as &$term_object){
-        vu_debug(gettype($term_object->name),'',$term_object->name);
+        //vu_debug(gettype($term_object->name),'',$term_object->name);
         while(is_numeric($term_object->name)){
             $term_object = get_term( $term_object->name, $taxonomy );
-            vu_debug("got term: ",'',$term_object);
+            //vu_debug("got term: ",'',$term_object);
         }
     }
 
-    vu_debug($terms);
+    //vu_debug($terms);
     return $terms;
 }
