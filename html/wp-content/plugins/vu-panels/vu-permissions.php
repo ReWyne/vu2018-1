@@ -69,7 +69,7 @@ function vu_register_permissions(){
 	
 	register_taxonomy(
 		'vu_user_group',
-		array('user'),
+		array('user','post'),
 		array(
 			'label' => __( 'VU User Group' ),
 			//'rewrite' => array( 'slug' => 'person' ),

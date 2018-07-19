@@ -73,7 +73,7 @@ class vu_link_post_type {
   //Callback from register_post_type
   function add_link_custom_fields() {
     vu_log("add_link_custom_fields");
-    add_meta_box( 'link_meta_id', 'link_url_value', array($this, 'links_url_custom_field_display'), 'link', 'normal', 'high' );
+    add_meta_box( 'link_meta_id', __('Link URL'), array($this, 'links_url_custom_field_display'), 'link', 'normal', 'high' );
   }
 
   //Display the contents of the custom meta box
@@ -121,7 +121,6 @@ $link_post_type = new vu_link_post_type();
 
 // add links custom post type to the front page main loop via hooks
 add_action( 'pre_get_posts', 'vu_generate_link_posts' );
-
 function vu_generate_link_posts( $query ) {
 //  vu_log('vu_generate_link_posts');
 
