@@ -89,11 +89,15 @@ function vu_alter_user_group_taxonomy_process_request(){
         }
 
         $vu_augt_value = sanitize_key( $_POST['group'] );
+        if(is_numeric($vu_augt_value)){
+            echo 'Error: group name cannot be a number';
+            wp_die();
+        }
 
         // IMPORTANT: 'administrator' is both a role and (in this case) a protected term in the vu_user_group taxonomy
         // You're not allowed to modify it because otherwise you could lock all admins out of being able to modify the site.
         if($vu_augt_value === VU_ADMIN_GROUP){
-            $_POST['vu_augt_return'] = 'Error: Modifying the '.VU_ADMIN_GROUP.' group is prohibited';
+            echo 'Error: Modifying the '.VU_ADMIN_GROUP.' group is prohibited';
             wp_die();
         }
 

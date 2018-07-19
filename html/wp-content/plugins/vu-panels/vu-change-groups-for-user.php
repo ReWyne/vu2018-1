@@ -55,7 +55,9 @@ function vu_show_extra_profile_fields( $user ) {
 				// vu_debug('\$term_object: ','',$term_object);
 				// vu_debug('\$term_object["term_id"]: ','',$term_object->term_id);
 				// vu_debug('<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->name.'" '.( array_key_exists($term_object->name, $my_user_groups) ? 'checked' : '  ' ).'>'.$term_object->name.'<br>');
-				echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->term_id.'" '.( array_key_exists($term_object->name, $my_parsed_ugs) ? 'checked' : '  ' ).'>'.$term_object->name.'<br>';
+				if( ! is_numeric($term_object->name) ){
+					echo '<input type="checkbox" name="vu_cgfu_checkbox[]" value="'.$term_object->term_id.'" '.( array_key_exists($term_object->name, $my_parsed_ugs) ? 'checked' : '  ' ).'>'.$term_object->name.'<br>';
+				}
 			}
 			?>
 			<p class="description">Change which groups this user is a member of. WARNING: this may change the user's role (permissions)!</p>
