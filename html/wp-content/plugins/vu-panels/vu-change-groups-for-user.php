@@ -112,7 +112,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	//get_user_by('id', $user_id)->set_role($new_role);
 	vu_debug("$user_id would be set to role $new_role");
 
-	echo "Successfully updated user's vu_my_ugs_array data entry to: ".wp_get_object_terms($user_id, 'vu_user_group').
+	echo "Successfully updated user's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, 'vu_user_group'),true).
 	"\nUser role has been updated to: $new_role";
 
 

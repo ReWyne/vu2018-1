@@ -167,7 +167,7 @@ function vu_get_user_role($user = ''){
 	$permission_level = 0;
 	$permission_role = '';
 
-	foreach($terms as $term => $data){
+	foreach($terms as $term){
 		$role = vu_db_get_ug2r_role($term);
 		if($role === vu_permission_level::Admin){
 			$permission_level = 2;
