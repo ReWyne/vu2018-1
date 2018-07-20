@@ -118,6 +118,8 @@ function vu_register_permissions(){
 
 }
 
+
+
 /**
  * Boolean wrapper for wp's term_exists(). Return true if the string is an existing taxonomy term
  * @param  string $term, $taxonomy
@@ -129,6 +131,28 @@ function vu_term_exists($term, $taxonomy){
 		return true;
 	}
 	return false;
+}
+
+/**
+ * Filters the found terms.
+ *
+ * @param array		$options      'taxonomy' specifies the taxonomy, 'hide_empty' specifies whether unused terms (with count == 0) are displayed
+ * @return array 	$real_terms Array of found terms, filtering out reference terms. (terms that serve as a pointer to another)
+ */
+ 
+function vu_get_real_terms($options){
+	//example:
+	//get_terms( array(
+	// 	'taxonomy' => 'vu_user_group',
+	// 	'hide_empty' => false,  ) );
+	$terms = get_terms( $options );
+
+	foreach($terms as $term_object){
+		if( is_numeric($term_object->name) ){
+			unset($term_object);
+		}
+	}
+	return array_values($terms); //reindex array before returning
 }
 
 /**
@@ -188,6 +212,33 @@ function vu_get_user_role($user = ''){
 	return $permission_role;
 }  
 
+/**
+ * Get what vu_user_group should be considered the user's "default" one for the purpose of adding posts (NOT permissions)
+ * @param  object $user
+ * @return string $primary_ug
+ */
+function vu_get_primary_user_group($user = ''){
+	//allow calling w/o params
+	if('' === $user){
+		$user = wp_get_current_user();
+	}
+
+	//must be user ID
+	$user_id = $user;
+	if( ! is_int($user_id) ){
+		$user_id = $user_id->ID;
+	}
+
+	//Get user group from remembered value...
+	$primary_ug = get_user_meta($user_id, $key = 'vu_user_primary_ug', $single = true);
+	//...or just pick one semi-arbitrarily
+	if($primary_ug == ''){
+		$terms = vu_get_real_object_terms($user, 'vu_user_group');
+		vu_debug("vu_get_primary_user_group fallback; terms for $user: ", '', $terms);
+		$primary_ug = $terms[0]->name; // #TODO does this work when $terms is empty ? (should try to guarantee users always have at least one user_group term)
+	}
+	return $primary_ug;
+}  
 
 /**
  * Block access to posts that the user should not have access to based on their user group membership
@@ -215,7 +266,7 @@ function vu_custom_dashboard_access_handler() {
 
 
    global $post;
-	$id = $post->ID;
+	$id = $post->ID; //TODO ```Notice: Trying to get property 'ID' of non-object```
 
 	
 // 	//reference

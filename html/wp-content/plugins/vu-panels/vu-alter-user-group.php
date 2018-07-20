@@ -27,9 +27,8 @@ function vu_alter_user_group_taxonomy_display(){
 		$vu_alter_user_group_taxonomy_display_count++;
 	}
 	//vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
-
 	
-?>
+    ?>
   <div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">
 	<?php wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' ) ?>
 	<label for="vu_augt_group"><b>User Group to add :</b></label>
@@ -53,11 +52,11 @@ function vu_alter_user_group_taxonomy_display(){
 			echo '<option value="'.$key.'">'.$role['name'].'</option>';
         }
         ?>
-</select>
+        </select>
     <button type="button" name="vu_augt_submit" value="vu_augt_submit" id="vu_augt_button" onclick="vu_alter_user_group_taxonomy_submit()">Submit</button>
 	<span id="vu_augt_return" style="font-family:monospace; color:red; white-space:pre"></span>
   </div>
-<?php //button attr used instead of submit to prevent page reload without the js preventDefault() call
+    <?php //button attr used instead of submit to prevent page reload without the js preventDefault() call
 }
 
 /**

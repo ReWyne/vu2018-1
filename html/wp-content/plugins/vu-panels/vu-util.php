@@ -31,6 +31,15 @@ function vu_pc_debug($message, ...$args){
 }
 
 /**
+ * Print message or object to all available outputs, with some extra info added
+ * @param  mixed $message String
+ * @return void
+ */
+function vu_dbg($message, ...$args){
+    vu_debug($message, 'all', ...$args);
+}
+
+/**
  * Print debug message via some output
  * @param  mixed String $message, array of enums (err_log, pc_dbg) $logger, other classes to output ...$args
  * @return void
@@ -45,9 +54,15 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     ++$vu_pc_dbg_counter;
 
     $separator = " | ";
+    $output;
 
     //initial message
-    $output = print_r($message, true).$separator;
+    if(gettype($message) != string){
+        $output = "[".gettype($message)."] ".print_r($message, true).$separator;
+    }
+    else {
+        $output = $message.$separator;
+    }
 
     //post name, if applicable
     $output .= (isset($post) ? $post->post_name : "[no post]").$separator;
@@ -66,7 +81,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     }
 
     //output
-    if(in_array(vu_debug_type::pc_dbg,$loggers))
+    if(in_array(vu_debug_type::pc_dbg,$loggers) && class_exists("PC"))
         PC::debug($output);
     if(in_array(vu_debug_type::err_log,$loggers))
         error_log($output);

@@ -82,7 +82,7 @@ class vu_link_post_type {
     wp_nonce_field( 'link_save', 'link_url_nonce' );
     $value = get_post_meta(get_the_ID(), 'link_url_value', true);
     echo '<label for="link_url">';
-    echo 'URL for external link :';
+    echo 'URL for external link : ';
     echo '</label> ';
     echo '<input type="text" id="link_url_field" name="link_url_value" value="' . esc_url( $value ) . '" size="60" />';
   }

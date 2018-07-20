@@ -31,27 +31,62 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 // }
 
 //Callback from register_post_type
-add_action( 'add_meta_boxes_post', 'add_vu_user_group_post_custom_fields');
-function add_vu_user_group_post_custom_fields() {
-	add_meta_box( 'vu_user_group_meta_id', __( 'Owned by group: ', 'vu-panels' ), 'add_vu_user_group_post_custom_field_display', 'post', 'normal', 'high' );
+add_action( 'add_meta_boxes_post', 'add_vu_post_user_group_custom_fields');
+function add_vu_post_user_group_custom_fields() {
+	add_meta_box( 'vu_user_group_meta_id', __( 'Department', 'vu-panels' ), 'vu_add_post_user_group_display', 'post', 'normal', 'high' );
 //add_meta_box( string $id, string $title, callable $callback, string|array|WP_Screen $screen = null, string $context = 'advanced', string $priority = 'default', array $callback_args = null )
 }
 
-//Display the contents of the custom meta box
-function add_vu_user_group_post_custom_field_display(){
-	vu_log("links_url_custom_field_display");
-	wp_nonce_field( 'link_save', 'link_url_nonce' );
+/**
+ * Display the contents of the add_post_user_group meta box
+ * This function deals with the vu_user_group taxonomy
+ * @param  none
+ * @return none
+ */
+function vu_add_post_user_group_display(){
+	wp_nonce_field( 'vu_post_ug_save', 'vu_post_ug_nonce' );
 	$value = get_post_meta(get_the_ID(), 'link_url_value', true);
-	echo '<label for="link_url">';
-	echo 'URL for external link :';
-	echo '</label> ';
-	echo '<input type="text" id="link_url_field" name="link_url_value" value="' . esc_url( $value ) . '" size="60" />';
-	}
+	?>
+	<label for="vu_post_ug">Group in charge of managing this post : </label>
+	<select name="vu_cgfp_value" name="vu_cgfp_field">
 
-add_action( 'save_post', 'save_link_url');
-//Save the meta value entered
-function save_link_url( $post_id ) {
-	vu_log("save_link_url pID ", $post_id);
+		<?php
+		//get all existing groups again
+		//TODO: should only be allowed to make user groups they hav access to
+		$user = wp_get_current_user(); //NOTE: $user_id global should be defined here, if you'd rather use that
+		$available_user_groups;
+		if( current_user_can(vu_permission_level::Admin, $user->ID) )
+		{
+			$available_user_groups = vu_get_real_terms( array(
+				'taxonomy' => 'vu_user_group',
+				'hide_empty' => false,  ) );				
+		}
+		else{
+			$available_user_groups = vu_get_real_object_terms($user->ID, 'vu_user_group');
+		}
+
+		//and print
+		foreach($available_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
+			echo '<option name="vu_cgfu_checkbox[]"'.
+				(/*TODO get first nonadmin user group returned for user*/VU_ADMIN_GROUP == $term_object->name ? 'selected="selected"`' : '' ).
+				' value="'.$term_object->term_id.'" >'.$term_object->name.'<br>';
+		}
+		?>
+
+	</select>
+	<?php
+}
+
+add_action( 'save_post', 'vu_add_post_user_group_save');
+//
+/**
+ * #TODO
+ * Save the add_post_user_group meta value entered
+ * This function deals with the vu_user_group taxonomy
+ * @param  none
+ * @return none
+ */
+function vu_add_post_user_group_save( $post_id ) {
 
 	//only save meta value if hitting submit
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
@@ -71,7 +106,10 @@ function save_link_url( $post_id ) {
 	return $post_id;
 	}
 
-	$link_url_value = sanitize_text_field( $_POST['link_url_value'] );
+	//set user's default user group to whatever they decided to use here
+	update_user_meta( $user_id, 'vu_user_primary_ug', $primary_ug );
 
-	update_post_meta( $post_id, 'link_url_value', $link_url_value );
+	//$link_url_value = sanitize_text_field( $_POST['link_url_value'] );
+
+	//update_post_meta( $post_id, 'link_url_value', $link_url_value );
 }
