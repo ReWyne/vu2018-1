@@ -90,7 +90,7 @@ function vu_add_post_user_group_save( $post_id ) {
 
 	//only save meta value if hitting submit
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
-	return $post_id;  
+	return $post_id;
 	}
 
 	// Check if nonce is set
