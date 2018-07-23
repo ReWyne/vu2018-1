@@ -225,8 +225,8 @@ function vu_get_primary_user_group($user = ''){
 
 	//must be user ID
 	$user_id = $user;
-	if( ! is_int($user_id) ){
-		$user_id = $user_id->ID;
+	if( ! is_int($user) ){
+		$user_id = $user->ID;
 	}
 
 	//Get user group from remembered value...

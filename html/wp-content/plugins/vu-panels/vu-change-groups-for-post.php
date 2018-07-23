@@ -44,8 +44,7 @@ function add_vu_post_user_group_custom_fields() {
  * @return none
  */
 function vu_add_post_user_group_display(){
-	wp_nonce_field( 'vu_post_ug_save', 'vu_post_ug_nonce' );
-	$value = get_post_meta(get_the_ID(), 'link_url_value', true);
+	wp_nonce_field( 'vu_post_cgfp_save', 'vu_post_cgfp_nonce' );
 	?>
 	<label for="vu_post_ug">Group in charge of managing this post : </label>
 	<select name="vu_cgfp_value" name="vu_cgfp_field">
@@ -66,13 +65,19 @@ function vu_add_post_user_group_display(){
 		}
 
 		//and print
+		$selected_text;
+		$post_terms = vu_get_real_object_terms(get_the_ID(), 'vu_user_group');
+		vu_debug('vu_add_post_user_group_display \$post_terms: ','',$post_terms);
 		foreach($available_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
-			echo '<option name="vu_cgfu_checkbox[]"'.
-				(/*TODO get first nonadmin user group returned for user*/VU_ADMIN_GROUP == $term_object->name ? 'selected="selected"`' : '' ).
-				' value="'.$term_object->term_id.'" >'.$term_object->name.'<br>';
+			if($post_terms){
+				$selected_text = $post_terms[0]->name == $term_object->name ? 'selected="selected"`' : '';  //#TODO: $post_terms[0] *should* be getting the first and only term that the post has from the vu_user_group taxonomy
+			}
+			else{
+				$selected_text = vu_get_primary_user_group($user->ID) == $term_object->name ? 'selected="selected"`' : '';
+			}
+			echo '<option '.$selected_text.' value="'.$term_object->term_id.'" >'.$term_object->name.'<br>';
 		}
 		?>
-
 	</select>
 	<?php
 }
@@ -106,8 +111,18 @@ function vu_add_post_user_group_save( $post_id ) {
 	return $post_id;
 	}
 
+	// $new_ug = sanitize_key( $_POST['vu_cgfp_value'] );
+	// update_post_meta( $post_id, 'link_url_value', $new_ug );
+
+	//get frontend's specified user group and update
+	$new_ug = (int) $_POST['vu_cgfp_value'];
+	wp_set_object_terms( $post_id, array($new_ug), 'vu_user_group' );
+
 	//set user's default user group to whatever they decided to use here
-	update_user_meta( $user_id, 'vu_user_primary_ug', $primary_ug );
+	update_user_meta( $user_id, 'vu_user_primary_ug', get_term($new_ug, 'vu_user_group')->name );
+
+	vu_debug("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, 'vu_user_group'),true).
+	"\n<br>User vu_user_primary_ug meta has been updated to: ".get_user_meta($user_id, 'vu_user_primary_ug'));
 
 	//$link_url_value = sanitize_text_field( $_POST['link_url_value'] );
 
