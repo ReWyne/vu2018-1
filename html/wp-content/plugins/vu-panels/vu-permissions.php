@@ -246,9 +246,9 @@ function vu_get_primary_user_group($user = ''){
  * @param  none
  * @return none
  */
-add_action( 'admin_init', 'vu_custom_dashboard_access_handler');
+add_action( 'admin_init', 'vu_post_group_access_handler');
  
-function vu_custom_dashboard_access_handler() {
+function vu_post_group_access_handler() {
 	global $pagenow;
 
 	if($pagenow != 'post.php'){
@@ -261,12 +261,19 @@ function vu_custom_dashboard_access_handler() {
       exit;
    }
 
-   //Exit if the user cannot edit *this* post, due to lacking group membership.
-
-
-
    global $post;
-	$id = $post->ID; //TODO ```Notice: Trying to get property 'ID' of non-object```
+   $id = $post->ID; //TODO ```Notice: Trying to get property 'ID' of non-object```
+   vu_dbg("vu_post_group_access_handler",$post);
+
+   //Exit if the user cannot edit *this* post, due to lacking group membership.
+   $user_tax = vu_terms_array_to_set( vu_get_real_object_terms( $object, $taxonomy ), $term_field );
+
+   if ( is_admin() && ! current_user_can( 'edit_posts' )) {
+	wp_redirect( home_url() );
+	exit;
+ }
+
+
 
 	
 // 	//reference

@@ -57,7 +57,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     $output;
 
     //initial message
-    if(gettype($message) != string){
+    if( ! is_string($message) ){
         $output = "[".gettype($message)."] ".print_r($message, true).$separator;
     }
     else {
@@ -139,7 +139,8 @@ function vu_is_custom_post_type( $post = NULL )
 /**
  * Convert WP_terms array into array suitable only for checking (in O(1)) if a term is present, based on the specified property.
  * Ex return value - {"name1"=>true, "name2"=>true, ...} might then by checked by array_key_exists("name1", $output_array)
- * @param  array $term_array
+ * Note: if a regular array is desired instead of a set, wp provides a function comparable to this: wp_list_pluck( $subcategory_terms, 'term_id' );
+ *  @param  array $term_array
  * @param  string $term_field ex - "name" or "term_id"
  * @return array $setlike_array
  */
@@ -153,12 +154,12 @@ function vu_terms_array_to_set( $term_array, $term_field ){
 
 /**
  * Get *original* WP_terms attached to object, dereferencing "pointer terms"
- * @param  int|object $user
+ * @param  int|object $object
  * @param  string $taxonomy
  * @return array $real_terms_array
  */
-function vu_get_real_object_terms( $user, $taxonomy ){
-    $terms = wp_get_object_terms($user, $taxonomy);
+function vu_get_real_object_terms( $object, $taxonomy ){
+    $terms = wp_get_object_terms($object, $taxonomy);
     
     //vu_debug("vu_get_real_object_terms");
     foreach($terms as &$term_object){
