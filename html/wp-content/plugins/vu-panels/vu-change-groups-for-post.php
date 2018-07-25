@@ -67,13 +67,18 @@ function vu_add_post_user_group_display(){
 		//and print
 		$selected_text;
 		$post_terms = vu_get_real_object_terms(get_the_ID(), 'vu_user_group');
-		vu_debug('vu_add_post_user_group_display \$post_terms: ','',$post_terms);
+		$primary_ug = vu_get_primary_user_group($user->ID);
+		vu_debug('vu_add_post_user_group_display '.get_the_ID().' \$post_terms: ','',$post_terms);
+		if(IS_WP_DEBUG && count($post_terms) > 1){
+			vu_dbg("ERROR: Post".get_the_ID()." has more than one user group!",$post_terms);
+		}
 		foreach($available_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
-			if($post_terms){
+			
+			if($post_terms){ //if the post already has ugs, use the first (and only) one from that list as the default
 				$selected_text = $post_terms[0]->name == $term_object->name ? 'selected="selected"`' : '';  //#TODO: $post_terms[0] *should* be getting the first and only term that the post has from the vu_user_group taxonomy
 			}
-			else{
-				$selected_text = vu_get_primary_user_group($user->ID) == $term_object->name ? 'selected="selected"`' : '';
+			else{ //otherwise, use whatever user group this particular user picked last
+				$selected_text = $primary_ug == $term_object->name ? 'selected="selected"`' : '';
 			}
 			echo '<option '.$selected_text.' value="'.$term_object->term_id.'" >'.$term_object->name.'<br>';
 		}
