@@ -187,9 +187,8 @@ function vu_get_real_terms($options){
 	// 	'hide_empty' => false,  ) );
 	$terms = get_terms( $options );
 
-	foreach($terms as $term_object){
+	foreach($terms as &$term_object){
 		if( is_numeric($term_object->name) ){
-            vu_dbg("is_numeric($term_object->name)");
 			unset($term_object);
 		}
     }
