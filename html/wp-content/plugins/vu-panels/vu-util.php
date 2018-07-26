@@ -173,3 +173,27 @@ function vu_get_real_object_terms( $object, $taxonomy ){
     //vu_debug($terms);
     return $terms;
 }
+
+/**
+ * Filters the found terms.
+ *
+ * @param array		$options      'taxonomy' specifies the taxonomy, 'hide_empty' specifies whether currently unused terms (with count == 0) are displayed
+ * @return array 	$real_terms Array of found terms, filtering out reference terms. (terms that serve as a pointer to another)
+ */
+function vu_get_real_terms($options){
+	//example:
+	//get_terms( array(
+	// 	'taxonomy' => 'vu_user_group',
+	// 	'hide_empty' => false,  ) );
+	$terms = get_terms( $options );
+
+	foreach($terms as $term_object){
+		if( is_numeric($term_object->name) ){
+			unset($term_object);
+		}
+    }
+    
+    vu_dbg("vu_get_real_terms",$terms);
+
+	return array_values($terms); //reindex array before returning
+}

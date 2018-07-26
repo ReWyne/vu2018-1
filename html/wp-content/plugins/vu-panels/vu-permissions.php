@@ -15,7 +15,7 @@ abstract class vu_permission_level {
 	const Basic = 'subscriber';
   }
 
-define("VU_ADMIN_GROUP", "vu_admin");
+define("VU_ADMIN_GROUP", "vu_admin"); //name of the term in the vu_user_group taxonomy that specifies the user in question as an admin
 
 add_action( 'init', 'vu_register_permissions', 0 );
 function vu_register_permissions(){
@@ -68,7 +68,7 @@ function vu_register_permissions(){
 	// );
 	
 	register_taxonomy(
-		'vu_user_group',
+		VU_USER_GROUP,
 		array('user','post'),
 		array(
 			'label' => __( 'VU User Group', 'vu-panels' ),
@@ -87,8 +87,8 @@ function vu_register_permissions(){
 		)
 	);
 
-	if ( ! vu_term_exists( VU_ADMIN_GROUP, 'vu_user_group' ) ){
-		$output = "Inserted admin vu_user_group: " . print_r(wp_insert_term( VU_ADMIN_GROUP, 'vu_user_group' ), true);
+	if ( ! vu_term_exists( VU_ADMIN_GROUP, VU_USER_GROUP ) ){
+		$output = "Inserted admin vu_user_group: " . print_r(wp_insert_term( VU_ADMIN_GROUP, VU_USER_GROUP ), true);
 		vu_debug($output);
 		
 		vu_db_replace_ug2r_data(VU_ADMIN_GROUP, vu_permission_level::Admin);
@@ -111,14 +111,12 @@ function vu_register_permissions(){
 		//vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
 
 		$terms = get_terms( array(
-			'taxonomy' => 'vu_user_group',
+			'taxonomy' => VU_USER_GROUP,
 			'hide_empty' => false,  ) );
 		//vu_debug("vu_user_group current terms: ", '', $terms);
 	}
 
 }
-
-
 
 /**
  * Boolean wrapper for wp's term_exists(). Return true if the string is an existing taxonomy term
@@ -131,28 +129,6 @@ function vu_term_exists($term, $taxonomy){
 		return true;
 	}
 	return false;
-}
-
-/**
- * Filters the found terms.
- *
- * @param array		$options      'taxonomy' specifies the taxonomy, 'hide_empty' specifies whether unused terms (with count == 0) are displayed
- * @return array 	$real_terms Array of found terms, filtering out reference terms. (terms that serve as a pointer to another)
- */
- 
-function vu_get_real_terms($options){
-	//example:
-	//get_terms( array(
-	// 	'taxonomy' => 'vu_user_group',
-	// 	'hide_empty' => false,  ) );
-	$terms = get_terms( $options );
-
-	foreach($terms as $term_object){
-		if( is_numeric($term_object->name) ){
-			unset($term_object);
-		}
-	}
-	return array_values($terms); //reindex array before returning
 }
 
 /**
@@ -174,7 +150,6 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
 
 }
 
-
 /**
  * Compute what role a user should have by looking at what vu_user_group terms it has and getting the associated roles from user_group_to_role
  * Recommend setting the user's role right after
@@ -185,7 +160,7 @@ function vu_get_user_role($user = ''){
 	if('' === $user){
 		$user = wp_get_current_user();
 	}
-	$terms = vu_get_real_object_terms($user, 'vu_user_group');
+	$terms = vu_get_real_object_terms($user, VU_USER_GROUP);
 	vu_debug("vu_get_user_role terms for $user: ", '', $terms);
 
 	$permission_level = 0;
@@ -213,6 +188,37 @@ function vu_get_user_role($user = ''){
 }  
 
 /**
+ * Get all vu_user_group terms that the user has access to.
+ * Note that admins always have access to all terms, regardless of what is actually attached to their user object.
+ * @param  object $user
+ * @return string $accesible_ugs
+ */
+function vu_get_accesible_user_groups($user = ''){
+	//allow calling w/o params
+	if('' === $user){
+		$user = wp_get_current_user();
+	}
+
+	//must be user ID
+	$user_id = $user;
+	if( ! is_int($user) ){
+		$user_id = $user->ID;
+	}
+
+	$available_user_groups;
+	if( current_user_can(vu_permission_level::Admin, $user_id) ) //admins
+	{
+		$available_user_groups = vu_get_real_terms( array(
+			'taxonomy' => VU_USER_GROUP,
+			'hide_empty' => false,  ) );				
+	}
+	else{
+		$available_user_groups = vu_get_real_object_terms($user_id, VU_USER_GROUP);
+	}
+	return $available_user_groups;
+}  
+
+/**
  * Get what vu_user_group should be considered the user's "default" one for the purpose of adding posts (NOT permissions)
  * @param  object $user
  * @return string $primary_ug
@@ -230,15 +236,15 @@ function vu_get_primary_user_group($user = ''){
 	}
 
 	//Get user group from remembered value...
-	$primary_ug = get_user_meta($user_id, $key = 'vu_user_primary_ug', $single = true);
+	$primary_ug = get_user_meta($user_id, $key = VU_USER_PRIMARY_UG, $single = true);
 	//...or just pick one semi-arbitrarily
 	if($primary_ug == ''){
-		$terms = vu_get_real_object_terms($user, 'vu_user_group');
+		$terms = vu_get_real_object_terms($user, VU_USER_GROUP);
 		vu_debug("vu_get_primary_user_group fallback; terms for $user: ", '', $terms);
 		$primary_ug = $terms[0]->name; // #TODO does this work when $terms is empty ? (should try to guarantee users always have at least one user_group term)
 	}
 	return $primary_ug;
-}  
+}
 
 /**
  * Block access to posts that the user should not have access to based on their user group membership
@@ -256,17 +262,16 @@ function vu_post_group_access_handler() {
 	}
 
    // Exit if the user cannot edit any posts
-   if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX )) {
+   if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! IS_DOING_AJAX) {
       wp_redirect( home_url() );
       exit;
    }
 
-   global $post;
-   $id = $post->ID; //TODO ```Notice: Trying to get property 'ID' of non-object```
-   vu_dbg("vu_post_group_access_handler",$post);
+   $current_post_id = get_the_ID();
+   vu_dbg("vu_post_group_access_handler", $current_post_id);
 
    //Exit if the user cannot edit *this* post, due to lacking group membership.
-   $user_tax = vu_terms_array_to_set( vu_get_real_object_terms( $object, $taxonomy ), $term_field );
+   $user_tax = vu_terms_array_to_set( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ), 'name' );
 
    if ( is_admin() && ! current_user_can( 'edit_posts' )) {
 	wp_redirect( home_url() );

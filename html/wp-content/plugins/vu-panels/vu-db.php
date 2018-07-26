@@ -5,6 +5,8 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 global $vu_db_version;
 $vu_db_version = '1.001';
 
+define("USER_GROUP_TO_ROLE","user_group_to_role");
+
 /**
  * Update vu_db if vu_db_versione is new
  * @param  none
@@ -35,7 +37,7 @@ function vu_db_install_ug2r() {
 
     if ( !$installed_ver || $installed_ver != $vu_db_version ) { //get_option returns false if option DNE
 
-        $table_name = $wpdb->prefix . 'user_group_to_role';
+        $table_name = $wpdb->prefix . USER_GROUP_TO_ROLE;
         
         $charset_collate = $wpdb->get_charset_collate();
 
@@ -60,7 +62,7 @@ function vu_db_install_ug2r() {
 function vu_db_replace_ug2r_data($tax_group, $group_role) {
 	global $wpdb;
 	vu_debug("vu_db_replace_ug2r_data called with params: $tax_group, $group_role");
-	$table_name = $wpdb->prefix . 'user_group_to_role';
+	$table_name = $wpdb->prefix . USER_GROUP_TO_ROLE;
     $insert_data = array( 
         'tax_group' => $tax_group, 
         'group_role' => $group_role, 
@@ -80,7 +82,7 @@ function vu_db_replace_ug2r_data($tax_group, $group_role) {
 function vu_db_get_ug2r_role($tax_group) {
 	global $wpdb;
 
-    $table_name = $wpdb->prefix . 'user_group_to_role';
+    $table_name = $wpdb->prefix . USER_GROUP_TO_ROLE;
 
     $output = $wpdb->get_var( $wpdb->prepare( 
         "

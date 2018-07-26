@@ -102,11 +102,11 @@ function vu_alter_user_group_taxonomy_process_request(){
 
         // This is the actual inserting part
         // insert term
-        if ( ! vu_term_exists( $vu_augt_value, 'vu_user_group' ) ){
-            $_POST['vu_augt_return'] = "Successully inserted term with return value: " . print_r(wp_insert_term( $vu_augt_value, 'vu_user_group' ), true);
+        if ( ! vu_term_exists( $vu_augt_value, VU_USER_GROUP ) ){
+            $_POST['vu_augt_return'] = "Successully inserted term with return value: " . print_r(wp_insert_term( $vu_augt_value, VU_USER_GROUP ), true);
         }
         else {
-            $t = print_r(wp_update_term( term_exists($vu_augt_value), 'vu_user_group' ), true);
+            $t = print_r(wp_update_term( term_exists($vu_augt_value), VU_USER_GROUP ), true);
             $_POST['vu_augt_return'] = "WARNING: Term was replaced with return value: '''$t''' This may change the roles (permissions) of existing users";
         }
 

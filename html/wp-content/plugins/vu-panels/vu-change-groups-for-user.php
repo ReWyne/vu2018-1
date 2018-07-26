@@ -27,11 +27,11 @@ function vu_show_extra_profile_fields( $user ) {
 			<td>
 			<?php
 			$all_user_groups = vu_get_real_terms( array(
-				'taxonomy' => 'vu_user_group',
+				'taxonomy' => VU_USER_GROUP,
 				'hide_empty' => false,  ) );
 			
 			//get our array of the user's user groups
-			$my_user_groups = vu_get_real_object_terms($user->ID, 'vu_user_group');
+			$my_user_groups = vu_get_real_object_terms($user->ID, VU_USER_GROUP);
 			vu_debug('\$my_user_groups: ','',$my_user_groups);
 
 			// parse $my_user_groups into a nice {"my_first_group"=>true, "my_second_group"=>true, ... } format to replicate a Set; avoids n^2 runtime and probably a bit easier to read
@@ -89,7 +89,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	// update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
 
 	//update user group data
-	wp_set_object_terms( $user_id, $frontend_array, 'vu_user_group' );
+	wp_set_object_terms( $user_id, $frontend_array, VU_USER_GROUP );
 
 	// echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
 	// "\nUser role has been updated to: "/*TODO*/;
@@ -98,6 +98,6 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	$new_role = vu_get_user_role($user_id);
 	get_user_by('id', $user_id)->set_role($new_role);
 
-	vu_debug("Successfully updated user $user_id's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, 'vu_user_group'),true).
+	vu_debug("Successfully updated user $user_id's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, VU_USER_GROUP),true).
 	"\n<br>User role has been updated to: $new_role");
 }

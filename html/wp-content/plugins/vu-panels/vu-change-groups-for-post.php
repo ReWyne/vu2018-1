@@ -53,24 +53,15 @@ function vu_add_post_user_group_display(){
 		//get all existing groups again
 		//TODO: should only be allowed to make user groups they hav access to
 		$user = wp_get_current_user(); //NOTE: $user_id global should be defined here, if you'd rather use that
-		$available_user_groups;
-		if( current_user_can(vu_permission_level::Admin, $user->ID) )
-		{
-			$available_user_groups = vu_get_real_terms( array(
-				'taxonomy' => 'vu_user_group',
-				'hide_empty' => false,  ) );				
-		}
-		else{
-			$available_user_groups = vu_get_real_object_terms($user->ID, 'vu_user_group');
-		}
+		$available_user_groups = vu_get_accesible_user_groups($user->ID);
+		$current_post_id = get_the_ID();
 
 		//and print
 		$selected_text;
-		$post_terms = vu_get_real_object_terms(get_the_ID(), 'vu_user_group');
+		$post_terms = vu_get_real_object_terms($current_post_id, VU_USER_GROUP);
 		$primary_ug = vu_get_primary_user_group($user->ID);
-		vu_debug('vu_add_post_user_group_display '.get_the_ID().' \$post_terms: ','',$post_terms);
 		if(IS_WP_DEBUG && count($post_terms) > 1){
-			vu_dbg("ERROR: Post".get_the_ID()." has more than one user group!",$post_terms);
+			vu_dbg("ERROR: Post".$current_post_id." has more than one user group!",$post_terms);
 		}
 		foreach($available_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 			
@@ -99,7 +90,7 @@ add_action( 'save_post', 'vu_add_post_user_group_save');
 function vu_add_post_user_group_save( $post_id ) {
 
 	//only save meta value if hitting submit
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+	if ( IS_DOING_AUTOSAVE ){
 	return $post_id;
 	}
 
@@ -121,13 +112,13 @@ function vu_add_post_user_group_save( $post_id ) {
 
 	//get frontend's specified user group and update
 	$new_ug = (int) $_POST['vu_cgfp_value'];
-	wp_set_object_terms( $post_id, array($new_ug), 'vu_user_group' );
+	wp_set_object_terms( $post_id, array($new_ug), VU_USER_GROUP );
 
 	//set user's default user group to whatever they decided to use here
-	update_user_meta( $user_id, 'vu_user_primary_ug', get_term($new_ug, 'vu_user_group')->name );
+	update_user_meta( $user_id, VU_USER_PRIMARY_UG, get_term($new_ug, VU_USER_GROUP)->name );
 
-	vu_debug("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, 'vu_user_group'),true).
-	"\n<br>User vu_user_primary_ug meta has been updated to: ".get_user_meta($user_id, 'vu_user_primary_ug'));
+	vu_debug("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, VU_USER_GROUP),true).
+	"\n<br>User vu_user_primary_ug meta has been updated to: ".get_user_meta($user_id, VU_USER_PRIMARY_UG));
 
 	//$link_url_value = sanitize_text_field( $_POST['link_url_value'] );
 

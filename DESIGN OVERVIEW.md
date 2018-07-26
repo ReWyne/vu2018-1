@@ -34,7 +34,7 @@ The site's display is handled by the **vu_custom_portal** theme.
     - **Related files:** 
     - **Key related functions:** 
 - `vu-permissions.php`
-    - **Description:** Defines the base taxonomy, etc. information necessary for implementing the frontend and backend administrator panel features responsible for giving post access permissions by user group
+    - **Description:** Defines the base taxonomy, etc. information necessary for implementing the frontend and backend administrator panel features responsible for giving post access permissions by user group. (User groups are a new concept introduced for managing file ownership. Each post has an associated user group, and users can only edit said post if they are a member of that user group, or an admin. Users can be a member of multiple user groups)
     - **Key functions:** 
     - **Notes:** The **vu_user_group** taxonomy, like all taxonomies, creates new taxonomy terms whenever existing taxonomy terms attempt to be added to the user/post/etc, which merely reference the real thing. Call vu-util.php/vu_get_real_object_terms() to get the actual taxonomy terms attached to a post/taxonomy.
     - **Related files:** vu-alter-user-group.php, vu-add-group-for-user.php, vu.choose-user-initial-group.php
@@ -69,7 +69,17 @@ The site's display is handled by the **vu_custom_portal** theme.
     - **Notes:** 
     - **Related files:** 
     - **Key related functions:** 
+### Constants
+- `IS_WP_DEBUG:` Returns true if wordpress is in debug mode
+- `USER_GROUP_TO_ROLE` Constant portion of the name of the database table mapping vu_user_group terms to their associated roles
+- `vu_permission_level::Admin` Name of the role corresponding to administrator priveleges
+- `VU_USER_GROUP` Name of the taxonomy responsible for giving posts access permissions by user group
+- `VU_USER_PRIMARY_UG` Metadata attached to a User object that contains the default vu_user_group term to use when creating taxonomies.
 
+
+- `'vu_user_group'` Name of the taxonomy responsible for giving post access permissions by user group
+
+vu_user_primary_ug
 ---
 ## vu_custom_portal
 *Manages the display of the site, excluding admin panels. Based on wordpress's **_s (underscores)** theme. Some unimportant files have been omitted.*

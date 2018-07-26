@@ -16,6 +16,13 @@ defined( 'ABSPATH' ) or die(); //canonical way to exit if accessed directly
 // define( 'WP_DEBUG_LOG', true );
 // define( 'WP_DEBUG_DISPLAY', true );
 define( 'IS_WP_DEBUG', defined('WP_DEBUG') && true === WP_DEBUG );
+define( 'IS_DOING_AJAX', defined( 'DOING_AJAX' ) && true === DOING_AJAX );
+define( 'IS_DOING_AUTOSAVE', defined( 'DOING_AUTOSAVE' ) && true === DOING_AUTOSAVE );
+
+
+// Miscellaneous Constants
+define("VU_USER_GROUP","vu_user_group"); //taxonomy
+define("VU_USER_PRIMARY_UG","vu_user_primary_ug"); //user metadata
 
 include_once dirname( __FILE__ ) . '/vu-util.php';
 include_once dirname( __FILE__ ) . '/vu-db.php';
@@ -92,7 +99,7 @@ class vu_link_post_type {
     vu_log("save_link_url pID ", $post_id);
 
     //only save meta value if hitting submit
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+    if ( IS_DOING_AUTOSAVE ){
       return $post_id;  
     }
 
