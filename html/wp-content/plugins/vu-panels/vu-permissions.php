@@ -318,7 +318,8 @@ function vu_filter_by_the_author() {
 //#TEMP
 add_filter( 'template_include', 'var_template_include', 1000 );
 function var_template_include( $t ){
-    vu_dbg("var_template_include",$GLOBALS['current_theme_template'] = basename($t));
+	$GLOBALS['current_theme_template'] = basename($t);
+    vu_dbg("var_template_include",$GLOBALS['current_theme_template']);
     return $t;
 }
 
