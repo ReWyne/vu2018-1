@@ -316,11 +316,21 @@ function vu_filter_by_the_author() {
 }
 
 //#TEMP
-add_action('wp_head', 'show_template');
-function show_template() {
-    global $template;
-    vu_dbg("\$template basename: ".basename($template));
+add_filter( 'template_include', 'var_template_include', 1000 );
+function var_template_include( $t ){
+    vu_dbg("var_template_include",$GLOBALS['current_theme_template'] = basename($t));
+    return $t;
 }
+
+function get_current_template( $echo = false ) {
+    if( !isset( $GLOBALS['current_theme_template'] ) )
+        return false;
+    if( $echo )
+        echo $GLOBALS['current_theme_template'];
+    else
+        return $GLOBALS['current_theme_template'];
+}
+
 
 // $params = array(
 // 	'name' => 'author', // this is the "name" attribute for filter <select>

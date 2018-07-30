@@ -31,10 +31,10 @@ function vu_alter_user_group_taxonomy_display(){
     ?>
   <div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">
 	<?php wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' ) ?>
-	<label for="vu_augt_group"><b>User Group to add :</b></label>
-    <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60" required>
+	<label for="vu_augt_group"><b>User Group to add : </b></label>
+    <input type="text" id="vu_augt_group_field" name="vu_augt_group_value" placeholder="Enter User Group" size="60">
 
-    <p><label for="psw"><b>Group Permissions :</b></label>
+    <p><label for="psw"><b>Group Permissions : </b></label>
 	  <select name="vu_augt_role_value" id="vu_augt_role_select" class="postbox">';
 	  <?php
       //generate options for our drop-down select
@@ -72,6 +72,11 @@ function vu_alter_user_group_taxonomy_process_request(){
         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
         //     return $post_id;  
         // }
+        if($vu_augt_value == ''){
+            echo 'Error: Please specify a group';
+            wp_die();
+        }
+
         $_POST['vu_augt_return'] = "Error: Permissions validation failed";
         // Check if nonce is set
         if ( ! isset( $_POST['vu_augt_nonce'] ) ) {
@@ -88,6 +93,7 @@ function vu_alter_user_group_taxonomy_process_request(){
         }
 
         $vu_augt_value = sanitize_key( $_POST['group'] );
+
         if(is_numeric($vu_augt_value)){
             echo 'Error: group name cannot be a number';
             wp_die();

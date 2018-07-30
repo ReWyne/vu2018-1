@@ -15,7 +15,7 @@ var Debugger = function (gState, klass){
   isDebug = typeof ajax_object.IS_WP_DEBUG !== "undefined" ? ajax_object.IS_WP_DEBUG : true //global debug state
 
   // we instantiate with the global switch and a ref to this for the local 
-  // this must have it's own isDebug defined for local controll
+  // this must have it's own isDebug defined for local control
   debug = Debugger(isDebug, this)
 
 //vu_alter_user_group_taxonomy submit
@@ -29,7 +29,7 @@ function vu_alter_user_group_taxonomy_submit(){
 	debug.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
 	$.post(spath, data, function (response) {
 		// Response div
-		$("#vu_augt_return").html(response.replace(/\\n/g,"<br />"));
+		$("#vu_augt_return").html(response.replace(/\\n/g, "<br />"));
 	});
 };
 
