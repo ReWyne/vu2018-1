@@ -319,7 +319,7 @@ function vu_filter_by_the_author() {
 add_action('wp_head', 'show_template');
 function show_template() {
     global $template;
-    echo "\$template basename: ".basename($template);
+    vu_dbg("\$template basename: ".basename($template));
 }
 
 // $params = array(
