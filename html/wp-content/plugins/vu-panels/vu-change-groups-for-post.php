@@ -66,10 +66,10 @@ function vu_add_post_user_group_display(){
 		foreach($available_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 			
 			if($post_terms){ //if the post already has ugs, use the first (and only) one from that list as the default
-				$selected_text = $post_terms[0]->name == $term_object->name ? 'selected="selected"`' : '';  //#TODO: $post_terms[0] *should* be getting the first and only term that the post has from the vu_user_group taxonomy
+				$selected_text = $post_terms[0]->name == $term_object->name ? 'selected="selected"' : '';  //#TODO: $post_terms[0] *should* be getting the first and only term that the post has from the vu_user_group taxonomy
 			}
 			else{ //otherwise, use whatever user group this particular user picked last
-				$selected_text = $primary_ug == $term_object->name ? 'selected="selected"`' : '';
+				$selected_text = $primary_ug == $term_object->name ? 'selected="selected"' : '';
 			}
 			echo '<option '.$selected_text.' value="'.$term_object->term_id.'" >'.$term_object->name.'<br>';
 		}

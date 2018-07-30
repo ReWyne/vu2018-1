@@ -138,7 +138,9 @@ function vu_is_custom_post_type( $post = NULL )
 
 /**
  * Convert WP_terms array into array suitable only for checking (in O(1)) if a term is present, based on the specified property.
- * Ex return value - {"name1"=>true, "name2"=>true, ...} might then by checked by array_key_exists("name1", $output_array)
+ * Useful for checking array containment/intersection
+ * Ex return value - {"name1"=>3, "name2"=>55, ...} might then by checked by array_key_exists("name1", $output_array)
+ * The values returned in the array are the ids of the corresponding taxonomy terms. Which *should* always be integers evaluating to true. You can get the associated term with get_term( $term, $taxonomy );
  * Note: if a regular array is desired instead of a set, wp provides a function comparable to this: wp_list_pluck( $subcategory_terms, 'term_id' );
  *  @param  array $term_array
  * @param  string $term_field ex - "name" or "term_id"
@@ -147,9 +149,52 @@ function vu_is_custom_post_type( $post = NULL )
 function vu_terms_array_to_set( $term_array, $term_field ){
     $setlike_array = array();
     foreach($term_array as $term_object){
-        $setlike_array[$term_object->$term_field] = true;
+        $setlike_array[$term_object->$term_field] = $term_object->term_id;
     }
     return $setlike_array;
+}
+
+/**
+ * Returns true if the two sets (arrays) provided share at least one key. Values are ignored.
+ * @param  array $left_terms
+ * @param  array $right_terms
+ * @return boolean $intersect
+ */
+function vu_check_set_intersection($left_terms, $right_terms){
+    //allow someone to pass in just a single key as the left-hand term only
+    if( ! is_array($left_terms) ){
+        $left_terms = [$left_terms => true ];
+        vu_dbg("Warning: vu_check_set_intersection $left_terms is not an array");
+    }
+
+    foreach($left_terms as $lterm){
+        if ( array_key_exists($lterm, $right_terms) ){
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Returns an array of the intersecting keys of two sets (arrays). Values are ignored.
+ * @param  array $left_terms
+ * @param  array $right_terms
+ * @return array $intersection
+ */
+function vu_get_set_intersection($left_terms, $right_terms){
+    //allow someone to pass in just a single key as the left-hand term only
+    if( ! is_array($left_terms) ){
+        $left_terms = [$left_terms => true ];
+        vu_dbg("Warning: vu_check_set_intersection $left_terms is not an array");
+    }
+
+    $intersection = [];
+    foreach($left_terms as $lterm){
+        if ( array_key_exists($lterm, $right_terms) ){
+            $intersection->append($lterm);
+        }
+    }
+    return $intersection;
 }
 
 /**
@@ -196,4 +241,23 @@ function vu_get_real_terms($options){
     vu_dbg("vu_get_real_terms",$terms);
 
 	return array_values($terms); //reindex array before returning
+}
+
+/**
+ * Returns true if the two objects' sub-taxonomies provided share at least one key. Values are ignored.
+ * @param  int $left_id
+ * @param  int $right_id
+ * @param  string $taxonomy Name of taxnonomy
+ * @param  int $term_field Name of field to use in the comparison 
+ * @return array $intersection Array of shared terms
+ */
+function vu_get_object_tax_intersection($left_id, $right_id, $taxonomy, $term_field){
+       //get term (should be singular!) associated with post
+   $left_terms = vu_terms_array_to_set( vu_get_real_object_terms( $current_post_id, $taxonomy ), $term_field );
+   
+   //get terms associated with user
+   $right_terms = vu_terms_array_to_set( vu_get_real_object_terms( $current_user_id, $taxonomy ), $term_field );
+   vu_dbg("vu_get_object_tax_intersection \$left_terms, \$right_terms", $left_terms, $right_terms);
+
+   return vu_get_set_intersection($left_terms, $right_terms);
 }

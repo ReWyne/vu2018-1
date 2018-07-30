@@ -253,7 +253,6 @@ function vu_get_primary_user_group($user = ''){
  * @return none
  */
 add_action( 'admin_init', 'vu_post_group_access_handler');
- 
 function vu_post_group_access_handler() {
 	global $pagenow;
 
@@ -268,18 +267,15 @@ function vu_post_group_access_handler() {
    }
 
    $current_post_id = get_the_ID();
-   vu_dbg("vu_post_group_access_handler", $current_post_id);
+   $current_user_id = get_current_user_id();
+   vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
 
    //Exit if the user cannot edit *this* post, due to lacking group membership.
-   $user_tax = vu_terms_array_to_set( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ), 'name' );
-
-   if ( is_admin() && ! current_user_can( 'edit_posts' )) {
-	wp_redirect( home_url() );
-	exit;
- }
-
-
-
+   if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name')){
+		wp_redirect( home_url() );
+		exit;
+   }
+}
 	
 // 	//reference
 //    /* Get the meta key. */
@@ -294,8 +290,6 @@ function vu_post_group_access_handler() {
 //       add_post_meta( $post_id, $meta_key, $new_meta_value, true );
 //       $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'private' WHERE ID = ".$post_id." AND post_type ='post'"));
 //       }
-	
-}
 
 /**
  * Prevent posts that the user does not have permission to modify from showing up on the All Posts page
@@ -303,8 +297,12 @@ function vu_post_group_access_handler() {
  * @param  none
  * @return none
  */
-add_action('restrict_manage_posts', 'rudr_filter_by_the_author');
+add_action('restrict_manage_posts', 'vu_filter_by_the_author');
 function vu_filter_by_the_author() {
+
+	//https://rudrastyh.com/wordpress/filter-posts-by-terms.html
+	//just copy past this in and then modify it to get it working
+	
 	$params = array(
 		'name' => 'author', // this is the "name" attribute for filter <select>
 		'show_option_all' => 'All authors' // label for all authors (display posts without filter)
@@ -314,5 +312,23 @@ function vu_filter_by_the_author() {
 		$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
  
 	wp_dropdown_users( $params ); // print the ready author list
+	return;
 }
- 
+
+//#TEMP
+add_action('wp_head', 'show_template');
+function show_template() {
+    global $template;
+    echo "\$template basename: ".basename($template);
+}
+
+// $params = array(
+// 	'name' => 'author', // this is the "name" attribute for filter <select>
+// 	'show_option_all' => 'All authors' // label for all authors (display posts without filter)
+// );
+
+// if ( isset($_GET['user']) )
+// 	$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
+
+// wp_dropdown_users( $params ); // print the ready author list
+// return;
