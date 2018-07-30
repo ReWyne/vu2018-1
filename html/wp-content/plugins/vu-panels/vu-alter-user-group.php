@@ -27,7 +27,10 @@ function vu_alter_user_group_taxonomy_display(){
 		$vu_alter_user_group_taxonomy_display_count++;
 	}
 	//vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
-	
+    
+    //#TEMP
+    vu_dbg("get_current_template()",get_current_template());
+
     ?>
   <div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">
 	<?php wp_nonce_field( 'vu_augt_save', 'vu_augt_nonce' ) ?>
