@@ -297,41 +297,52 @@ function vu_post_group_access_handler() {
  * @param  none
  * @return none
  */
-add_action('restrict_manage_posts', 'vu_filter_by_the_author');
-function vu_filter_by_the_author() {
 
-	//https://rudrastyh.com/wordpress/filter-posts-by-terms.html
-	//just copy past this in and then modify it to get it working
-	
-	$params = array(
-		'name' => 'author', // this is the "name" attribute for filter <select>
-		'show_option_all' => 'All authors' // label for all authors (display posts without filter)
-	);
- 
-	if ( isset($_GET['user']) )
-		$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
- 
-	wp_dropdown_users( $params ); // print the ready author list
-	return;
+
+/* Sort posts in wp_list_table by column in ascending or descending order. */
+if(is_admin()){
+    add_action('pre_get_posts', 'custom_post_order');
+}
+function custom_post_order($query){
+	// _builtin => true returns WordPress default post types. 
+	// _builtin => false returns custom registered post types. 
+	$post_types = get_post_types(array('_builtin' => true), 'names');
+	vu_dbg("\$post_types",$post_types);
+    /* The current post type. */
+    $post_type = $query->get('post_type');
+    /* Check post types. */
+    if(in_array($post_type, $post_types)){
+        /* Post Column: e.g. title */
+        if($query->get('orderby') == ''){
+            $query->set('orderby', 'title');
+        }
+        /* Post Order: ASC / DESC */
+        if($query->get('order') == ''){
+            $query->set('order', 'ASC');
+        }
+    }
 }
 
-//#TEMP
-add_filter( 'template_include', 'var_template_include', 1000 );
-function var_template_include( $t ){
-	$GLOBALS['current_theme_template'] = basename($t);
-    vu_dbg("var_template_include",$GLOBALS['current_theme_template']);
-    return $t;
-}
+// //#TEMP
+// add_filter( 'template_include', 'var_template_include', 1000 );
+// function var_template_include( $t ){
+// 	$GLOBALS['current_theme_template'] = basename($t);
+//     vu_dbg("var_template_include",$GLOBALS['current_theme_template']);
+//     return $t;
+// }
 
-function get_current_template( $echo = false ) {
-    if( !isset( $GLOBALS['current_theme_template'] ) )
-        return false;
-    if( $echo )
-        echo $GLOBALS['current_theme_template'];
-    else
-        return $GLOBALS['current_theme_template'];
-}
+// function get_current_template( $echo = false ) {
+//     if( !isset( $GLOBALS['current_theme_template'] ) )
+//         return false;
+//     if( $echo )
+//         echo $GLOBALS['current_theme_template'];
+//     else
+//         return $GLOBALS['current_theme_template'];
+// }
 
+
+// add_action('restrict_manage_posts', 'vu_filter_by_the_author');
+// function vu_filter_by_the_author() {
 
 // $params = array(
 // 	'name' => 'author', // this is the "name" attribute for filter <select>
@@ -342,4 +353,4 @@ function get_current_template( $echo = false ) {
 // 	$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
 
 // wp_dropdown_users( $params ); // print the ready author list
-// return;
+// return;}
