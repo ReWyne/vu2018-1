@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 global $vu_db_version;
-$vu_db_version = '1.001';
+$vu_db_version = '1.002';
 
 define("USER_GROUP_TO_ROLE","user_group_to_role");
 
@@ -43,7 +43,7 @@ function vu_db_install_ug2r() {
 
         $sql = "CREATE TABLE $table_name (
             tax_group varchar(100) NOT NULL,
-            group_role tinytext NOT NULL,
+            group_role varchar(100) NOT NULL,
             PRIMARY KEY  (tax_group)
         ) $charset_collate;";
     }

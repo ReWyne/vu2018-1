@@ -304,6 +304,7 @@ if(is_admin()){
     add_action('pre_get_posts', 'custom_post_listing');
 }
 function custom_post_listing($query){
+	$query;
 	// $args = array(
 	// 	'post_type' => array('post','link'),
 	// 	'tax_query' => array(
@@ -315,17 +316,17 @@ function custom_post_listing($query){
 	// 	),
 	// );
 	// $query = new WP_Query( $args );
-	$args = array(
-		'post_type' => 'post',
-		'tax_query' => array(
-			array(
-				'taxonomy' => 'people',
-				'field'    => 'slug',
-				'terms'    => 'bob',
-			),
-		),
-	);
-	$query = new WP_Query( $args );
+	// $args = array(
+	// 	'post_type' => 'post',
+	// 	'tax_query' => array(
+	// 		array(
+	// 			'taxonomy' => 'people',
+	// 			'field'    => 'slug',
+	// 			'terms'    => 'bob',
+	// 		),
+	// 	),
+	// );
+	// $query = new WP_Query( $args );
 	vu_dbg("custom_post_listing query", $query);
 
 
