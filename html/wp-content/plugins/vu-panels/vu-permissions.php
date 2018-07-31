@@ -304,6 +304,7 @@ if(is_admin()){
     add_action('pre_get_posts', 'custom_post_listing');
 }
 function custom_post_listing($query){
+	vu_dbg("custom_post_listing query");
 	// $args = array(
 	// 	'post_type' => array('post','link'),
 	// 	'tax_query' => array(
