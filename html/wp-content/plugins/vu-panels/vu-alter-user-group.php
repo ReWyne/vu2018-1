@@ -127,7 +127,7 @@ function vu_alter_user_group_taxonomy_process_request(){
     else{
         $_POST['vu_augt_return'] = "Error: Nothing submitted";
     }
-    vu_dbg( $_POST['vu_augt_return'], vu_get_real_terms(array(
+    vu_dbg( $_POST['vu_augt_return'], get_terms(array(
          	'taxonomy' => 'vu_user_group',
          	'hide_empty' => false,  ) ));
         //example:
