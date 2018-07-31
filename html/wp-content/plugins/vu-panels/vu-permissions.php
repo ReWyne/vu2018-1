@@ -305,7 +305,7 @@ if(is_admin()){
 }
 function custom_post_listing($query){
 	$args = array(
-		'post_type' => array('post','link'),
+		'post_type' => array('post'),
 		'tax_query' => array(
 			array(
 				'taxonomy' => VU_USER_GROUP,
