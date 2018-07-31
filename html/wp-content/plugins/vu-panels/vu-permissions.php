@@ -301,21 +301,22 @@ function vu_post_group_access_handler() {
 
 /* Sort posts in wp_list_table by column in ascending or descending order. */
 if(is_admin()){
-    add_action('pre_get_posts', 'custom_post_order');
+    add_action('pre_get_posts', 'custom_post_listing');
 }
-function custom_post_order($query){
-$args = array(
-	'post_type' => 'post',
-	'tax_query' => array(
-		array(
-			'taxonomy' => VU_USER_GROUP,
-			'field'    => 'slug',
-			'terms'    => 'bob',
+function custom_post_listing($query){
+	vu_dbg();
+	$args = array(
+		'post_type' => array('post','link'),
+		'tax_query' => array(
+			array(
+				'taxonomy' => VU_USER_GROUP,
+				'field'    => 'slug',
+				'terms'    => 'testgroup',
+			),
 		),
-	),
-);
-$query = new WP_Query( $args );
-
+	);
+	$query = new WP_Query( $args );
+	vu_dbg("custom_post_listing query", $query);
 
 
 
