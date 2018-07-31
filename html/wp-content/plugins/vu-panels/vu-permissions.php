@@ -304,8 +304,19 @@ if(is_admin()){
     add_action('pre_get_posts', 'custom_post_listing');
 }
 function custom_post_listing($query){
+	// $args = array(
+	// 	'post_type' => array('post','link'),
+	// 	'tax_query' => array(
+	// 		array(
+	// 			'taxonomy' => VU_USER_GROUP,
+	// 			'field'    => 'slug',
+	// 			'terms'    => 'testgroup',
+	// 		),
+	// 	),
+	// );
+	// $query = new WP_Query( $args );
 	$args = array(
-		'post_type' => array('post'),
+		'post_type' => 'post',
 		'tax_query' => array(
 			array(
 				'taxonomy' => VU_USER_GROUP,
