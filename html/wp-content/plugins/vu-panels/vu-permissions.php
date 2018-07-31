@@ -316,18 +316,18 @@ function custom_post_listing($query){
 	// 	),
 	// );
 	// $query = new WP_Query( $args );
-	$args = array(
-		'post_type' => 'post',
-		'tax_query' => array(
-			array(
-				'taxonomy' => VU_USER_GROUP,
-				'field'    => 'slug',
-				'terms'    => 'testgroup',
-			),
-		),
-	);
-	$query = new WP_Query( $args );
-	vu_dbg("custom_post_listing query", $query);
+	// $args = array(
+	// 	'post_type' => 'post',
+	// 	'tax_query' => array(
+	// 		array(
+	// 			'taxonomy' => VU_USER_GROUP,
+	// 			'field'    => 'slug',
+	// 			'terms'    => 'testgroup',
+	// 		),
+	// 	),
+	// );
+	// $query = new WP_Query( $args );
+	// vu_dbg("custom_post_listing query", $query);
 
 
 
