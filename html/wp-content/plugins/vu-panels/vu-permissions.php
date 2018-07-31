@@ -331,7 +331,7 @@ function custom_post_listing($query){
 
 
 
-	exit;
+	return;
 
 
 	// _builtin => true returns WordPress default post types. 
