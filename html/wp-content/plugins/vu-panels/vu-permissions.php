@@ -304,7 +304,6 @@ if(is_admin()){
     add_action('pre_get_posts', 'custom_post_listing');
 }
 function custom_post_listing($query){
-	$query;
 	// $args = array(
 	// 	'post_type' => array('post','link'),
 	// 	'tax_query' => array(
@@ -331,7 +330,6 @@ function custom_post_listing($query){
 
 
 
-	return;
 
 
 	// _builtin => true returns WordPress default post types. 
@@ -343,13 +341,13 @@ function custom_post_listing($query){
     /* Check post types. */
     if(in_array($post_type, $post_types)){
         /* Post Column: e.g. title */
-        if($query->get('orderby') == ''){
-            $query->set('orderby', 'title');
-        }
-        /* Post Order: ASC / DESC */
-        if($query->get('order') == ''){
-            $query->set('order', 'ASC');
-        }
+        // if($query->get('orderby') == ''){
+        //     $query->set('orderby', 'title');
+        // }
+        // /* Post Order: ASC / DESC */
+        // if($query->get('order') == ''){
+        //     $query->set('order', 'ASC');
+        // }
     }
 }
 
