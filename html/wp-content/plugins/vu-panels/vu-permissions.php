@@ -304,9 +304,27 @@ if(is_admin()){
     add_action('pre_get_posts', 'custom_post_order');
 }
 function custom_post_order($query){
+$args = array(
+	'post_type' => 'post',
+	'tax_query' => array(
+		array(
+			'taxonomy' => VU_USER_GROUP,
+			'field'    => 'slug',
+			'terms'    => 'bob',
+		),
+	),
+);
+$query = new WP_Query( $args );
+
+
+
+
+
+
+
 	// _builtin => true returns WordPress default post types. 
 	// _builtin => false returns custom registered post types. 
-	$post_types = get_post_types(array('_builtin' => true), 'names');
+	$post_types = get_post_types(array('_builtin' => true), 'objects');
 	vu_dbg("\$post_types",$post_types);
     /* The current post type. */
     $post_type = $query->get('post_type');
@@ -322,6 +340,24 @@ function custom_post_order($query){
         }
     }
 }
+
+// Display posts tagged with bob, under people custom taxonomy:
+
+// $args = array(
+// 	'post_type' => 'post',
+// 	'tax_query' => array(
+// 		array(
+// 			'taxonomy' => 'people',
+// 			'field'    => 'slug',
+// 			'terms'    => 'bob',
+// 		),
+// 	),
+// );
+// $query = new WP_Query( $args );
+
+
+
+
 
 // //#TEMP
 // add_filter( 'template_include', 'var_template_include', 1000 );

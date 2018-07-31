@@ -75,6 +75,9 @@ function vu_alter_user_group_taxonomy_process_request(){
         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
         //     return $post_id;  
         // }
+
+        $vu_augt_value = sanitize_key( $_POST['group'] );
+        
         if($vu_augt_value == ''){
             echo 'Error: Please specify a group';
             wp_die();
@@ -94,8 +97,6 @@ function vu_alter_user_group_taxonomy_process_request(){
         if ( ! is_admin() || ! current_user_can( 'promote_users' ) ) {
             return $_POST;
         }
-
-        $vu_augt_value = sanitize_key( $_POST['group'] );
 
         if(is_numeric($vu_augt_value)){
             echo 'Error: group name cannot be a number';
@@ -126,7 +127,7 @@ function vu_alter_user_group_taxonomy_process_request(){
     else{
         $_POST['vu_augt_return'] = "Error: Nothing submitted";
     }
-    vu_debug( $_POST['vu_augt_return'] );
+    vu_dbg( $_POST['vu_augt_return'], get_term(3, VU_USER_GROUP) );
     echo json_encode($_POST['vu_augt_return']);
     wp_die();
 }
