@@ -108,6 +108,7 @@ function vu_echo_to_str($func, ...$params){
  */
 function vu_is_custom_post_type( $post = NULL )
 {
+    if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_is_custom_post_type \$post ",$post);}
     $all_custom_post_types = get_post_types( array ( '_builtin' => FALSE ) );
 
     // there are no custom post types
@@ -147,6 +148,7 @@ function vu_is_custom_post_type( $post = NULL )
  * @return array $setlike_array
  */
 function vu_terms_array_to_set( $term_array, $term_field ){
+    if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_terms_array_to_set \$term_array, \$term_field ",$term_array, $term_field);}
     $setlike_array = array();
     foreach($term_array as $term_object){
         $setlike_array[$term_object->$term_field] = $term_object->term_id;
@@ -182,6 +184,7 @@ function vu_check_set_intersection($left_terms, $right_terms){
  * @return array $intersection
  */
 function vu_get_set_intersection($left_terms, $right_terms){
+    if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_get_set_intersection \$left_terms, \$right_terms ",$left_terms, $right_terms);}
     //allow someone to pass in just a single key as the left-hand term only
     if( ! is_array($left_terms) ){
         $left_terms = [$left_terms => true ];
@@ -194,6 +197,7 @@ function vu_get_set_intersection($left_terms, $right_terms){
             $intersection->append($lterm);
         }
     }
+    if(VU_RESTRICT_DEBUG_LEVEL(2)){vu_dbg("vu_get_set_intersection \$intersection ",$intersection);}
     return $intersection;
 }
 
@@ -216,6 +220,7 @@ function vu_get_real_object_terms( $object, $taxonomy ){
     }
 
     //vu_debug($terms);
+    if(VU_RESTRICT_DEBUG_LEVEL(1)){vu_dbg("vu_get_real_object_terms \$terms ",$terms);}
     return $terms;
 }
 

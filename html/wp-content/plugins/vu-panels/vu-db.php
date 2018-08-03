@@ -13,6 +13,8 @@ define("USER_GROUP_TO_ROLE","user_group_to_role");
  * @return none
  */
 function vu_update_db_check() {
+    if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_update_db_check");}
+
     global $vu_db_version;
     $opt = get_site_option( 'vu_db_version' );
     if ( !$opt || $opt != $vu_db_version ) { //get_site_option returns false if option DNE
@@ -28,7 +30,9 @@ add_action( 'plugins_loaded', 'vu_update_db_check' );
  * @return none
  */
 function vu_db_install_ug2r() {
-	global $wpdb;
+    if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_db_install_ug2r");}
+
+    global $wpdb;
     global $vu_db_version;
 
     vu_log("vu_db_install_ug2r");
@@ -60,8 +64,9 @@ function vu_db_install_ug2r() {
  * @return none
  */
 function vu_db_replace_ug2r_data($tax_group, $group_role) {
+    if(VU_RESTRICT_DEBUG_LEVEL(2)){vu_dbg("vu_db_replace_ug2r_data \$tax_group, \$group_role ",$tax_group, $group_role);}
+
 	global $wpdb;
-	vu_debug("vu_db_replace_ug2r_data called with params: $tax_group, $group_role");
 	$table_name = $wpdb->prefix . USER_GROUP_TO_ROLE;
     $insert_data = array( 
         'tax_group' => $tax_group, 
@@ -80,7 +85,9 @@ function vu_db_replace_ug2r_data($tax_group, $group_role) {
  * @return string $group_role
  */
 function vu_db_get_ug2r_role($tax_group) {
-	global $wpdb;
+    if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_db_get_ug2r_role \$tax_group ",$tax_group);}
+
+    global $wpdb;
 
     $table_name = $wpdb->prefix . USER_GROUP_TO_ROLE;
 
