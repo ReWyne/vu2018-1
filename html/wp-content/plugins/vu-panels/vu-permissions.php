@@ -300,98 +300,13 @@ function vu_post_group_access_handler() {
  */
 add_action('restrict_manage_posts', 'vu_filter_by_the_author');
 function vu_filter_by_the_author() {
+	global $pagenow;
 
-<<<<<<< HEAD
-
-/* Sort posts in wp_list_table by column in ascending or descending order. */
-if(is_admin()){
-    add_action('pre_get_posts', 'custom_post_listing');
-}
-function custom_post_listing($query){
-	// $args = array(
-	// 	'post_type' => array('post','link'),
-	// 	'tax_query' => array(
-	// 		array(
-	// 			'taxonomy' => VU_USER_GROUP,
-	// 			'field'    => 'slug',
-	// 			'terms'    => 'testgroup',
-	// 		),
-	// 	),
-	// );
-	// $query = new WP_Query( $args );
-	// $args = array(
-	// 	'post_type' => 'post',
-	// 	'tax_query' => array(
-	// 		array(
-	// 			'taxonomy' => 'people',
-	// 			'field'    => 'slug',
-	// 			'terms'    => 'bob',
-	// 		),
-	// 	),
-	// );
-	// $query = new WP_Query( $args );
-	vu_dbg("custom_post_listing query", $query);
+	if($pagenow != 'post.php'){
+		return;
+	}
 
 
-
-
-
-	// _builtin => true returns WordPress default post types. 
-	// _builtin => false returns custom registered post types. 
-	$post_types = get_post_types(array('_builtin' => true), 'objects');
-	$custom_post_types = get_post_types(array('_builtin' => false), 'objects');
-	vu_dbg("\$post_types",$post_types);
-	vu_dbg("\$custom_post_types",$custom_post_types);
-    /* The current post type. */
-    $post_type = $query->get('post_type');
-    /* Check post types. */
-    if(in_array($post_type, $post_types)){
-        /* Post Column: e.g. title */
-        // if($query->get('orderby') == ''){
-        //     $query->set('orderby', 'title');
-        // }
-        // /* Post Order: ASC / DESC */
-        // if($query->get('order') == ''){
-        //     $query->set('order', 'ASC');
-        // }
-    }
-}
-
-// Display posts tagged with bob, under people custom taxonomy:
-
-// $args = array(
-// 	'post_type' => 'post',
-// 	'tax_query' => array(
-// 		array(
-// 			'taxonomy' => 'people',
-// 			'field'    => 'slug',
-// 			'terms'    => 'bob',
-// 		),
-// 	),
-// );
-// $query = new WP_Query( $args );
-
-
-
-
-
-// //#TEMP
-// add_filter( 'template_include', 'var_template_include', 1000 );
-// function var_template_include( $t ){
-// 	$GLOBALS['current_theme_template'] = basename($t);
-//     vu_dbg("var_template_include",$GLOBALS['current_theme_template']);
-//     return $t;
-// }
-
-// function get_current_template( $echo = false ) {
-//     if( !isset( $GLOBALS['current_theme_template'] ) )
-//         return false;
-//     if( $echo )
-//         echo $GLOBALS['current_theme_template'];
-//     else
-//         return $GLOBALS['current_theme_template'];
-// }
-=======
 	//https://rudrastyh.com/wordpress/filter-posts-by-terms.html
 	//just copy past this in and then modify it to get it working
 	
@@ -414,7 +329,6 @@ function var_template_include( $t ){
     vu_dbg("var_template_include",$GLOBALS['current_theme_template']);
     return $t;
 }
->>>>>>> parent of 02444af... dbg
 
 function get_current_template( $echo = false ) {
     if( !isset( $GLOBALS['current_theme_template'] ) )
