@@ -28,8 +28,8 @@ function vu_alter_user_group_taxonomy_display(){
 	}
 	//vu_debug("vaugt_display count: $vu_alter_user_group_taxonomy_display_count");
     
-    // //#TEMP
-    // vu_dbg("get_current_template()",get_current_template());
+    //#TEMP
+    vu_dbg("get_current_template()",get_current_template());
 
     ?>
   <div class="postbox container" style="margin-top:60px; padding:10px; padding-bottom:0px; clear:both;">
