@@ -335,7 +335,9 @@ function custom_post_listing($query){
 	// _builtin => true returns WordPress default post types. 
 	// _builtin => false returns custom registered post types. 
 	$post_types = get_post_types(array('_builtin' => true), 'objects');
+	$custom_post_types = get_post_types(array('_builtin' => false), 'objects');
 	vu_dbg("\$post_types",$post_types);
+	vu_dbg("\$custom_post_types",$custom_post_types);
     /* The current post type. */
     $post_type = $query->get('post_type');
     /* Check post types. */
