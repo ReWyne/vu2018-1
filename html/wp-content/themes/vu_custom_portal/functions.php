@@ -138,7 +138,7 @@ function vu_custom_portal_scripts() {
 	$temp1 = plugin_dir_url( __FILE__ ) . '/plugins/vu-panels/js/vu-scripts.js';
 	wp_enqueue_script( 'vu_plugin_js', $temp1);
 	vu_dbg("\$temp1",$temp1);
-	vu_dbg(dirname( get_template_directory_uri(), 2 )."/plugins/vu-panels/js/vu-scripts.js")
+	vu_dbg(dirname( get_template_directory_uri(), 2 )."/plugins/vu-panels/js/vu-scripts.js");
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
