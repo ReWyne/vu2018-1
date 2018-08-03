@@ -298,46 +298,46 @@ function vu_get_primary_user_group($user = ''){
  * @param  none
  * @return none
  */
-add_action('restrict_manage_posts', 'vu_filter_by_the_author');
-function vu_filter_by_the_author() {
-	global $pagenow;
+// add_action('restrict_manage_posts', 'vu_filter_by_the_author');
+// function vu_filter_by_the_author() {
+// 	global $pagenow;
 
-	if($pagenow != 'post.php'){
-		return;
-	}
+// 	if($pagenow != 'post.php'){
+// 		return;
+// 	}
 
 
-	//https://rudrastyh.com/wordpress/filter-posts-by-terms.html
-	//just copy past this in and then modify it to get it working
+// 	//https://rudrastyh.com/wordpress/filter-posts-by-terms.html
+// 	//just copy past this in and then modify it to get it working
 	
-	$params = array(
-		'name' => 'author', // this is the "name" attribute for filter <select>
-		'show_option_all' => 'All authors' // label for all authors (display posts without filter)
-	);
+// 	$params = array(
+// 		'name' => 'author', // this is the "name" attribute for filter <select>
+// 		'show_option_all' => 'All authors' // label for all authors (display posts without filter)
+// 	);
  
-	if ( isset($_GET['user']) )
-		$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
+// 	if ( isset($_GET['user']) )
+// 		$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
  
-	wp_dropdown_users( $params ); // print the ready author list
-	return;
-}
+// 	wp_dropdown_users( $params ); // print the ready author list
+// 	return;
+// }
 
-//#TEMP
-add_filter( 'template_include', 'var_template_include', 1000 );
-function var_template_include( $t ){
-	$GLOBALS['current_theme_template'] = basename($t);
-    vu_dbg("var_template_include",$GLOBALS['current_theme_template']);
-    return $t;
-}
+// //#TEMP
+// add_filter( 'template_include', 'var_template_include', 1000 );
+// function var_template_include( $t ){
+// 	$GLOBALS['current_theme_template'] = basename($t);
+//     vu_dbg("var_template_include",$GLOBALS['current_theme_template']);
+//     return $t;
+// }
 
-function get_current_template( $echo = false ) {
-    if( !isset( $GLOBALS['current_theme_template'] ) )
-        return false;
-    if( $echo )
-        echo $GLOBALS['current_theme_template'];
-    else
-        return $GLOBALS['current_theme_template'];
-}
+// function get_current_template( $echo = false ) {
+//     if( !isset( $GLOBALS['current_theme_template'] ) )
+//         return false;
+//     if( $echo )
+//         echo $GLOBALS['current_theme_template'];
+//     else
+//         return $GLOBALS['current_theme_template'];
+// }
 
 
 // $params = array(
