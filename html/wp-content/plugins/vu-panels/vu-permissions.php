@@ -298,6 +298,8 @@ function vu_get_primary_user_group($user = ''){
  * @param  none
  * @return none
  */
+
+//from current-branch
 // add_action('restrict_manage_posts', 'vu_filter_by_the_author');
 // function vu_filter_by_the_author() {
 // 	global $pagenow;
@@ -307,6 +309,42 @@ function vu_get_primary_user_group($user = ''){
 // 	}
 
 
+
+
+/* Sort posts in wp_list_table by column in ascending or descending order. */
+if(is_admin()){
+    add_action('pre_get_posts', 'custom_post_listing');
+}
+function custom_post_listing($query){
+	// $args = array(
+	// 	'post_type' => array('post','link'),
+	// 	'tax_query' => array(
+	// 		array(
+	// 			'taxonomy' => VU_USER_GROUP,
+	// 			'field'    => 'slug',
+	// 			'terms'    => 'testgroup',
+	// 		),
+	// 	),
+	// );
+	// $query = new WP_Query( $args );
+	// $args = array(
+	// 	'post_type' => 'post',
+	// 	'tax_query' => array(
+	// 		array(
+	// 			'taxonomy' => 'people',
+	// 			'field'    => 'slug',
+	// 			'terms'    => 'bob',
+	// 		),
+	// 	),
+	// );
+	// $query = new WP_Query( $args );
+	vu_dbg("custom_post_listing query", $query);
+
+
+
+
+
+// from current-branch	
 // 	//https://rudrastyh.com/wordpress/filter-posts-by-terms.html
 // 	//just copy past this in and then modify it to get it working
 	
@@ -320,7 +358,49 @@ function vu_get_primary_user_group($user = ''){
  
 // 	wp_dropdown_users( $params ); // print the ready author list
 // 	return;
-// }
+
+
+
+
+
+	// _builtin => true returns WordPress default post types. 
+	// _builtin => false returns custom registered post types. 
+	$post_types = get_post_types(array('_builtin' => true), 'objects');
+	$custom_post_types = get_post_types(array('_builtin' => false), 'objects');
+	vu_dbg("\$post_types",$post_types);
+	vu_dbg("\$custom_post_types",$custom_post_types);
+    /* The current post type. */
+    $post_type = $query->get('post_type');
+    /* Check post types. */
+    if(in_array($post_type, $post_types)){
+        /* Post Column: e.g. title */
+        // if($query->get('orderby') == ''){
+        //     $query->set('orderby', 'title');
+        // }
+        // /* Post Order: ASC / DESC */
+        // if($query->get('order') == ''){
+        //     $query->set('order', 'ASC');
+        // }
+    }
+}
+
+// Display posts tagged with bob, under people custom taxonomy:
+
+// $args = array(
+// 	'post_type' => 'post',
+// 	'tax_query' => array(
+// 		array(
+// 			'taxonomy' => 'people',
+// 			'field'    => 'slug',
+// 			'terms'    => 'bob',
+// 		),
+// 	),
+// );
+// $query = new WP_Query( $args );
+
+
+
+
 
 // //#TEMP
 // add_filter( 'template_include', 'var_template_include', 1000 );
@@ -340,6 +420,9 @@ function vu_get_primary_user_group($user = ''){
 // }
 
 
+// add_action('restrict_manage_posts', 'vu_filter_by_the_author');
+// function vu_filter_by_the_author() {
+
 // $params = array(
 // 	'name' => 'author', // this is the "name" attribute for filter <select>
 // 	'show_option_all' => 'All authors' // label for all authors (display posts without filter)
@@ -350,3 +433,4 @@ function vu_get_primary_user_group($user = ''){
 
 // wp_dropdown_users( $params ); // print the ready author list
 // return;
+//}
