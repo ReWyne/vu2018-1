@@ -40,7 +40,7 @@
 					    </div>
 					    <div class="wiz-input-cont">
 							<label style="padding-right: 5px;" class="mc-input-label" for="origin-url">API Key:</label><input type="text" name="" value="" class="api-key" id="origin-url">
-							<a style="margin-left:5px;" target="_blank" href="http://www.wpfastestcache.com/tutorial/wp-fastest-cache-cloudflare/#cloudflare-api-key"><img src="http://berkatan.com/wp-content/plugins/wp-fastest-cache/images/info.png"></a>
+							<a style="margin-left:5px;" target="_blank" href="http://www.wpfastestcache.com/tutorial/wp-fastest-cache-cloudflare/#cloudflare-api-key"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACgElEQVR42qVSX0hTYRT/3Xu3uzvUy7Q/29BMRbMyR+ZDIAQiEQVKT9HCJx9iQVKU4INCD6OJD46K9SL04IvkUyDrKQiKJHoJcktSYiKlbkYqG7Xd/7fvu/e2GdZTBw7fx++c8/t+53yHwX8asw+5EA/C1zws8NyA3+dtA8Ngq6B8ljQkUVhPIBnJ/Zvg6rNwsK5quv9MQOxoEKHqhpXh5lxY2vyB54vbhWxeiWDm/Nx+gmvz4RNHfLOXuwMsx7Ko9jC4c7GZCsCjF1+Ql01QvvnFHeNTtjSIJ+fmKgSXHgYOtoRWBrr8IkuKqZ1trsb13gbrPrOQxcJqEZSNcCCZzhe+r2eO4+mVrE0w9DLW0+obq63mrSTKy3PAcG8ALMvg8etvkAzWfo/Ed4sG3q4VJ5A4PW4RuCNvUqHGmk6AtRJMgmmabp20yO3hwVjK7Dj11KacVuMnQ7aCG+9KVYJLEL0u0P41TUN2sqs8nuD4R7h4j1WomwwKiomfCiRMtXltgpvvS+QJgSZwHEsOokKVoSW6rTA/skRkemCQYt1pg+RLmGxyCG6nUwTsJGBZInQN5oMOu4mRFUIgVGJ2XhqxeqeFu8sxAoxVCMipqzCnjtkEo6tEhrC3mKITiB62h4jwbBBHe5ZJQLQSqMlFmPF2hyADeGtQjjFMAdlUO6b7cpVFGs2EicxZOm7eVCDfb/xjST33NqBwAr0aMPRBRP17Fum3jX8NwyVMk88QD/AqagU7vCuZ2FbcKOnkZUOLIBr4yypTO9TOoLWvHvXdtxA41c/UNbVQ2NxZW8XWUhKbHxLIvNpALm3uJaCNkU8G1ed1XHAwt5On0qkQl4iXHKd3+RfbC84TL5MhdwAAAABJRU5ErkJggg=="></a>
 					    </div>
 					</div>
 					<div wpfc-cdn-page="3" class="wiz-cont" style="display:none">

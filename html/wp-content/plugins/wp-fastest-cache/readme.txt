@@ -4,7 +4,7 @@ Donate link: http://profiles.wordpress.org/emrevona/
 Tags: cache, performance, wp-cache, total cache, super cache
 Requires at least: 3.3
 Tested up to: 4.9
-Stable tag: 0.8.8.2
+Stable tag: 0.8.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,15 @@ Wpfc does not support Wordpress Multisite yet.
 18. Database Cleanup
 
 == Changelog ==
+
+= 0.8.8.3 =
+* to fix Revolution Slider Error
+* to make Cloudflare CDN integration work with sub-domains
+* to fix error on js combine feature
+* to fix error replace cdn-url
+* to replace urls on data-thumb attribute with cdn-url
+* to move the rules of Gtranslate at the top of WP Fastest Cache on .htaccess
+* to define preload number manually [<a target="_blank" href="https://www.wpfastestcache.com/features/preload-settings/#preload-number">Details</a>]
 
 = 0.8.8.2 =
 * to fix removing the escaped slashes of Cloudflare Integration [<a target="_blank" href="https://wordpress.org/support/topic/wpfc-cf-is-stripping-important-code/">Details</a>]
