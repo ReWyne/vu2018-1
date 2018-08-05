@@ -144,7 +144,7 @@
 											),
 							);
 
-			$response = wp_remote_request('https://api.cloudflare.com/client/v4/zones?name='.$hostname, $header);
+			$response = wp_remote_request('https://api.cloudflare.com/client/v4/zones', $header);
 
 			if(!$response || is_wp_error($response)){
 				$res = array("success" => false, "error_message" => $response->get_error_message());
@@ -155,7 +155,11 @@
 					$res = array("success" => false, "error_message" => $zone->errors[0]->message);
 				}else{
 					if(isset($zone->result) && isset($zone->result[0])){
-						$res = array("success" => true, "zoneid" => $zone->result[0]->id);
+						foreach ($zone->result as $zone_key => $zone_value) {
+							if(preg_match("/".$zone_value->name."/", $hostname)){
+								$res = array("success" => true, "zoneid" => $zone_value->id);
+							}
+						}
 					}else{
 						$res = array("success" => false, "error_message" => "No zone name ".$hostname);
 					}

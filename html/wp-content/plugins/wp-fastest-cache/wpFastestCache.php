@@ -3,7 +3,7 @@
 Plugin Name: WP Fastest Cache
 Plugin URI: http://wordpress.org/plugins/wp-fastest-cache/
 Description: The simplest and fastest WP Cache system
-Version: 0.8.8.2
+Version: 0.8.8.3
 Author: Emre Vona
 Author URI: http://tr.linkedin.com/in/emrevona
 Text Domain: wp-fastest-cache
@@ -1109,7 +1109,13 @@ GNU General Public License for more details.
 				$this->options = $this->getOptions();
 
 				$pre_load = json_decode($data);
-				$number = $pre_load->number;
+
+				if(defined("WPFC_PRELOAD_NUMBER") && WPFC_PRELOAD_NUMBER){
+					$number = WPFC_PRELOAD_NUMBER;
+				}else{
+					$number = $pre_load->number;
+				}
+
 				
 				$urls_limit = isset($this->options->wpFastestCachePreload_number) ? $this->options->wpFastestCachePreload_number : 4; // must be even
 				$urls = array();
@@ -1758,7 +1764,7 @@ GNU General Public License for more details.
 			if(count($this->cdn) > 0){
 				foreach ($this->cdn as $key => $cdn) {
 					if($cdn->id == "cloudflare"){
-						//nothing to do
+						continue;
 					}
 
 					if(preg_match("/manifest\.json\.php/i", $matches[0])){
@@ -1784,7 +1790,11 @@ GNU General Public License for more details.
 					$cdn->file_types = str_replace(",", "|", $cdn->file_types);
 
 					if(!preg_match("/\.(".$cdn->file_types.")/i", $matches[0])){
-						if(!preg_match("/\/revslider\/public\/assets\/js/", $matches[0])){
+						if(preg_match("/js/", $cdn->file_types)){
+							if(!preg_match("/\/revslider\/public\/assets\/js/", $matches[0])){
+								continue;
+							}
+						}else{
 							continue;
 						}
 					}

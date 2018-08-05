@@ -369,7 +369,8 @@
 				$htaccess = $this->insertLBCRule($htaccess, $post);
 				$htaccess = $this->insertGzipRule($htaccess, $post);
 				$htaccess = $this->insertRewriteRule($htaccess, $post);
-				//$htaccess = preg_replace("/\n+/","\n", $htaccess);
+
+				$htaccess = $this->to_move_gtranslate_rules($htaccess);
 
 				file_put_contents($path.".htaccess", $htaccess);
 			}else{
@@ -378,6 +379,17 @@
 			}
 			return array("Options have been saved", "success");
 
+		}
+
+		public function to_move_gtranslate_rules($htaccess){
+			preg_match("/\#\#\#\s+BEGIN\sGTranslate\sconfig\s\#\#\#[^\#]+\#\#\#\s+END\sGTranslate\sconfig\s\#\#\#/i", $htaccess, $gtranslate);
+
+			if(isset($gtranslate[0])){
+				$htaccess = preg_replace("/\#\#\#\s+BEGIN\sGTranslate\sconfig\s\#\#\#[^\#]+\#\#\#\s+END\sGTranslate\sconfig\s\#\#\#/i", "", $htaccess);
+				$htaccess = $gtranslate[0]."\n".$htaccess;
+			}
+
+			return $htaccess;
 		}
 
 		public function warningIncompatible($incompatible, $alternative = false){
@@ -1248,6 +1260,7 @@
 											"parkviewhomes.info",
 											"myparkviewhomes.com",
 											"kompressorcheck.de",
+											"bsty.vn",
 											"cutflower.com",
 											"sackkarre-tests.de",
 											"schraubstock-test.de",
