@@ -207,7 +207,8 @@ add_filter('post_class', 'vu_mark_CPTs');
 // add category nicenames in body and post class
 function category_id_class( $classes ) {
   global $wp_query;
-	$post = get_post( $wp_query->current_post );
+  $post = get_post( $wp_query->current_post );
+  vu_dbg('category_id_class \$post',$post);
 	foreach ( ( get_the_category( $post->ID ) ) as $category ) {
     $classes[] = $category->category_nicename;
 	}
