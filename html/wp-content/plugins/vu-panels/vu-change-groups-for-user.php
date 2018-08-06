@@ -66,18 +66,14 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	if ( !current_user_can( vu_permission_level::Admin, $user_id ) )
 		return $user_id;
 
-	vu_dbg("vu_cgfu verifying nonce...");
-
 	// Nonce validating code here 
 	if ( ! wp_verify_nonce( $_POST['vu_cgfu_nonce'], 'vu_cgfu_save' ) ) {
 		return $user_id;
 	  }
-	vu_debug("Verified!");
-
 	// get checkbox data from frontend
 	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
 	array_map( function($a){ return (int)$a; }, $frontend_array ); // TODO: this line may be unnecessary
-	vu_dbg("\$frontend_array + gettype([0]): ",$frontend_array, gettype($frontend_array[0]));
+	//vu_dbg("\$frontend_array + gettype([0]): ",$frontend_array, gettype($frontend_array[0]));
 
 	// // properly format array to go array('group'=>true, ...) instead of array('group', ...) for O(1) lookup
 	// $new_ugs_array = array();
@@ -97,7 +93,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	//update
 	$new_role = vu_get_user_role($user_id);
 	$user = get_user_by('id', $user_id);
-	vu_dbg('\$user_cgfu',$user);
+	//vu_dbg('\$user_cgfu',$user);
 	$user->set_role($new_role);
 	vu_dbg('get_role',$user->roles);
 	// $user->set_role('administrator');
@@ -106,7 +102,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	global $wp_roles;
 
 	$all_roles = $wp_roles->roles;
-	vu_dbg('all roles',$all_roles);
+	//vu_dbg('all roles',$all_roles);
 
 	if(VU_RESTRICT_DEBUG_LEVEL(5)) vu_dbg("Successfully updated user $user_id's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, VU_USER_GROUP),true).
 	"\nUser role has been updated to: $new_role");
