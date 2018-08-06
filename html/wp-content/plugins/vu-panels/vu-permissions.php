@@ -373,7 +373,7 @@ function custom_post_listing($query){
 	vu_dbg("\$custom_post_types",$custom_post_types);
 
 	$post_types = get_post_types('', 'objects'); //all post types
-
+	vu_dbg("got post types",$post_types);
     /* The current post type. */
 	$post_type = $query->get('post_type');
 	vu_dbg("got post type",$post_type);
