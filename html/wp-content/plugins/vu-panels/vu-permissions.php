@@ -343,7 +343,8 @@ function custom_post_listing($query){
 	// 	),
 	// );
 	// $query = new WP_Query( $args );
-	vu_dbg("custom_post_listing query", $query);
+
+	//vu_dbg("custom_post_listing query", $query);
 
 
 
@@ -378,15 +379,18 @@ function custom_post_listing($query){
 	// [_builtin => true] as a first param returns only WordPress default post types. 
 	// [_builtin => false] as a first param returns only registered custom post types. 
 	$post_types = get_post_types('', 'objects'); //all post types
-	vu_dbg("got post types",array_keys($post_types));
+	//vu_dbg("got post types",array_keys($post_types));
+
     /* The current post type. */
 	$post_type = $query->get('post_type');
-	vu_dbg("got post type",$post_type);
+	//vu_dbg("got post type",$post_type);
+
 	// vu_dbg("arr_keys",$post_type,array_keys($post_types));
 	// vu_dbg("in_array check test",$post_type == 'link',$post_type == array('link'),in_array($post_type, array_keys($post_types)));
     /* Check post types. */
     if(in_array($post_type, array_keys($post_types)) && ($post_type == 'post' || $post_type == 'link')){
-		vu_dbg("pass in_aray");
+		//vu_dbg("pass in_aray");
+
 		$query->set( 'tax_query', array(
 			array(
 				'taxonomy' => VU_USER_GROUP,
