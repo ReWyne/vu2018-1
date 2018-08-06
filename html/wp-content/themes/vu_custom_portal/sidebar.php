@@ -7,6 +7,8 @@
  * @package vu_custom_portal
  */
 
+return; //FORCE INACTIVE IN CODE
+
 if ( ! is_active_sidebar( 'sidebar-1' ) ) {
 	return;
 }
