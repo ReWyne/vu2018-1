@@ -205,8 +205,8 @@ function vu_mark_CPTs($classes){
 add_filter('post_class', 'vu_mark_CPTs');
 
 // add category nicenames in body and post class
-function category_id_class( $classes, $post_id ) {
-	$post = get_post( $post_id );
+function category_id_class( $classes ) {
+	$post = the_post();
 	foreach ( ( get_the_category( $post->ID ) ) as $category ) {
     $classes[] = $category->category_nicename;
 	}
