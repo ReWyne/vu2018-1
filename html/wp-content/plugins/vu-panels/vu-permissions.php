@@ -373,9 +373,9 @@ function custom_post_listing($query){
 	// vu_dbg("\$custom_post_types",$custom_post_types);
 
 	//first, skip all this if user is an admin; they do what they want
-	if(current_user_can(vu_permission_level::Admin)){
-		return $query;
-	}
+	// if(current_user_can(vu_permission_level::Admin)){
+	// 	return $query;
+	// }
 
 	// [_builtin => true] as a first param returns only WordPress default post types. 
 	// [_builtin => false] as a first param returns only registered custom post types. 
@@ -396,7 +396,7 @@ function custom_post_listing($query){
 			array(
 				'taxonomy' => VU_USER_GROUP,
 				'field' => 'name',
-				'terms' => array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ), // there is a provided wp function to simplify this, but I can't remember what it is. Sorry.
+				'terms' => array_keys( vu_terms_array_to_set( vu_get_accesible_user_groups(), 'name' ) ), // there is a provided wp function to simplify this, but I can't remember what it is. Sorry.
 				'operator' => 'IN'
 			)
 		) );
