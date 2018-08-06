@@ -406,7 +406,7 @@ function custom_post_listing($query){
 		//for each user_group, get all posts that are members of that user group
 			//get all user groups
 		$user_terms = array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'id' ) ); // there is a provided wp function to simplify this, but I can't remember what it is. Sorry
-
+		vu_dbg("array_keys finished");
 		//get all posts attached to those user groups
 		$posts = get_posts(array(
 			'post_type' => $post_type,
