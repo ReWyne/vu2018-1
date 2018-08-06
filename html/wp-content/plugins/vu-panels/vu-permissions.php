@@ -369,18 +369,18 @@ function custom_post_listing($query){
 
 	$post_types = get_post_types(array('_builtin' => true), 'objects');
 	$custom_post_types = get_post_types(array('_builtin' => false), 'objects');
-	vu_dbg("\$post_types",$post_types);
-	vu_dbg("\$custom_post_types",$custom_post_types);
+	// vu_dbg("\$post_types",$post_types);
+	// vu_dbg("\$custom_post_types",$custom_post_types);
 
 	$post_types = get_post_types('', 'objects'); //all post types
-	vu_dbg("got post types",$post_types);
+	vu_dbg("got post types",array_keys($post_types));
     /* The current post type. */
 	$post_type = $query->get('post_type');
 	vu_dbg("got post type",$post_type);
-	vu_dbg("arr_keys",$post_type,array_keys($post_types));
-	vu_dbg("in_array check test",$post_type == 'link',$post_type == array('link'),in_array($post_type, array_keys($post_types)));
+	// vu_dbg("arr_keys",$post_type,array_keys($post_types));
+	// vu_dbg("in_array check test",$post_type == 'link',$post_type == array('link'),in_array($post_type, array_keys($post_types)));
     /* Check post types. */
-    if(in_array($post_type, $post_types) && ($post_type == 'post' || $post_type == 'link')){
+    if(in_array($post_type, array_keys($post_types)) && ($post_type == 'post' || $post_type == 'link')){
 		vu_dbg("pass in_aray");
 		$query->set('taxonomy', VU_USER_GROUP);
 		$query->set('field', 'slug');
