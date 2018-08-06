@@ -174,12 +174,12 @@ function vu_get_user_role($user = ''){
 			$permission_role = $role;
 			vu_dbg("set to vu_permission_level::Admin");
 		}
-		else if($role === vu_permission_level::Department && vu_permission_level < 2){
+		else if($role === vu_permission_level::Department && $permission_level < 2){
 			$permission_level = 1;
 			$permission_role = $role;
 			vu_dbg("set to vu_permission_level::Department");
 		}
-		else if($role === vu_permission_level::Basic && vu_permission_level < 1){
+		else if($role === vu_permission_level::Basic && $permission_level < 1){
 			$permission_level = 0;
 			$permission_role = $role;
 			vu_dbg("set to vu_permission_level::Basic");
