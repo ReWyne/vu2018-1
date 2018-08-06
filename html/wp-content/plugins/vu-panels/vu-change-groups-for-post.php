@@ -115,6 +115,7 @@ function vu_add_post_user_group_save( $post_id ) {
 	vu_dbg('VU_USER_GROUP',get_terms( VU_USER_GROUP));
 
 	$new_ug = (int) $_POST['vu_cgfp_value'];
+	$user_id = get_current_user_id();
 	vu_dbg('$new_ug',$new_ug);
 	wp_set_object_terms( $post_id, array($new_ug), VU_USER_GROUP );
 
