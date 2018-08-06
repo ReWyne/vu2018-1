@@ -185,7 +185,7 @@ function vu_get_user_role($user = ''){
 			vu_dbg("set to vu_permission_level::Basic");
 		}
 		else{
-			vu_debug("vu_get_user_role error, got role $role for term ".$term->name);
+			vu_debug("vu_get_user_role else condition, got role $role for term ".$term->name."current permission role: $permission_role");
 		}
 	}
 	return $permission_role;
