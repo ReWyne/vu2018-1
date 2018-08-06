@@ -252,31 +252,31 @@ function vu_get_primary_user_group($user = ''){
  * @param  none
  * @return none
  */
-add_action( 'admin_init', 'vu_post_group_access_handler');
-function vu_post_group_access_handler() {
-	if(VU_RESTRICT_DEBUG_LEVEL(1)){vu_dbg("vu_post_group_access_handler");}
-	global $pagenow;
+// add_action( 'admin_init', 'vu_post_group_access_handler');
+// function vu_post_group_access_handler() {
+// 	if(VU_RESTRICT_DEBUG_LEVEL(1)){vu_dbg("vu_post_group_access_handler");}
+// 	global $pagenow;
 
-	if($pagenow != 'post.php'){
-		return;
-	}
+// 	if($pagenow != 'post.php'){
+// 		return;
+// 	}
 
-   // Exit if the user cannot edit any posts
-   if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! IS_DOING_AJAX) {
-      wp_redirect( home_url() );
-      exit;
-   }
+//    // Exit if the user cannot edit any posts
+//    if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! IS_DOING_AJAX) {
+//       wp_redirect( home_url() );
+//       exit;
+//    }
 
-   $current_post_id = get_the_ID();
-   $current_user_id = get_current_user_id();
-   vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
+//    $current_post_id = get_the_ID();
+//    $current_user_id = get_current_user_id();
+//    vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
 
-   //Exit if the user cannot edit *this* post, due to lacking group membership.
-   if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name')){
-		wp_redirect( home_url() );
-		exit;
-   }
-}
+//    //Exit if the user cannot edit *this* post, due to lacking group membership.
+//    if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name')){
+// 		wp_redirect( home_url() );
+// 		exit;
+//    }
+// }
 	
 // 	//reference
 //    /* Get the meta key. */
