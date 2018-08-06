@@ -112,7 +112,10 @@ function vu_add_post_user_group_save( $post_id ) {
 	// update_post_meta( $post_id, 'link_url_value', $new_ug );
 
 	//get frontend's specified user group and update
+	vu_dbg('VU_USER_GROUP',get_terms( VU_USER_GROUP));
+
 	$new_ug = (int) $_POST['vu_cgfp_value'];
+	vu_dbg('$new_ug',$new_ug);
 	wp_set_object_terms( $post_id, array($new_ug), VU_USER_GROUP );
 
 	//set user's default user group to whatever they decided to use here
