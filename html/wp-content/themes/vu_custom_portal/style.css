@@ -1224,3 +1224,11 @@ span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
 	color: red; 
 	white-space: pre;
 }
+
+/*--------------------------------------------------------------
+# DEBUGGER TWEAK
+--------------------------------------------------------------*/
+.log-entry{
+	font-family: monospace; 
+	white-space: pre;
+}

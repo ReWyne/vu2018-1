@@ -254,7 +254,7 @@ function vu_get_primary_user_group($user = ''){
  */
 add_action( 'admin_init', 'vu_post_group_access_handler');
 function vu_post_group_access_handler() {
-	if(VU_RESTRICT_DEBUG_LEVEL(1)){vu_dbg("vu_post_group_access_handler");}
+	if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_post_group_access_handler");}
 	global $pagenow;
 
 	if($pagenow != 'post.php'){
