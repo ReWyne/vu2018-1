@@ -40,7 +40,7 @@ function vu_register_permissions(){
 			'delete_others_posts' => true,
 			'delete_private_posts' => true,
 			'delete_published_posts' => true,
-			'edit_others_posts' => true,
+			'edit_others_posts' => true, //#IMPORTANT: this is the official cap that makes you a member of VU_Deparatment, when other plugins etc. (ex - Dashboard Access plugin) need to go off a single capability
 			'edit_posts' => true,
 			'edit_private_posts' => true,
 			'edit_published_posts' => true,
@@ -365,17 +365,19 @@ function custom_post_listing($query){
 // 	return;
 
 
-
-
-
-	// _builtin => true returns WordPress default post types. 
-	// _builtin => false returns custom registered post types. 
-
-	$post_types = get_post_types(array('_builtin' => true), 'objects');
-	$custom_post_types = get_post_types(array('_builtin' => false), 'objects');
+	// $post_types = get_post_types(array('_builtin' => true), 'objects');
+	// $custom_post_types = get_post_types(array('_builtin' => false), 'objects');
 	// vu_dbg("\$post_types",$post_types);
 	// vu_dbg("\$custom_post_types",$custom_post_types);
 
+	//#TEMP disabled for testing
+	// //first, skip all this if user is an admin; they do what they want
+	// if(current_user_can(vu_permission_level::Admin)){
+	// 	return $query;
+	// }
+
+	// [_builtin => true] as a first param returns only WordPress default post types. 
+	// [_builtin => false] as a first param returns only registered custom post types. 
 	$post_types = get_post_types('', 'objects'); //all post types
 	vu_dbg("got post types",array_keys($post_types));
     /* The current post type. */
@@ -386,19 +388,44 @@ function custom_post_listing($query){
     /* Check post types. */
     if(in_array($post_type, array_keys($post_types)) && ($post_type == 'post' || $post_type == 'link')){
 		vu_dbg("pass in_aray");
-		$query->set('taxonomy', VU_USER_GROUP);
-		$query->set('field', 'name');
-		$query->set('terms', array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
-		vu_dbg('array_keys',array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
-		vu_dbg("\$query2",$query);
+		// $query->set('taxonomy', VU_USER_GROUP);
+		// $query->set('field', 'name');
+		// $query->set('terms', array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
+		// vu_dbg('array_keys',array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
+		// vu_dbg("\$query2",$query);
 
 		// vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name');
 
 
 
 
+		//Display only the specific posts (super kludgy but it works for now)
 
 
+
+		//for each user_group, get all posts that are members of that user group
+			//get all user groups
+		$user_terms = array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'id' ) ); // there is a provided wp function to simplify this, but I can't remember what it is. Sorry
+
+		//get all posts attached to those user groups
+		$posts = get_posts(array(
+			'post_type' => $post_type,
+			'numberposts' => -1,
+			'tax_query' => array(
+				array(
+				'taxonomy' => VU_USER_GROUP,
+				'field' => 'id',
+				'terms' => $user_terms // Where term_id of Term 1 is "1".
+				)
+			)
+			));
+			vu_dbg('the $posts: ', $posts);
+
+			//get all ids from those posts
+			$post_ids = array_map( function($a){ return $a->ID; }, $posts );
+
+			//$query = new WP_Query( array( 'post_type' => 'page', 'post__in' => array( 2, 5, 12, 14, 20 ) ) );
+			$query->set('post__in', $post_ids);
 
 
 

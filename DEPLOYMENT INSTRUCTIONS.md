@@ -18,9 +18,13 @@ to install mcrypt:
 sudo apt-get update
 sudo apt-get install tasksel
 sudo tasksel install lamp-server
+
 - setup mysql
 - migrate files
 - setup wordpress
+	- Enable all plugins
+	- Go to Admin Panel > Settings > Dashboard Access. Set Advanced: Limit by capability: **edit_others_posts**
+	- (optional) Go to Admin Panel > Settings > WPS Hide Login. Set Login url to whatever you want the login page to be.
 
 - fix file/directory permissions, if you broke them
 sudo find . -type d -exec chmod 775 {} \;
