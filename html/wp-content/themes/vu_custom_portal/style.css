@@ -1230,7 +1230,8 @@ span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
-	user-select: none;          
+	user-select: none;      
+	display: none;    
 }
 
 /*--------------------------------------------------------------
