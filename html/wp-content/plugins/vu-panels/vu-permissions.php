@@ -387,12 +387,20 @@ function custom_post_listing($query){
     if(in_array($post_type, array_keys($post_types)) && ($post_type == 'post' || $post_type == 'link')){
 		vu_dbg("pass in_aray");
 		$query->set('taxonomy', VU_USER_GROUP);
-		$query->set('field', 'slug');
+		$query->set('field', 'name');
 		$query->set('terms', array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
 		vu_dbg('array_keys',array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
 		vu_dbg("\$query2",$query);
 
 		// vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name');
+
+
+
+
+
+
+
+
 
         /* Post Column: e.g. title */
         // if($query->get('orderby') == ''){
@@ -402,7 +410,9 @@ function custom_post_listing($query){
         // if($query->get('order') == ''){
         //     $query->set('order', 'ASC');
         // }
-    }
+	}
+	
+	return $query;
 }
 
 // Display posts tagged with bob, under people custom taxonomy:
