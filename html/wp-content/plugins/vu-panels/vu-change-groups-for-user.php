@@ -95,6 +95,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	$user = get_user_by('id', $user_id);
 	//vu_dbg('\$user_cgfu',$user);
 	$user->set_role($new_role);
+	$_POST['role'] = $new_role; //we should override whatever the previous value for the Role select was
 	vu_dbg('get_role',$user->roles);
 	// $user->set_role('administrator');
 	// vu_dbg('get_role2',$user->roles);
