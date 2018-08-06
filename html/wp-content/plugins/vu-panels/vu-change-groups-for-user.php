@@ -16,7 +16,7 @@ add_action( 'show_user_profile', 'vu_show_extra_profile_fields' );
 add_action( 'edit_user_profile', 'vu_show_extra_profile_fields' );
 add_action( 'user_new_form', 'vu_show_extra_profile_fields' );
 function vu_show_extra_profile_fields( $user ) {
-	if (!defined($user)){ //when creating a new user, we don't have this property
+	if (!isset($user)){ //when creating a new user, we don't have this property
 		$user = new StdClass;
 		$user->ID = 0;
 	}
