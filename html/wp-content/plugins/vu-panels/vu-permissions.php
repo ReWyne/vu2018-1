@@ -377,7 +377,7 @@ function custom_post_listing($query){
     /* The current post type. */
 	$post_type = $query->get('post_type');
 	vu_dbg("got post type",$post_type);
-	vu_dbg("in_array check test",$post_type == 'link',$post_type == array('link'));
+	vu_dbg("in_array check test",$post_type == 'link',$post_type == array('link'),in_array($post_type, $post_types));
     /* Check post types. */
     if(in_array($post_type, $post_types) && ($post_type == 'post' || $post_type == 'link')){
 		vu_dbg("pass in_aray");
