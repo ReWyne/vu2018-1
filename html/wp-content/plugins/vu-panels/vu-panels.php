@@ -26,7 +26,7 @@ define("VU_USER_PRIMARY_UG","vu_user_primary_ug"); //user metadata
 
 // Debugging convenience globals and accessors
 global $vu_panels_vars;
-$vu_panels_vars['RESTRICT_DEBUG_LEVEL'] = 1;
+$vu_panels_vars['RESTRICT_DEBUG_LEVEL'] = 3;
 
 //Setting the global to higher numbers should print less. Ohalso, floats are fine.
 //roughly speaking, 0 == "print everything", 1 == "print reasonably important functions", 2 == "important", 3 == "VERY important", 4 == "print programmer's summaries" 5 == "layman's summaries", 
