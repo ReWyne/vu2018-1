@@ -32,6 +32,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 //Callback from register_post_type
 add_action( 'add_meta_boxes_post', 'add_vu_post_user_group_custom_fields');
+add_action( 'add_meta_boxes_link', 'add_vu_post_user_group_custom_fields');
 function add_vu_post_user_group_custom_fields() {
 	add_meta_box( 'vu_user_group_meta_id', __( 'Department', 'vu-panels' ), 'vu_add_post_user_group_display', array('post','link'), 'normal', 'high' );
 //add_meta_box( string $id, string $title, callable $callback, string|array|WP_Screen $screen = null, string $context = 'advanced', string $priority = 'default', array $callback_args = null )
