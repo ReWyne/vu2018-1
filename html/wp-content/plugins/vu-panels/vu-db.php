@@ -100,6 +100,6 @@ function vu_db_get_ug2r_role($tax_group) {
         $tax_group
     ) );
     $escaped_output = esc_textarea($output);
-    vu_log("vu_db_get_ug2r_role called with param $tax_group. Returned: $output escaped to $escaped_output");
+    vu_log("vu_db_get_ug2r_role called with param $tax_group. Returned: $output which escapes to $escaped_output");
     return $escaped_output;
 }
