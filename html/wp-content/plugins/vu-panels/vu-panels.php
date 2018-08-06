@@ -205,18 +205,20 @@ function vu_mark_CPTs($classes){
 add_filter('post_class', 'vu_mark_CPTs');
 
 // add category nicenames in body and post class
-function category_id_class( $classes ) {
-  global $wp_query;
-  vu_dbg('pre_data',$wp_query);
-  $post = get_post( $wp_query->current_post );
+function category_id_class( $classes, $class, $post_id = NULL ) {
+  if($post_id === NULL){
+    vu_dbg('WARNING: \$post_id was NULL! Context... ',var_dump(debug_backtrace())); //var_dump instead of default print_r "just for fun"
+    return $classes;
+  }
+  $post = get_post( $post_id );
   vu_dbg('category_id_class \$post',$post);
 	foreach ( ( get_the_category( $post->ID ) ) as $category ) {
     $classes[] = $category->category_nicename;
 	}
 	return $classes;
 }
-add_filter( 'post_class', 'category_id_class' );
-add_filter( 'body_class', 'category_id_class' );
+add_filter( 'post_class', 'category_id_class',10,3 );
+add_filter( 'body_class', 'category_id_class',10,2 ); //
 
 
 
