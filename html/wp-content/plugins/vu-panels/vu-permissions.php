@@ -256,8 +256,6 @@ add_action( 'admin_init', 'vu_post_group_access_handler');
 function vu_post_group_access_handler() {
 	if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_post_group_access_handler");}
 	global $pagenow;
-	wp_redirect( home_url() );
-	exit;
 
 	 //TODO: may need wp_die(); instead, but calling exit; like the web suggested was breaking apache. (cost me like 8 hours >.<)
 
