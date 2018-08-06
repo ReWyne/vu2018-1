@@ -207,7 +207,7 @@ add_filter('post_class', 'vu_mark_CPTs');
 // add category nicenames in body and post class
 function category_id_class( $classes, $class, $post_id = NULL ) {
   if($post_id === NULL){
-    vu_dbg('WARNING: \$post_id was NULL! Context... ',var_dump(debug_backtrace())); //var_dump instead of default print_r "just for fun"
+    vu_dbg('WARNING: \$post_id was NULL! Context... ',var_dump(debug_backtrace())); // var_dump instead of default print_r "just for fun"
     return $classes;
   }
   $post = get_post( $post_id );
