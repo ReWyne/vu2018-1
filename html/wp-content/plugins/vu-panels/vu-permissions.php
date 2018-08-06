@@ -257,9 +257,6 @@ function vu_post_group_access_handler() {
 	if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_post_group_access_handler");}
 	global $pagenow;
 
-	 //TODO: may need wp_die(); instead, but calling exit; like the web suggested was breaking apache. (cost me like 8 hours >.<)
-
-
 	if($pagenow != 'post.php'){
 		return;
 	}
@@ -267,7 +264,7 @@ function vu_post_group_access_handler() {
    // Exit if the user cannot edit any posts
    if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! IS_DOING_AJAX) {
       wp_redirect( home_url() );
-      exit; //TODO: may need wp_die(); instead, but calling exit; like the web suggested was breaking apache. (cost me like 8 hours >.<)
+      wp_die(); //TODO: may need wp_die(); instead, but calling exit; like the web suggested was breaking apache. (cost me like 8 hours >.<)
    }
 
    $current_post_id = get_the_ID();
@@ -278,7 +275,7 @@ function vu_post_group_access_handler() {
    if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name') &&
      ! empty( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) ) ){
 		wp_redirect( home_url() );
-		exit;
+		wp_die();
    }
 }
 	
