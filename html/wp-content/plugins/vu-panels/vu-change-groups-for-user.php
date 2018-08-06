@@ -57,9 +57,9 @@ function vu_show_extra_profile_fields( $user ) {
  * @param  int $user_id
  * @return none
  */
-add_action( 'personal_options_update', 'vu_change_groups_for_user_process_request',100 );
-add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_request',100 );
-add_action('user_register', 'vu_change_groups_for_user_process_request',100);
+add_action( 'personal_options_update', 'vu_change_groups_for_user_process_request');
+add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_request');
+add_action('user_register', 'vu_change_groups_for_user_process_request');
 function vu_change_groups_for_user_process_request( $user_id ) {
 	 vu_dbg("vu_alter_user_group_taxonomy_process_request \$_POST: ",$_POST);
 	
