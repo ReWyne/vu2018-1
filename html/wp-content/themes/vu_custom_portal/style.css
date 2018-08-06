@@ -1226,7 +1226,7 @@ span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
 }
 
 /* role should be selected via user groups, not manually */
-#role{
+select#role{
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;

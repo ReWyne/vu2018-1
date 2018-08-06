@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 //Callback from register_post_type
 add_action( 'add_meta_boxes_post', 'add_vu_post_user_group_custom_fields');
 function add_vu_post_user_group_custom_fields() {
-	add_meta_box( 'vu_user_group_meta_id', __( 'Department', 'vu-panels' ), 'vu_add_post_user_group_display', 'post', 'normal', 'high' );
+	add_meta_box( 'vu_user_group_meta_id', __( 'Department', 'vu-panels' ), 'vu_add_post_user_group_display', array('post','link'), 'normal', 'high' );
 //add_meta_box( string $id, string $title, callable $callback, string|array|WP_Screen $screen = null, string $context = 'advanced', string $priority = 'default', array $callback_args = null )
 }
 
@@ -117,7 +117,7 @@ function vu_add_post_user_group_save( $post_id ) {
 	//set user's default user group to whatever they decided to use here
 	update_user_meta( $user_id, VU_USER_PRIMARY_UG, get_term($new_ug, VU_USER_GROUP)->name );
 
-	vu_debug("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, VU_USER_GROUP),true).
+	if(VU_RESTRICT_DEBUG_LEVEL(4)) vu_debug("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, VU_USER_GROUP),true).
 	"\n<br>User vu_user_primary_ug meta has been updated to: ".get_user_meta($user_id, VU_USER_PRIMARY_UG));
 
 	//$link_url_value = sanitize_text_field( $_POST['link_url_value'] );
