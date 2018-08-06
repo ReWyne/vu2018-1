@@ -264,15 +264,16 @@ function vu_post_group_access_handler() {
    // Exit if the user cannot edit any posts
    if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! IS_DOING_AJAX) {
       wp_redirect( home_url() );
-      return;
+      return; //TODO: may need wp_die(); instead, but calling exit; like the web suggested was breaking apache. (cost me like 8 hours >.<)
    }
 
    $current_post_id = get_the_ID();
    $current_user_id = get_current_user_id();
    vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
 
-   //Exit if the user cannot edit *this* post, due to lacking group membership.
-   if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name')){
+   //Exit if the user cannot edit *this* post, due to lacking group membership. (second && says "posts without groups are visible by everyone")
+   if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name') &&
+     ! empty( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) ) ){
 		wp_redirect( home_url() );
 		return;
    }
