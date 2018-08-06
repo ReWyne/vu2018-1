@@ -249,7 +249,7 @@ function vu_get_real_terms($options){
 }
 
 /**
- * Returns true if the two objects' sub-taxonomies provided share at least one key. Values are ignored.
+ * Returns an array of the intersecting keys of the two objects' sub-taxonomies. Values are ignored.
  * @param  int $left_id
  * @param  int $right_id
  * @param  string $taxonomy Name of taxnonomy
@@ -258,10 +258,10 @@ function vu_get_real_terms($options){
  */
 function vu_get_object_tax_intersection($left_id, $right_id, $taxonomy, $term_field){
        //get term (should be singular!) associated with post
-   $left_terms = vu_terms_array_to_set( vu_get_real_object_terms( $current_post_id, $taxonomy ), $term_field );
+   $left_terms = vu_terms_array_to_set( vu_get_real_object_terms( $left_id, $taxonomy ), $term_field );
    
    //get terms associated with user
-   $right_terms = vu_terms_array_to_set( vu_get_real_object_terms( $current_user_id, $taxonomy ), $term_field );
+   $right_terms = vu_terms_array_to_set( vu_get_real_object_terms( $right_id, $taxonomy ), $term_field );
    vu_dbg("vu_get_object_tax_intersection \$left_terms, \$right_terms", $left_terms, $right_terms);
 
    return vu_get_set_intersection($left_terms, $right_terms);

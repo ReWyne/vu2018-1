@@ -252,31 +252,31 @@ function vu_get_primary_user_group($user = ''){
  * @param  none
  * @return none
  */
-// add_action( 'admin_init', 'vu_post_group_access_handler');
-// function vu_post_group_access_handler() {
-// 	if(VU_RESTRICT_DEBUG_LEVEL(1)){vu_dbg("vu_post_group_access_handler");}
-// 	global $pagenow;
+add_action( 'admin_init', 'vu_post_group_access_handler');
+function vu_post_group_access_handler() {
+	if(VU_RESTRICT_DEBUG_LEVEL(1)){vu_dbg("vu_post_group_access_handler");}
+	global $pagenow;
 
-// 	if($pagenow != 'post.php'){
-// 		return;
-// 	}
+	if($pagenow != 'post.php'){
+		return;
+	}
 
-//    // Exit if the user cannot edit any posts
-//    if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! IS_DOING_AJAX) {
-//       wp_redirect( home_url() );
-//       exit;
-//    }
+   // Exit if the user cannot edit any posts
+   if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! IS_DOING_AJAX) {
+      wp_redirect( home_url() );
+      exit;
+   }
 
-//    $current_post_id = get_the_ID();
-//    $current_user_id = get_current_user_id();
-//    vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
+   $current_post_id = get_the_ID();
+   $current_user_id = get_current_user_id();
+   vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
 
-//    //Exit if the user cannot edit *this* post, due to lacking group membership.
-//    if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name')){
-// 		wp_redirect( home_url() );
-// 		exit;
-//    }
-// }
+   //Exit if the user cannot edit *this* post, due to lacking group membership.
+   if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name')){
+		wp_redirect( home_url() );
+		exit;
+   }
+}
 	
 // 	//reference
 //    /* Get the meta key. */
@@ -365,14 +365,26 @@ function custom_post_listing($query){
 
 	// _builtin => true returns WordPress default post types. 
 	// _builtin => false returns custom registered post types. 
+
 	$post_types = get_post_types(array('_builtin' => true), 'objects');
 	$custom_post_types = get_post_types(array('_builtin' => false), 'objects');
 	vu_dbg("\$post_types",$post_types);
 	vu_dbg("\$custom_post_types",$custom_post_types);
+
+	$post_types = get_post_types('', 'objects'); //all post types
+
     /* The current post type. */
     $post_type = $query->get('post_type');
     /* Check post types. */
-    if(in_array($post_type, $post_types)){
+    if(in_array($post_type, $post_types) && ($post_type == 'post' || $post_type == 'link')){
+		$query->set('taxonomy', VU_USER_GROUP);
+		$query->set('field', 'slug');
+		$query->set('terms', array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
+		vu_dbg('array_keys',array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
+		vu_dbg("\$query2",$query);
+
+		// vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name');
+
         /* Post Column: e.g. title */
         // if($query->get('orderby') == ''){
         //     $query->set('orderby', 'title');
@@ -397,6 +409,8 @@ function custom_post_listing($query){
 // 	),
 // );
 // $query = new WP_Query( $args );
+
+
 
 
 
