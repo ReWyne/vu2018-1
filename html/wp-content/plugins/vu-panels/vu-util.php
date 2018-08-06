@@ -52,7 +52,7 @@ function vu_dbg($message, ...$args){
  */
 function vu_no_newlines($string, $replace = '<br \>'){
     //return preg_replace("/\\[nr]/", $replace, $string);
-    return str_replace( array('\r\n', '\n', '\r'), $replace, $string );
+    return str_replace( array('\\r\\n', '\\n', '\\r'), $replace, $string );
 }
 
 /**
@@ -94,7 +94,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     global $vu_print_oneline_replace_text;
     if($vu_print_oneline == true){
         $output = vu_no_newlines($output, $vu_print_oneline_replace_text);
-        error_log("VU-NO-NEWLINES RESULT: \n \r \n\r <br /> :: ".$output);
+        error_log("VU-NO-NEWLINES RESULT: ".$output);
     }
 
     //handle shorthand methods of specifying output type
