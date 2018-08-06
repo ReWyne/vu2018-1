@@ -52,7 +52,7 @@ function vu_dbg($message, ...$args){
  */
 function vu_no_newlines($string, $replace = '<br \>'){
     //return preg_replace("/\\[nr]/", $replace, $string);
-    return str_replace( array('\\r\\n', '\\n', '\\r'), $replace, $string );
+    return str_replace( ["\r\n", "\r", "\n"], $replace, $string );
 }
 
 /**
