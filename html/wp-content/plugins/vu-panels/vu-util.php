@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 global $vu_print_oneline; //replaces \n's with <br>'s or whatever in output
 $vu_print_oneline = true;
 global $vu_print_oneline_replace_text; //what to replace the \n's with
-$vu_print_oneline_replace_text = "<br \>\n";//'<br \>'
+$vu_print_oneline_replace_text = "\n";//'<br \>'
 
 abstract class vu_debug_type
 {
