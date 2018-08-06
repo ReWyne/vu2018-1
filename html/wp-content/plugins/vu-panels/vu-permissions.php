@@ -377,8 +377,10 @@ function custom_post_listing($query){
     /* The current post type. */
 	$post_type = $query->get('post_type');
 	vu_dbg("got post type",$post_type);
+	vu_dbg("in_array check test",$post_type == 'link',$post_type == array('link'));
     /* Check post types. */
     if(in_array($post_type, $post_types) && ($post_type == 'post' || $post_type == 'link')){
+		vu_dbg("pass in_aray");
 		$query->set('taxonomy', VU_USER_GROUP);
 		$query->set('field', 'slug');
 		$query->set('terms', array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
