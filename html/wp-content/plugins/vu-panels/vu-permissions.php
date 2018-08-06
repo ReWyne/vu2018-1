@@ -219,6 +219,7 @@ function vu_get_accesible_user_groups($user = ''){
 	else{
 		$available_user_groups = vu_get_real_object_terms($user_id, VU_USER_GROUP);
 	}
+	if(VU_RESTRICT_DEBUG_LEVEL(5)){vu_dbg("vu_get_accesible_user_groups for user $user_id returned $available_user_groups");}
 	return $available_user_groups;
 }  
 
