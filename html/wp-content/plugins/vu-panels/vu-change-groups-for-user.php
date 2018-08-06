@@ -61,12 +61,12 @@ add_action( 'personal_options_update', 'vu_change_groups_for_user_process_reques
 add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_request' );
 add_action('user_register', 'vu_change_groups_for_user_process_request');
 function vu_change_groups_for_user_process_request( $user_id ) {
-	 vu_debug("vu_alter_user_group_taxonomy_process_request \$_POST: ",'',$_POST);
+	 vu_dbg("vu_alter_user_group_taxonomy_process_request \$_POST: ",$_POST);
 	
 	if ( !current_user_can( vu_permission_level::Admin, $user_id ) )
 		return $user_id;
 
-	vu_debug("vu_cgfu verifying nonce...");
+	vu_dbg("vu_cgfu verifying nonce...");
 
 	// Nonce validating code here 
 	if ( ! wp_verify_nonce( $_POST['vu_cgfu_nonce'], 'vu_cgfu_save' ) ) {
@@ -77,7 +77,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	// get checkbox data from frontend
 	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
 	array_map( function($a){ return (int)$a; }, $frontend_array ); // TODO: this line may be unnecessary
-	vu_debug("\$frontend_array + gettype([0]): ",'',$frontend_array, gettype($frontend_array[0]));
+	vu_dbg("\$frontend_array + gettype([0]): ",$frontend_array, gettype($frontend_array[0]));
 
 	// // properly format array to go array('group'=>true, ...) instead of array('group', ...) for O(1) lookup
 	// $new_ugs_array = array();
@@ -98,6 +98,6 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	$new_role = vu_get_user_role($user_id);
 	get_user_by('id', $user_id)->set_role($new_role);
 
-	vu_debug("Successfully updated user $user_id's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, VU_USER_GROUP),true).
+	vu_dbg("Successfully updated user $user_id's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, VU_USER_GROUP),true).
 	"\n<br>User role has been updated to: $new_role");
 }

@@ -3,7 +3,10 @@
 
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
-//utility functions
+//this file provides various utility functions
+
+global $vu_print_oneline; //replaces \n's with <br>'s in output
+$vu_print_oneline = true;
 
 abstract class vu_debug_type
 {
@@ -40,6 +43,16 @@ function vu_dbg($message, ...$args){
 }
 
 /**
+ * replace \n and \r with the specified replacement string (default '<br \>')
+ * @param  string String
+ * @param  string Replacement for \n's
+ * @return string
+ */
+function vu_no_newlines($string, $replace = '<br \>'){
+    return preg_replace("/\\[nr]/", $replace, $string);
+}
+
+/**
  * Print debug message via some output
  * @param  mixed String $message, array of enums (err_log, pc_dbg) $logger, other classes to output ...$args
  * @return void
@@ -73,6 +86,10 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     //print additional args
     if(!empty($args)){
         $output .= $separator.print_r($args, true); //or var_export($args, true) 
+    }
+
+    if($vu_print_oneline == true){
+        $output = vu_no_newlines($output);
     }
 
     //handle shorthand methods of specifying output type
