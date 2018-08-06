@@ -101,5 +101,5 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	$user->set_role($new_role);
 
 	if(VU_RESTRICT_DEBUG_LEVEL(5)) vu_dbg("Successfully updated user $user_id's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, VU_USER_GROUP),true).
-	"\n<br>User role has been updated to: $new_role");
+	"\nUser role has been updated to: $new_role");
 }
