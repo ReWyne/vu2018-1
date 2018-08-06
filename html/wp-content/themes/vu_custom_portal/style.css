@@ -1225,6 +1225,14 @@ span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
 	white-space: pre;
 }
 
+/* role should be selected via user groups, not manually */
+select#role{
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;          
+}
+
 /*--------------------------------------------------------------
 # DEBUGGER TWEAK
 --------------------------------------------------------------*/
