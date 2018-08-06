@@ -18,7 +18,7 @@ add_action( 'user_new_form', 'vu_show_extra_profile_fields' );
 function vu_show_extra_profile_fields( $user ) {
 	if (!defined($user)){ //when creating a new user, we don't have this property
 		$user = new StdClass;
-		$obj->ID = 0;
+		$user->ID = 0;
 	}
 	if( ! current_user_can(vu_permission_level::Admin, $user->ID)){return;}
 	?>
