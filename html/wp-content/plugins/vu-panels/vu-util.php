@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 global $vu_print_oneline; //replaces \n's with <br>'s or whatever in output
 $vu_print_oneline = true;
 global $vu_print_oneline_replace_text; //what to replace the \n's with
-$vu_print_oneline_replace_text = '';//'<br \>'
+$vu_print_oneline_replace_text = '<br \>';//'<br \>'
 
 abstract class vu_debug_type
 {
@@ -93,6 +93,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     global $vu_print_oneline_replace_text;
     if($vu_print_oneline == true){
         $output = vu_no_newlines($output, $vu_print_oneline_replace_text);
+        error_log("VU-NO-NEWLINES RESULT: ".$output);
     }
 
     //handle shorthand methods of specifying output type
