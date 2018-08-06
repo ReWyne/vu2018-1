@@ -93,7 +93,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 
 	// echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
 	// "\nUser role has been updated to: "/*TODO*/;
-
+	vu_dbg('get_role pre update',$user->roles);
 	//update
 	$new_role = vu_get_user_role($user_id);
 	$user = get_user_by('id', $user_id);
