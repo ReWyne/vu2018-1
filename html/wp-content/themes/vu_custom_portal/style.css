@@ -1228,7 +1228,7 @@ span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
 /*--------------------------------------------------------------
 # DEBUGGER TWEAK
 --------------------------------------------------------------*/
-.log-entry{
+.log-entry.message{
 	font-family: monospace; 
 	white-space: pre;
 }
