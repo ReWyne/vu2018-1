@@ -370,11 +370,10 @@ function custom_post_listing($query){
 	// vu_dbg("\$post_types",$post_types);
 	// vu_dbg("\$custom_post_types",$custom_post_types);
 
-	//#TEMP disabled for testing
-	// //first, skip all this if user is an admin; they do what they want
-	// if(current_user_can(vu_permission_level::Admin)){
-	// 	return $query;
-	// }
+	//first, skip all this if user is an admin; they do what they want
+	if(current_user_can(vu_permission_level::Admin)){
+		return $query;
+	}
 
 	// [_builtin => true] as a first param returns only WordPress default post types. 
 	// [_builtin => false] as a first param returns only registered custom post types. 
