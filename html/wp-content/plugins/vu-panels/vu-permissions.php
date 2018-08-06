@@ -168,17 +168,21 @@ function vu_get_user_role($user = ''){
 
 	foreach($terms as $term){
 		$role = vu_db_get_ug2r_role($term->name);
+		vu_dbg($role);
 		if($role === vu_permission_level::Admin){
 			$permission_level = 2;
 			$permission_role = $role;
+			vu_dbg("set to vu_permission_level::Admin");
 		}
 		else if($role === vu_permission_level::Department && vu_permission_level < 2){
 			$permission_level = 1;
 			$permission_role = $role;
+			vu_dbg("set to vu_permission_level::Department");
 		}
 		else if($role === vu_permission_level::Basic && vu_permission_level < 1){
 			$permission_level = 0;
 			$permission_role = $role;
+			vu_dbg("set to vu_permission_level::Basic");
 		}
 		else{
 			vu_debug("vu_get_user_role error, got role $role for term ".$term->name);
