@@ -5,8 +5,10 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 //this file provides various utility functions
 
-global $vu_print_oneline; //replaces \n's with <br>'s in output
+global $vu_print_oneline; //replaces \n's with <br>'s or whatever in output
 $vu_print_oneline = true;
+global $vu_print_oneline_replace_text; //what to replace the \n's with
+$vu_print_oneline_replace_text = '';//'<br \>'
 
 abstract class vu_debug_type
 {
@@ -87,9 +89,10 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     if(!empty($args)){
         $output .= $separator.print_r($args, true); //or var_export($args, true) 
     }
-
+    global $vu_print_oneline;
+    global $vu_print_oneline_replace_text;
     if($vu_print_oneline == true){
-        $output = vu_no_newlines($output);
+        $output = vu_no_newlines($output, $vu_print_oneline_replace_text);
     }
 
     //handle shorthand methods of specifying output type
