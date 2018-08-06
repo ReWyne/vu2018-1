@@ -263,6 +263,7 @@ function vu_post_group_access_handler() {
 	global $pagenow;
 
 	if($pagenow != 'post.php'){
+		vu_dbg("!= post.php");
 		return;
 	}
 
@@ -275,7 +276,8 @@ function vu_post_group_access_handler() {
    $current_post_id = get_the_ID();
    $current_user_id = get_current_user_id();
    vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
-
+   vu_dbg("tax_intersection",vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name'));
+   vu_dbg( 'vu_get_real_object_terms',vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) );
    //Exit if the user cannot edit *this* post, due to lacking group membership. (second && says "posts without groups are visible by everyone")
    if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name') &&
      ! empty( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) ) ){
