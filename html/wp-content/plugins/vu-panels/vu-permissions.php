@@ -375,7 +375,8 @@ function custom_post_listing($query){
 	$post_types = get_post_types('', 'objects'); //all post types
 
     /* The current post type. */
-    $post_type = $query->get('post_type');
+	$post_type = $query->get('post_type');
+	vu_dbg("got post type",$post_type);
     /* Check post types. */
     if(in_array($post_type, $post_types) && ($post_type == 'post' || $post_type == 'link')){
 		$query->set('taxonomy', VU_USER_GROUP);
