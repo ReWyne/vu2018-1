@@ -388,6 +388,14 @@ function custom_post_listing($query){
     /* Check post types. */
     if(in_array($post_type, array_keys($post_types)) && ($post_type == 'post' || $post_type == 'link')){
 		vu_dbg("pass in_aray");
+		$query->set( 'tax_query', array(
+			array(
+				'taxonomy' => VU_USER_GROUP,
+				'field' => 'name',
+				'terms' => array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ), // there is a provided wp function to simplify this, but I can't remember what it is. Sorry.
+				'operator' => 'IN'
+			)
+		) );
 		// $query->set('taxonomy', VU_USER_GROUP);
 		// $query->set('field', 'name');
 		// $query->set('terms', array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
@@ -402,30 +410,30 @@ function custom_post_listing($query){
 		//Display only the specific posts (super kludgy but it works for now)
 
 
-
+		// OUTDATED: Calling get_posts results in an infinite loop (b/c it inits a new Query obj)
 		//for each user_group, get all posts that are members of that user group
 			//get all user groups
-		$user_terms = array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'id' ) ); // there is a provided wp function to simplify this, but I can't remember what it is. Sorry
-		vu_dbg("array_keys finished");
-		//get all posts attached to those user groups
-		$posts = get_posts(array(
-			'post_type' => $post_type,
-			'numberposts' => -1,
-			'tax_query' => array(
-				array(
-				'taxonomy' => VU_USER_GROUP,
-				'field' => 'id',
-				'terms' => $user_terms // Where term_id of Term 1 is "1".
-				)
-			)
-			));
-			vu_dbg('the $posts: ', $posts);
+		// $user_terms = array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ); // there is a provided wp function to simplify this, but I can't remember what it is. Sorry
+		// vu_dbg("array_keys finished");
+		// //get all posts attached to those user groups
+		// $posts = get_posts(array(
+		// 	'post_type' => $post_type,
+		// 	'numberposts' => -1,
+		// 	'tax_query' => array(
+		// 		array(
+		// 		'taxonomy' => VU_USER_GROUP,
+		// 		'field' => 'id',
+		// 		'terms' => $user_terms // Where term_id of Term 1 is "1".
+		// 		)
+		// 	)
+		// 	));
+		// 	vu_dbg('the $posts: ', $posts);
 
-			//get all ids from those posts
-			$post_ids = array_map( function($a){ return $a->ID; }, $posts );
+		// 	//get all ids from those posts
+		// 	$post_ids = array_map( function($a){ return $a->ID; }, $posts );
 
-			//$query = new WP_Query( array( 'post_type' => 'page', 'post__in' => array( 2, 5, 12, 14, 20 ) ) );
-			$query->set('post__in', $post_ids);
+		// 	//$query = new WP_Query( array( 'post_type' => 'page', 'post__in' => array( 2, 5, 12, 14, 20 ) ) );
+		// 	$query->set('post__in', $post_ids);
 
 
 
