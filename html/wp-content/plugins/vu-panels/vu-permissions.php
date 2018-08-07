@@ -211,7 +211,7 @@ function vu_get_accesible_user_groups($user = ''){
 
 	//must be user ID
 	$user_id = $user;
-	if( ! is_int($user) ){
+	if( ! is_numeric($user) ){
 		$user_id = $user->ID;
 	}
 
