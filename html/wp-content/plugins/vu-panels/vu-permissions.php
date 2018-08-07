@@ -293,11 +293,18 @@ function vu_get_object_user_group_intersection($left_id, $right_id, $term_field)
 add_action( 'admin_init', 'vu_post_group_access_handler');
 function vu_post_group_access_handler() {
 	if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_post_group_access_handler");}
-	global $pagenow;
+	// global $pagenow;
 
-	if($pagenow != 'post.php'){
-		vu_dbg("!= post.php");
-		return;
+	// if($pagenow != 'post.php'){
+	// 	vu_dbg("!= post.php");
+	// 	return;
+	// }
+
+	$screen = get_current_screen();
+
+	if($screen === NULL || $screen->post_type == 'post' || $screen->post_type == 'link'){
+		vu_dbg("$screen is not a restricted type. Exiting function...");
+	 	return;
 	}
 
    // Exit if the user cannot edit any posts
@@ -306,7 +313,7 @@ function vu_post_group_access_handler() {
       wp_die(); //TODO: may need wp_die(); instead, but calling exit; like the web suggested was breaking apache. (cost me like 8 hours >.<)
    }
 
-   $current_post_id = get_the_ID();
+   $current_post_id = $_GET['post']; //get_the_ID() doesn't work out of the loop
    $current_user_id = get_current_user_id();
    vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
    vu_dbg("ug_intersection",vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name'));
