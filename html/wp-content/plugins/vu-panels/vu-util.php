@@ -133,8 +133,9 @@ function vu_echo_to_str($func, ...$params){
 function vu_to_str(...$params){
     global $vu_to_str_uses;
     if($vu_to_str_uses == 'print_r'){
-        $out = (count($params) == 1) ? print_r(array_values($params)[0], true) : print_r($params, true);
-        return ($out != '') ? $out : gettype($out);
+        $to_print = (count($params) == 1) ? array_values($params)[0] : $params;
+        $out = print_r($to_print, true);
+        return ($out != '') ? $out : gettype($to_print);
     }
     else{
         return vu_echo_to_str($vu_to_str_uses,...$params); //this also works for var_dump
