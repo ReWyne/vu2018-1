@@ -304,7 +304,11 @@ function vu_post_group_access_handler() {
 
 	if($screen === NULL || $screen->post_type == 'post' || $screen->post_type == 'link'){
 		vu_dbg("\$screen is not a restricted type. Exiting function...",$screen);
-	 	return;
+		global $pagenow;
+		vu_dbg("\$pagenow: ",$pagenow);
+		vu_dbg("\$_GET['post']: ",$_GET['post']);
+		
+		wp_die();
 	}
 
    // Exit if the user cannot edit any posts
