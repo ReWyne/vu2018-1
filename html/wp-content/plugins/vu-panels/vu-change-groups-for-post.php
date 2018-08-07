@@ -78,7 +78,7 @@ function vu_add_post_user_group_display(){
 			}
 			else{ //otherwise, use whatever user group this particular user picked last
 				$selected_text = ($primary_ug == $term_object->name) ? 'selected="selected"' : '';
-				vu_dbg('using $$primary_ug for ', $term_object);
+				vu_dbg('using $primary_ug for ', $term_object);
 			}
 			echo '<option '.$selected_text.' value="'.$term_object->term_id.'" >'.$term_object->name.'<br>';
 		}

@@ -299,7 +299,7 @@ function vu_post_group_access_handler() {
 	global $pagenow;
 
 	if($pagenow != 'post.php'){
-		vu_dbg("$pagenow != post.php");
+		if(VU_RESTRICT_DEBUG_LEVEL(1))vu_dbg("$pagenow != post.php");
 		return;
 	}
 
