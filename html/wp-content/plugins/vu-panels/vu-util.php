@@ -133,7 +133,7 @@ function vu_echo_to_str($func, ...$params){
 function vu_to_str(...$params){
     global $vu_to_str_uses;
     if($vu_to_str_uses == 'print_r'){
-        $out = print_r($params, true);
+        $out = (count($params) == 1) ? print_r(array_values($params)[0], true) : print_r($params, true);
         return ($out != '') ? $out : gettype($out);
     }
     else{
