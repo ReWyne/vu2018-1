@@ -247,7 +247,7 @@ function vu_get_set_intersection($left_terms, $right_terms){
     foreach($left_terms as $l_key => $l_id){
         vu_dbg('$l_key, array_key_exists()',$l_key, array_key_exists($l_key, $right_terms));
         if ( array_key_exists($l_key, $right_terms) ){
-            $intersection->append($l_key);
+            array_push($intersection, $l_key);
         }
     }
     if(VU_RESTRICT_DEBUG_LEVEL(2)){vu_dbg("vu_get_set_intersection \$intersection ",$intersection);}
