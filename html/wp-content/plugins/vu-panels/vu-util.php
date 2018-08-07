@@ -9,6 +9,8 @@ global $vu_print_oneline; //replaces \n's with <br>'s or whatever in output
 $vu_print_oneline = true;
 global $vu_print_oneline_replace_text; //what to replace the \n's with
 $vu_print_oneline_replace_text = "\n";//'<br \>'
+global $vu_to_str_uses; //options: print_r, var_dump
+$vu_to_str_uses = 'print_r';
 
 abstract class vu_debug_type
 {
@@ -119,7 +121,22 @@ function vu_echo_to_str($func, ...$params){
     $func(...$params);
     $output = ob_get_clean();
     //ob_end_flush(); //unneeded, should be flushed when function returns
-    return $output ;
+    return $output;
+}
+
+/**
+ * Convert the provided object into a string, using method specified in the $vu_to_str_uses global
+ * @param  multiple $params
+ * @return string output
+ */
+function vu_to_str(...$params){
+    global $vu_to_str_uses;
+    if($vu_to_str_uses == 'print_r'){
+        return print_r($params, true);
+    }
+    else{
+        return vu_echo_to_str($vu_to_str_uses,...$params); //this also works for var_dump
+    }
 }
 
 /**
@@ -213,7 +230,7 @@ function vu_get_set_intersection($left_terms, $right_terms){
             vu_dbg("Warning: vu_check_set_intersection parameter $term is not an array");
         }
     }
-    
+
     $intersection = [];
     foreach($left_terms as $lterm){
         if ( array_key_exists($lterm, $right_terms) ){
