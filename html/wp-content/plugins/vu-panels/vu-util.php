@@ -3,7 +3,15 @@
 
 defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
-//this file provides various utility functions
+/**
+ * This file provides various utility functions
+ * 
+ * Other functions you may find helpful for debugging:
+ *     func_get_args() returns an array consisting of the function's parameters
+ *     debug_backtrace() returns an array describing the current call stack
+ * Get *too* crazy with this and you'll start wondering why you're not just using xdebug, though...
+ * https://www.agileana.com/blog/how-to-debug-from-a-remote-server-using-xdebug-and-phpstorm/
+ */
 
 global $vu_print_oneline; //replaces \n's with <br>'s or whatever in output
 $vu_print_oneline = true;
@@ -134,9 +142,9 @@ function vu_echo_to_str($func, ...$params){
 function vu_to_str(...$params){
     global $vu_to_str_uses;
     if($vu_to_str_uses == 'print_r'){
-        $to_print = (count($params) == 1) ? array_values($params)[0] : $params;
-        $out = print_r($to_print, true);
-        return ($out != '') ? $out : "(empty type: ".gettype($to_print).")";
+        $obj_to_print = (count($params) == 1) ? array_values($params)[0] : $params;
+        $out = print_r($obj_to_print, true);
+        return ($out != '') ? $out : "(empty type: ".gettype($obj_to_print).")";
     }
     else{
         return vu_echo_to_str($vu_to_str_uses,...$params); //this also works for var_dump
