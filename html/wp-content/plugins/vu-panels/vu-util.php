@@ -90,7 +90,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     
     //print additional args
     if(!empty($args)){
-        $output .= $separator.vu_to_str($args); //or var_export($args, true) 
+        $output .= $separator.vu_to_str(...$args); //or var_export($args, true) 
     }
     global $vu_print_oneline;
     global $vu_print_oneline_replace_text;
