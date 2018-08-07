@@ -303,7 +303,7 @@ function vu_post_group_access_handler() {
 	$screen = get_current_screen();
 
 	if($screen === NULL || $screen->post_type == 'post' || $screen->post_type == 'link'){
-		vu_dbg("$screen is not a restricted type. Exiting function...");
+		vu_dbg("\$screen is not a restricted type. Exiting function...",$screen);
 	 	return;
 	}
 
