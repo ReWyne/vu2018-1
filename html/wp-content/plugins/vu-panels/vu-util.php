@@ -10,7 +10,7 @@ $vu_print_oneline = true;
 global $vu_print_oneline_replace_text; //what to replace the \n's with
 $vu_print_oneline_replace_text = "\n";//'<br \>'
 global $vu_to_str_uses; //options: print_r, var_dump
-$vu_to_str_uses = 'var_dump';
+$vu_to_str_uses = 'print_r';
 
 abstract class vu_debug_type
 {
@@ -76,7 +76,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
 
     //initial message
     if( ! is_string($message) ){
-        $output = "[".gettype($message)."] ".print_r($message, true).$separator;
+        $output = "[".gettype($message)."] ".vu_to_str($message).$separator;
     }
     else {
         $output = $message.$separator;
@@ -90,7 +90,7 @@ function vu_debug($message, $loggers = array('err_log','pc_dbg'), ...$args){
     
     //print additional args
     if(!empty($args)){
-        $output .= $separator.print_r($args, true); //or var_export($args, true) 
+        $output .= $separator.vu_to_str($args); //or var_export($args, true) 
     }
     global $vu_print_oneline;
     global $vu_print_oneline_replace_text;
