@@ -10,7 +10,7 @@ $vu_print_oneline = true;
 global $vu_print_oneline_replace_text; //what to replace the \n's with
 $vu_print_oneline_replace_text = "\n";//'<br \>'
 global $vu_to_str_uses; //options: print_r, var_dump
-$vu_to_str_uses = 'print_r';
+$vu_to_str_uses = 'var_dump';
 
 abstract class vu_debug_type
 {
