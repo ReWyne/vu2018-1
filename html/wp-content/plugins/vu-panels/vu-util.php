@@ -245,11 +245,12 @@ function vu_get_set_intersection($left_terms, $right_terms){
 
     $intersection = [];
     foreach($left_terms as $lterm){
+        vu_dbg('$lterm, array_key_exists()',$lterm, array_key_exists($lterm, $right_terms));
         if ( array_key_exists($lterm, $right_terms) ){
             $intersection->append($lterm);
         }
     }
-    if(VU_RESTRICT_DEBUG_LEVEL(2)){vu_dbg("vu_get_set_intersection \$intersection ",$intersection);}
+    if(VU_RESTRICT_DEBUG_LEVEL(3)){vu_dbg("vu_get_set_intersection \$intersection ",$intersection);}
     return $intersection;
 }
 
