@@ -10,7 +10,7 @@ $vu_print_oneline = true;
 global $vu_print_oneline_replace_text; //what to replace the \n's with
 $vu_print_oneline_replace_text = "\n";//'<br \>'
 global $vu_to_str_uses; //options: print_r, var_dump
-$vu_to_str_uses = 'var_dump';
+$vu_to_str_uses = 'print_r';
 
 abstract class vu_debug_type
 {
@@ -132,7 +132,8 @@ function vu_echo_to_str($func, ...$params){
 function vu_to_str(...$params){
     global $vu_to_str_uses;
     if($vu_to_str_uses == 'print_r'){
-        return print_r($params, true);
+        $out = print_r($params, true);
+        return ($out != '') ? $out : gettype($out);
     }
     else{
         return vu_echo_to_str($vu_to_str_uses,...$params); //this also works for var_dump
