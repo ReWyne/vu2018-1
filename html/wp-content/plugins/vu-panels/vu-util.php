@@ -159,7 +159,7 @@ function vu_to_str(...$params){
 function vu_is_custom_post_type( $post = NULL )
 {
     if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('vu_is_custom_post_type $post ',$post);
-    $all_custom_post_types = get_post_types( array ( '_builtin' => FALSE ) );
+    $all_custom_post_types = get_post_types( array ( '_builtin' => FALSE ) ); 
 
     // there are no custom post types
     if ( empty ( $all_custom_post_types ) )
