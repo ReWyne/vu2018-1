@@ -190,8 +190,8 @@ function vu_generate_link_posts( $query ) {
 
 //add general class for all our custom post types
 function vu_mark_CPTs($classes){
-  if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_mark_CPTs \$classes", $classes);}
-
+  if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('vu_mark_CPTs $classes', $classes);
+  global $post; vu_dbg('vu_mark_CPTs $classes', $classes, $post);
   if(!vu_is_custom_post_type($classes)){
     return $classes;
   }
@@ -206,11 +206,11 @@ add_filter('post_class', 'vu_mark_CPTs');
 // add category nicenames in body and post class
 function category_id_class( $classes, $class, $post_id = NULL ) {
   if($post_id === NULL){
-    vu_dbg('WARNING: \$post_id was NULL! Context... ',debug_backtrace());
+    if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('Notice: $post_id was NULL! Context... ',debug_backtrace());
     return $classes;
   }
   $post = get_post( $post_id );
-  vu_dbg('category_id_class \$post',$post);
+  if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('category_id_class \$post',$post);
 	foreach ( ( get_the_category( $post->ID ) ) as $category ) {
     $classes[] = $category->category_nicename;
 	}

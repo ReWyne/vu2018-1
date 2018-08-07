@@ -158,17 +158,18 @@ function vu_to_str(...$params){
  */
 function vu_is_custom_post_type( $post = NULL )
 {
-    if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_is_custom_post_type \$post ",$post);}
+    if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('vu_is_custom_post_type $post ',$post);
     $all_custom_post_types = get_post_types( array ( '_builtin' => FALSE ) );
 
     // there are no custom post types
     if ( empty ( $all_custom_post_types ) )
-        return FALSE;
+        return false;
 
     $custom_types = array_keys( $all_custom_post_types );
 
     //if array was passed, check if anything in it is a custom post type
     if(is_array($post)){
+        /*if(VU_RESTRICT_DEBUG_LEVEL(1))*/vu_dbg('vu_is_custom_post_type is_array($post) ',$post);
         return array_intersect($post, $custom_types);
     }
 
