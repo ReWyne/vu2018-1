@@ -20,7 +20,7 @@ define("VU_ADMIN_GROUP", "vu_admin"); //name of the term in the vu_user_group ta
 add_action( 'init', 'vu_register_permissions', 0 );
 function vu_register_permissions(){
 	// if(IS_WP_DEBUG){
-	// 	vu_log("vu_register_permissions");
+	// 	vu_dbg("vu_register_permissions");
 
 	// 	global $wp_roles;
 
@@ -56,6 +56,12 @@ function vu_register_permissions(){
 		)
 	);
 
+	// remove unused roles for convenience
+	foreach(['editor', 'author', 'contributor'] as $old_role){
+		if( get_role($old_role) ){
+			remove_role( $old_role );
+		}
+	}
 	// //if we want our own admin role
 	// $t_role = get_role('administrator');
 	// $admin_caps = $t_role['capabilities'];
@@ -89,7 +95,7 @@ function vu_register_permissions(){
 
 	if ( ! vu_term_exists( VU_ADMIN_GROUP, VU_USER_GROUP ) ){
 		$output = "Inserted admin vu_user_group: " . print_r(wp_insert_term( VU_ADMIN_GROUP, VU_USER_GROUP ), true);
-		vu_debug($output);
+		vu_dbg($output);
 		
 		vu_db_replace_ug2r_data(VU_ADMIN_GROUP, vu_permission_level::Admin);
 	}

@@ -16,7 +16,8 @@ add_action( 'show_user_profile', 'vu_show_extra_profile_fields' );
 add_action( 'edit_user_profile', 'vu_show_extra_profile_fields' );
 add_action( 'user_new_form', 'vu_show_extra_profile_fields' );
 function vu_show_extra_profile_fields( $user ) {
-	if (!isset($user)){ //when creating a new user, we don't have this property
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('vu_show_extra_profile_fields, $user: ', $user);
+	if (!isset($user)){ //when creating a new user, we don't have this parameter
 		$user = new StdClass;
 		$user->ID = 0;
 	}
@@ -65,7 +66,7 @@ add_action( 'personal_options_update', 'vu_change_groups_for_user_process_reques
 add_action( 'edit_user_profile_update', 'vu_change_groups_for_user_process_request');
 add_action('user_register', 'vu_change_groups_for_user_process_request');
 function vu_change_groups_for_user_process_request( $user_id ) {
-	 vu_dbg("vu_alter_user_group_taxonomy_process_request \$_POST: ",$_POST);
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg("vu_alter_user_group_taxonomy_process_request \$_POST \$user_id: ", $_POST, $user_id);
 	
 	if ( !current_user_can( vu_permission_level::Admin, $user_id ) )
 		return $user_id;
@@ -75,7 +76,7 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 		return $user_id;
 	  }
 	// get checkbox data from frontend
-	$frontend_array = $_POST['vu_cgfu_checkbox']; //value-only array
+	$frontend_array = array_key_exists('vu_cgfu_checkbox', $_POST) ? $_POST['vu_cgfu_checkbox'] : []; //value-only array
 	array_map( function($a){ return (int)$a; }, $frontend_array ); // TODO: this line may be unnecessary
 	//vu_dbg("\$frontend_array + gettype([0]): ",$frontend_array, gettype($frontend_array[0]));
 
@@ -93,14 +94,14 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 
 	// echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
 	// "\nUser role has been updated to: "/*TODO*/;
-	vu_dbg('get_role pre update',$user->roles);
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('get_role pre update',$user->roles);
 	//update
 	$new_role = vu_get_user_role($user_id);
 	$user = get_user_by('id', $user_id);
 	//vu_dbg('\$user_cgfu',$user);
 	$user->set_role($new_role);
 	$_POST['role'] = $new_role; //we should override whatever the previous value for the Role select was
-	vu_dbg('get_role',$user->roles);
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('get_role',$user->roles);
 	// $user->set_role('administrator');
 	// vu_dbg('get_role2',$user->roles);
 
