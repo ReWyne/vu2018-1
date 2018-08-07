@@ -273,11 +273,11 @@ function vu_get_object_user_group_intersection($left_id, $right_id, $term_field)
 	foreach( [$left_id, $right_id] as $id ){
 		++$count;
 		if( get_userdata( $id ) ){ // if the object is a user, use the accessor function
-			vu_dbg("itsauser",vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
+			//vu_dbg("itsauser",vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
 			$compare_terms[$count] = vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field );
 		}
 		else{
-			vu_dbg("itsanobject",vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
+			//vu_dbg("itsanobject",vu_terms_array_to_set( vu_get_real_object_terms( $id, VU_USER_GROUP ), $term_field ) );
 			$compare_terms[$count] = vu_terms_array_to_set( vu_get_real_object_terms( $id, VU_USER_GROUP ), $term_field );
 		}
 	}
@@ -306,7 +306,7 @@ function vu_post_group_access_handler() {
    // Exit if the user cannot edit any posts
    if ( is_admin() && ! current_user_can( 'edit_posts' ) && ! IS_DOING_AJAX) {
       wp_redirect( home_url() );
-      wp_die(); //TODO: may need wp_die(); instead, but calling exit; like the web suggested was breaking apache. (cost me like 8 hours >.<)
+      exit; //TODO: may need wp_die(); instead, but calling exit; like the web suggested was breaking apache. (cost me like 8 hours >.<)
    }
 
    $current_post_id = $_GET['post']; //get_the_ID() doesn't work out of the loop
@@ -318,7 +318,7 @@ function vu_post_group_access_handler() {
    if ( ! vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name') &&
      ! empty( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) ) ){
 		wp_redirect( home_url() );
-		wp_die();
+		exit;
    }
 }
 	
