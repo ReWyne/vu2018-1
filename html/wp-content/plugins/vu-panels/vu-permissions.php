@@ -201,7 +201,7 @@ function vu_get_user_role($user = ''){
  * Get all vu_user_group terms that the user has access to.
  * Note that admins always have access to all terms, regardless of what is actually attached to their user object.
  * @param  object $user
- * @return string $accesible_ugs
+ * @return array $accesible_ugs array of wp term objects
  */
 function vu_get_accesible_user_groups($user = ''){
 	//allow calling w/o params
@@ -258,6 +258,33 @@ function vu_get_primary_user_group($user = ''){
 }
 
 /**
+ * Returns an array of the intersecting keys of the two objects' vu_user_group terms. Values are ignored.
+ * Distinct from the more general vu_get_object_tax_intersection because the latter does not consider admins to be a member of every group unless they actually are.
+ * @param  int $left_id
+ * @param  int $right_id
+ * @param  int $term_field Name of field to use in the comparison 
+ * @return array $intersection Array of shared terms
+ */
+
+function vu_get_object_user_group_intersection($left_id, $right_id, $term_field){
+	//get term (should be singular!) associated with post
+	$taxonomy = VU_USER_GROUP;
+	$compare_terms = [];
+	foreach([$left_id, $right_id] as $id){
+		if( get_userdata( $id ) ){ // if the object is a user, use the accessor function
+			$compare_terms.append( vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
+		}
+		else{
+			$compare_terms.append( vu_terms_array_to_set( vu_get_real_object_terms( $id, $taxonomy ), $term_field ) );
+		}
+	}
+
+	vu_dbg("vu_get_object_tax_intersection \$left_terms, \$right_terms", $compare_terms[0], $compare_terms[1]);
+
+	return vu_get_set_intersection($compare_terms[0], $compare_terms[1]);
+}
+
+/**
  * Block access to posts that the user should not have access to based on their user group membership
  * TODO
  * @param  none
@@ -282,10 +309,10 @@ function vu_post_group_access_handler() {
    $current_post_id = get_the_ID();
    $current_user_id = get_current_user_id();
    vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
-   vu_dbg("tax_intersection",vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name'));
+   vu_dbg("ug_intersection",vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name'));
    vu_dbg( 'vu_get_real_object_terms',vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) );
    //Exit if the user cannot edit *this* post, due to lacking group membership. (second && says "posts without groups are visible by everyone")
-   if ( ! vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name') &&
+   if ( ! vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name') &&
      ! empty( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) ) ){
 		wp_redirect( home_url() );
 		wp_die();
@@ -390,21 +417,20 @@ function custom_post_listing($query){
 	$post_types = get_post_types('', 'objects'); //all post types
 	//vu_dbg("got post types",array_keys($post_types));
 
-    /* The current post type. */
-	$post_type = $query->get('post_type');
+	$post_type = $query->get('post_type'); //queried post type
 	//vu_dbg("got post type",$post_type);
 
 	// vu_dbg("arr_keys",$post_type,array_keys($post_types));
 	// vu_dbg("in_array check test",$post_type == 'link',$post_type == array('link'),in_array($post_type, array_keys($post_types)));
     /* Check post types. */
     if(in_array($post_type, array_keys($post_types)) && ($post_type == 'post' || $post_type == 'link')){
-		vu_dbg("pass in_aray");
+		vu_dbg("pass in_array");
 
 		$query->set( 'tax_query', array(
 			array(
 				'taxonomy' => VU_USER_GROUP,
 				'field' => 'name',
-				'terms' => array_keys( vu_terms_array_to_set( vu_get_accesible_user_groups(), 'name' ) ), // there is a provided wp function to simplify this, but I can't remember what it is. Sorry.
+				'terms' => wp_list_pluck( vu_get_accesible_user_groups(), 'name' ), // get the names of the vu_user_groups the user has access to
 				'operator' => 'IN'
 			)
 		) );

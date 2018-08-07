@@ -162,7 +162,7 @@ function vu_is_custom_post_type( $post = NULL )
  * Convert WP_terms array into array suitable only for checking (in O(1)) if a term is present, based on the specified property.
  * Useful for checking array containment/intersection
  * Ex return value - {"name1"=>3, "name2"=>55, ...} might then by checked by array_key_exists("name1", $output_array)
- * The values returned in the array are the ids of the corresponding taxonomy terms. Which *should* always be integers evaluating to true. You can get the associated term with get_term( $term, $taxonomy );
+ * The values returned in the array are the ids of the corresponding taxonomy terms. Which *should* always be integers evaluating to true. You can get the associated term with get_term( $term_id, $taxonomy );
  * Note: if a regular array is desired instead of a set, wp provides a function comparable to this: wp_list_pluck( $subcategory_terms, 'term_id' );
  *  @param  array $term_array
  * @param  string $term_field ex - "name" or "term_id"
@@ -264,7 +264,7 @@ function vu_get_real_terms($options){
 		}
     }
     
-    vu_dbg("vu_get_real_terms",$terms);
+    if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg("vu_get_real_terms",$terms);
 
 	return array_values($terms); //reindex array before returning
 }
@@ -283,7 +283,7 @@ function vu_get_object_tax_intersection($left_id, $right_id, $taxonomy, $term_fi
    
    //get terms associated with user
    $right_terms = vu_terms_array_to_set( vu_get_real_object_terms( $right_id, $taxonomy ), $term_field );
-   vu_dbg("vu_get_object_tax_intersection \$left_terms, \$right_terms", $left_terms, $right_terms);
+   if(VU_RESTRICT_DEBUG_LEVEL(1)) vu_dbg("vu_get_object_tax_intersection \$left_terms, \$right_terms", $left_terms, $right_terms);
 
    return vu_get_set_intersection($left_terms, $right_terms);
 }
