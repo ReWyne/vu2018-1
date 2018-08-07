@@ -268,14 +268,15 @@ function vu_get_primary_user_group($user = ''){
 
 function vu_get_object_user_group_intersection($left_id, $right_id, $term_field){
 	//get term (should be singular!) associated with post
-	$taxonomy = VU_USER_GROUP;
 	$compare_terms = []; //array with 2 items, that holds the two sets whose intersection we are checking
 	foreach( [$left_id, $right_id] as $id ){
 		if( get_userdata( $id ) ){ // if the object is a user, use the accessor function
+			vu_dbg("itsauser",vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
 			$compare_terms->append( vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
 		}
 		else{
-			$compare_terms->append( vu_terms_array_to_set( vu_get_real_object_terms( $id, $taxonomy ), $term_field ) );
+			vu_dbg("itsanobject",vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
+			$compare_terms->append( vu_terms_array_to_set( vu_get_real_object_terms( $id, VU_USER_GROUP ), $term_field ) );
 		}
 	}
 
