@@ -244,13 +244,13 @@ function vu_get_set_intersection($left_terms, $right_terms){
     }
 
     $intersection = [];
-    foreach($left_terms as $lterm){
-        vu_dbg('$lterm, array_key_exists()',$lterm, array_key_exists($lterm, $right_terms));
-        if ( array_key_exists($lterm, $right_terms) ){
-            $intersection->append($lterm);
+    foreach($left_terms as $l_key => $l_id){
+        vu_dbg('$l_key, array_key_exists()',$l_key, array_key_exists($l_key, $right_terms));
+        if ( array_key_exists($l_key, $right_terms) ){
+            $intersection->append($l_key);
         }
     }
-    if(VU_RESTRICT_DEBUG_LEVEL(3)){vu_dbg("vu_get_set_intersection \$intersection ",$intersection);}
+    if(VU_RESTRICT_DEBUG_LEVEL(2)){vu_dbg("vu_get_set_intersection \$intersection ",$intersection);}
     return $intersection;
 }
 
