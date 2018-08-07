@@ -311,18 +311,11 @@ function vu_post_group_access_handler() {
 
    $current_post_id = $_GET['post']; //get_the_ID() doesn't work out of the loop
    $current_user_id = get_current_user_id();
-   vu_dbg("vu_post_group_access_handler \$current_post_id", $current_post_id);
-   vu_dbg("ug_intersection",vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name'));
-   vu_dbg( 'vu_get_real_object_terms',vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) );
    //Exit if the user cannot edit *this* post, due to lacking group membership. (second && says "posts without groups are visible by everyone")
-   vu_dbg("vu_get_object_user_group_intersection",vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name'));
    if ( ! vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name') &&
      ! empty( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) ) ){
-		//#TEMP 
-		wp_die();
-
-		// wp_redirect( home_url() );
-		// exit;
+		wp_redirect( home_url() );
+		exit;
    }
 }
 	
