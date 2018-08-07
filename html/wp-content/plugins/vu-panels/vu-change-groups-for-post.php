@@ -34,6 +34,8 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 add_action( 'add_meta_boxes_post', 'add_vu_post_user_group_custom_fields');
 add_action( 'add_meta_boxes_link', 'add_vu_post_user_group_custom_fields');
 function add_vu_post_user_group_custom_fields() {
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('add_vu_post_user_group_custom_fields');
+
 	add_meta_box( 'vu_user_group_meta_id', __( 'Department', 'vu-panels' ), 'vu_add_post_user_group_display', array('post','link'), 'normal', 'high' );
 //add_meta_box( string $id, string $title, callable $callback, string|array|WP_Screen $screen = null, string $context = 'advanced', string $priority = 'default', array $callback_args = null )
 }
@@ -45,6 +47,8 @@ function add_vu_post_user_group_custom_fields() {
  * @return none
  */
 function vu_add_post_user_group_display(){
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('vu_add_post_user_group_display');
+
 	wp_nonce_field( 'vu_post_cgfp_save', 'vu_post_cgfp_nonce' );
 	?>
 	<label for="vu_post_ug">Group in charge of managing this post : </label>
@@ -62,7 +66,7 @@ function vu_add_post_user_group_display(){
 		$post_terms = vu_get_real_object_terms($current_post_id, VU_USER_GROUP);
 		$primary_ug = vu_get_primary_user_group($user->ID);
 		if(IS_WP_DEBUG && count($post_terms) > 1){
-			vu_dbg("ERROR: Post".$current_post_id." has more than one user group!",$post_terms);
+			vu_dbg("ERROR: Post".$current_post_id." has more than one user group! \$post_terms: ",$post_terms);
 		}
 		foreach($available_user_groups as $term_object){ //Note: in_array runs in [length of array] time; switch to key => value method for O(1) lookup if this is an issue
 			
@@ -79,8 +83,6 @@ function vu_add_post_user_group_display(){
 	<?php
 }
 
-add_action( 'save_post', 'vu_add_post_user_group_save');
-//
 /**
  * #TODO
  * Save the add_post_user_group meta value entered
@@ -88,8 +90,9 @@ add_action( 'save_post', 'vu_add_post_user_group_save');
  * @param  none
  * @return none
  */
+add_action( 'save_post', 'vu_add_post_user_group_save');
 function vu_add_post_user_group_save( $post_id ) {
-
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('vu_show_extra_profile_fields, $post_id: ', $post_id);
 	//only save meta value if hitting submit
 	if ( IS_DOING_AUTOSAVE ){
 	return $post_id;
@@ -112,19 +115,20 @@ function vu_add_post_user_group_save( $post_id ) {
 	// update_post_meta( $post_id, 'link_url_value', $new_ug );
 
 	//get frontend's specified user group and update
-	vu_dbg('VU_USER_GROUP',get_terms( VU_USER_GROUP));
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('VU_USER_GROUP: ', get_terms( VU_USER_GROUP));	
 
-	$new_ug = (int) $_POST['vu_cgfp_value'];
 	$user_id = get_current_user_id();
-	vu_dbg('$new_ug',$new_ug);
-	wp_set_object_terms( $post_id, array($new_ug), VU_USER_GROUP );
+	$new_ug = (int) $_POST['vu_cgfp_value'];
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('$new_ug',$new_ug);
 
-	//set user's default user group to whatever they decided to use here
-	update_user_meta( $user_id, VU_USER_PRIMARY_UG, get_term($new_ug, VU_USER_GROUP)->name );
+	if( wp_set_object_terms( $post_id, array($new_ug), VU_USER_GROUP ) ){
+		//set user's default user group to whatever they decided to use here
+		update_user_meta( $user_id, VU_USER_PRIMARY_UG, get_term($new_ug, VU_USER_GROUP)->name );
 
-	if(VU_RESTRICT_DEBUG_LEVEL(4)) vu_debug("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, VU_USER_GROUP),true).
-	"\n<br>User vu_user_primary_ug meta has been updated to: ".get_user_meta($user_id, VU_USER_PRIMARY_UG));
-
+		if(VU_RESTRICT_DEBUG_LEVEL(4)) vu_debug("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, VU_USER_GROUP),true).
+		"\n<br>User vu_user_primary_ug meta has been updated to: ".get_user_meta($user_id, VU_USER_PRIMARY_UG));
+		return;
+	}
 	//$link_url_value = sanitize_text_field( $_POST['link_url_value'] );
 
 	//update_post_meta( $post_id, 'link_url_value', $link_url_value );
