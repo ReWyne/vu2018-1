@@ -38,7 +38,6 @@ include_once dirname( __FILE__ ) . '/vu-permissions.php';
 //is there a better way to handle this besides putting all the little php files in their own folder and adding them all with a for loop? (with a text file or summit to ensure order) I guess I could class them and include_once, but that seems a little...
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-user.php';
 include_once dirname( __FILE__ ) . '/vu-alter-user-group.php';
-include_once dirname( __FILE__ ) . '/vu-choose-user-initial-group.php';
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-post.php';
 
 
