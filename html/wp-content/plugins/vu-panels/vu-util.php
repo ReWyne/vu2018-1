@@ -127,7 +127,7 @@ function vu_echo_to_str($func, ...$params){
 
 /**
  * Convert the provided object into a string, using method specified in the $vu_to_str_uses global
- * Note that in the specific case of print_r and a single input that would evaluate to '', the variable type is returned instead. (so pasing in NULL would print '(empty str of type: NULL' rather than '') This is helpful for debugging, but could break your code if you tried to use this as an alternative to JSON.stringify. So...don't do that.
+ * Note that in the specific case of print_r and a single input that would evaluate to '', the variable type is returned instead. (so pasing in NULL would print '(empty type: NULL' rather than '') This is helpful for debugging, but could break your code if you tried to use this as an alternative to JSON.stringify. So...don't do that.
  * @param  multiple $params
  * @return string output
  */
@@ -136,7 +136,7 @@ function vu_to_str(...$params){
     if($vu_to_str_uses == 'print_r'){
         $to_print = (count($params) == 1) ? array_values($params)[0] : $params;
         $out = print_r($to_print, true);
-        return ($out != '') ? $out : "(empty str of type: ".gettype($to_print).")";
+        return ($out != '') ? $out : "(empty type: ".gettype($to_print).")";
     }
     else{
         return vu_echo_to_str($vu_to_str_uses,...$params); //this also works for var_dump

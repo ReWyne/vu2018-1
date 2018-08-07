@@ -293,22 +293,11 @@ function vu_get_object_user_group_intersection($left_id, $right_id, $term_field)
 add_action( 'admin_init', 'vu_post_group_access_handler');
 function vu_post_group_access_handler() {
 	if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_post_group_access_handler");}
-	// global $pagenow;
+	global $pagenow;
 
-	// if($pagenow != 'post.php'){
-	// 	vu_dbg("!= post.php");
-	// 	return;
-	// }
-
-	$screen = get_current_screen();
-
-	if($screen === NULL || $screen->post_type == 'post' || $screen->post_type == 'link'){
-		vu_dbg("\$screen is not a restricted type. Exiting function...",$screen);
-		global $pagenow;
-		vu_dbg("\$pagenow: ",$pagenow);
-		vu_dbg("\$_GET['post']: ",$_GET['post']);
-		
-		wp_die();
+	if($pagenow != 'post.php'){
+		vu_dbg("$pagenow != post.php");
+		return;
 	}
 
    // Exit if the user cannot edit any posts
