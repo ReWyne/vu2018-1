@@ -207,11 +207,13 @@ function vu_check_set_intersection($left_terms, $right_terms){
 function vu_get_set_intersection($left_terms, $right_terms){
     if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("vu_get_set_intersection \$left_terms, \$right_terms ",$left_terms, $right_terms);}
     //allow someone to pass in just a single key as the left-hand term only
-    if( ! is_array($left_terms) ){
-        $left_terms = [$left_terms => true ];
-        vu_dbg("Warning: vu_check_set_intersection $left_terms is not an array");
+    foreach([$left_terms, $right_terms] as &$term){
+        if( ! is_array($term) ){
+            $term = [$term => true ];
+            vu_dbg("Warning: vu_check_set_intersection parameter $term is not an array");
+        }
     }
-
+    
     $intersection = [];
     foreach($left_terms as $lterm){
         if ( array_key_exists($lterm, $right_terms) ){
