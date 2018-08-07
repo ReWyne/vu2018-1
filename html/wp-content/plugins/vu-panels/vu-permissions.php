@@ -225,7 +225,7 @@ function vu_get_accesible_user_groups($user = ''){
 	else{
 		$available_user_groups = vu_get_real_object_terms($user_id, VU_USER_GROUP);
 	}
-	if(VU_RESTRICT_DEBUG_LEVEL(5)){vu_dbg("vu_get_accesible_user_groups for user $user_id returned ",$available_user_groups);}
+	if(VU_RESTRICT_DEBUG_LEVEL(5)){vu_dbg("vu_get_accesible_user_groups for user $user_id returned ",wp_list_pluck( $available_user_groups, 'name' ));}
 	return $available_user_groups;
 }  
 
@@ -318,8 +318,11 @@ function vu_post_group_access_handler() {
    vu_dbg("vu_get_object_user_group_intersection",vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name'));
    if ( ! vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name') &&
      ! empty( vu_get_real_object_terms( $current_post_id, VU_USER_GROUP ) ) ){
-		wp_redirect( home_url() );
-		exit;
+		//#TEMP 
+		wp_die();
+
+		// wp_redirect( home_url() );
+		// exit;
    }
 }
 	
