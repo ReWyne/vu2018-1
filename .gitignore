@@ -1,5 +1,5 @@
 .DS_Store
 debug.log
 *.log
-.svn/*
-!.svn/svnignore.txt
+.svn/
+!.svn/svnignore.txt 

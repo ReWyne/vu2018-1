@@ -1,0 +1,30 @@
+== Changelog ==
+
+= 1.0.6 August 18 2015 =
+* Update buggy translation string for "x comments".
+
+= 1.0.5 August 3 2015 =
+* Removed stray PHP variable.
+* Clarified licensing of bundled resources.
+
+= 1.0.4 August 3 2015 =
+* Removed screen-reader-text :hover and :active styles.
+
+= 1.0.3 Jun 17 2015 =
+* Added proper escaping throughout theme files.
+
+= 1.0.2 - May 29 2015 =
+* Remove Sass sources.
+* Clean up tab/space issues.
+* Prepare for .org submission.
+
+= 1.0.1 - May 29 2015 =
+* Ensure that all featured posts appear on the homepage.
+* Correct sizing of header image.
+* Use accurate screenshot.
+* Make sure elements are properly escaped.
+* Add a star to indicate sticky posts.
+* Centre site logo if site title is hidden.
+
+= 1.0 - May 21 2015 =
+* Initial release.

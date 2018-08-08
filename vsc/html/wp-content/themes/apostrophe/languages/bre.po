@@ -1,0 +1,74 @@
+# Translation of Apostrophe in Breton
+# This file is distributed under the same license as the Apostrophe package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-05-29 11:16:57+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: GlotPress/1.0-alpha-1000\n"
+"Project-Id-Version: Apostrophe\n"
+
+#: content-single.php:10 image.php:21
+msgid "Edit"
+msgstr "Kemmañ"
+
+#: content-page.php:18 content-single.php:21 image.php:44
+msgid "Pages:"
+msgstr "Pajenoù:"
+
+#: content-none.php:28
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "War a seblant n'hellomp kavout ar pezh a glaskit. Marteze e voc'h sikouret gant ar c'hlask."
+
+#: content-none.php:23
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Digarezit, n'eus bet kavet entra gant ho termenoù klask. Klaskit en-dro gant gerioù-alc'hwez all."
+
+#: content-none.php:19
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "Prest da embann ho notenn gentañ ? <a href=\"%1$s\">Krogit amañ</a>."
+
+#: content-none.php:13
+msgid "Nothing Found"
+msgstr "N'eus bet kavet netra"
+
+#: comments.php:58
+msgid "Comments are closed."
+msgstr "Serret eo an evezhiadennoù."
+
+#: comments.php:31 comments.php:48
+msgid "Newer Comments &raquo;"
+msgstr ""
+
+#: comments.php:30 comments.php:47
+msgid "&laquo; Older Comments"
+msgstr "&amp;laquo; Evezhiadennoù koshoc'h"
+
+#: comments.php:24
+msgid "1 comment"
+msgid_plural "%s comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:29 comments.php:46
+msgid "Comment navigation"
+msgstr "Merdeiñ en evezhiadennoù"
+
+#. translators: %1$s: smiley
+#: 404.php:46
+msgid "Try looking in the monthly archives. %1$s"
+msgstr "Klaskit sellet en dielloù miziek. %1$s"
+
+#: 404.php:27
+msgid "Most Used Categories"
+msgstr "Rannoù implijetañ"
+
+#: 404.php:19
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr "N'eus bet kavet netra el lec'h-mañ. Klaskit unan eus al liammoù dindan pe ur c'hlask ?"
+
+#: 404.php:15
+msgid "Oops! That page can&rsquo;t be found."
+msgstr "Opala ! N'eus ket tu da gavout ar bajenn-se."

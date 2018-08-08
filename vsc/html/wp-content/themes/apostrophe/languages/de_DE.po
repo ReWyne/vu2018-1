@@ -1,0 +1,369 @@
+# Translation of WordPress.com - Themes - Apostrophe in German
+# This file is distributed under the same license as the WordPress.com - Themes - Apostrophe package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2017-03-23 06:02:31+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+"Language: de\n"
+"Project-Id-Version: WordPress.com - Themes - Apostrophe\n"
+
+#: inc/wpcom-colors.php:139
+msgid "Accents"
+msgstr "Akzente"
+
+#: inc/wpcom-colors.php:118
+msgid "Links and Buttons"
+msgstr "Links und Buttons"
+
+#: functions.php:210
+msgid "collapse child menu"
+msgstr "Untermenü verbergen"
+
+#: functions.php:209
+msgid "expand child menu"
+msgstr "Untermenü anzeigen"
+
+#: comments.php:26
+msgctxt "comments title"
+msgid "One comment"
+msgid_plural "%s comments"
+msgstr[0] "Ein Kommentar"
+msgstr[1] "%s Kommentare"
+
+#. Template Name of the plugin/theme
+#: wp-content/themes/pub/apostrophe/full-width-page.php
+msgid "Full-Width Page"
+msgstr "Seite in voller Breite"
+
+#. Author URI of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "https://wordpress.com/themes/"
+msgstr "https://wordpress.com/themes/"
+
+#. Author of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "Automattic"
+msgstr "Automattic"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/apostrophe/style.css
+msgid "A clean, no-nonsense magazine theme"
+msgstr "Ein klares, geradliniges Magazin-Theme"
+
+#: search.php:15
+msgid "Search Results for: %s"
+msgstr "Suchergebnisse für: %s"
+
+#: inc/template-tags.php:351
+msgid "Posts navigation"
+msgstr "Beiträge-Navigation"
+
+#: inc/template-tags.php:329 inc/template-tags.php:331
+msgid "&larr;"
+msgstr "&larr;"
+
+#: inc/template-tags.php:328 inc/template-tags.php:332
+msgid "&rarr;"
+msgstr "&rarr;"
+
+#: inc/template-tags.php:221
+msgid "Archives"
+msgstr "Archive"
+
+#. translators: 1: Taxonomy singular name, 2: Current taxonomy term
+#: inc/template-tags.php:219
+msgid "%1$s: %2$s"
+msgstr "%1$s @ %2$s"
+
+#: inc/template-tags.php:215
+msgid "Archives: %s"
+msgstr "Archive: %s"
+
+#: inc/template-tags.php:213
+msgctxt "post format archive title"
+msgid "Chats"
+msgstr "Chats"
+
+#: inc/template-tags.php:211
+msgctxt "post format archive title"
+msgid "Audio"
+msgstr "Audio"
+
+#: inc/template-tags.php:209
+msgctxt "post format archive title"
+msgid "Statuses"
+msgstr "Status"
+
+#: inc/template-tags.php:207
+msgctxt "post format archive title"
+msgid "Links"
+msgstr "Links"
+
+#: inc/template-tags.php:205
+msgctxt "post format archive title"
+msgid "Quotes"
+msgstr "Zitate"
+
+#: inc/template-tags.php:203
+msgctxt "post format archive title"
+msgid "Videos"
+msgstr "Videos"
+
+#: inc/template-tags.php:201
+msgctxt "post format archive title"
+msgid "Images"
+msgstr "Bilder"
+
+#: inc/template-tags.php:199
+msgctxt "post format archive title"
+msgid "Galleries"
+msgstr "Galerien"
+
+#: inc/template-tags.php:197
+msgctxt "post format archive title"
+msgid "Asides"
+msgstr "Kurzmitteilungen"
+
+#: inc/template-tags.php:195
+msgctxt "daily archives date format"
+msgid "F j, Y"
+msgstr "j. F Y"
+
+#: inc/template-tags.php:195
+msgid "Day: %s"
+msgstr "Tag: %s"
+
+#: inc/template-tags.php:193
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr "F Y"
+
+#: inc/template-tags.php:193
+msgid "Month: %s"
+msgstr "Monat: %s"
+
+#: inc/template-tags.php:191
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr "Y"
+
+#: inc/template-tags.php:191
+msgid "Year: %s"
+msgstr "Jahr: %s"
+
+#: inc/template-tags.php:189
+msgid "Author: %s"
+msgstr "Autor: %s"
+
+#: inc/template-tags.php:187
+msgid "Tag: %s"
+msgstr "Tag: %s"
+
+#: inc/template-tags.php:185
+msgid "Category: %s"
+msgstr "Kategorie: %s"
+
+#: inc/template-tags.php:127
+msgid "%s year ago"
+msgid_plural "%s years ago"
+msgstr[0] "Vor %s Jahr"
+msgstr[1] "Vor %s Jahren"
+
+#: inc/template-tags.php:122
+msgid "%s month ago"
+msgid_plural "%s months ago"
+msgstr[0] "Vor %s Monat"
+msgstr[1] "Vor %s Monaten"
+
+#: inc/template-tags.php:117
+msgid "%s week ago"
+msgid_plural "%s weeks ago"
+msgstr[0] "Vor %s Woche"
+msgstr[1] "Vor %s Wochen"
+
+#: inc/template-tags.php:112
+msgid "%s day ago"
+msgid_plural "%s days ago"
+msgstr[0] "Vor %s Tag"
+msgstr[1] "Vor %s Tagen"
+
+#: inc/template-tags.php:107
+msgid "%s hour ago"
+msgid_plural "%s hours ago"
+msgstr[0] "vor %s Stunde"
+msgstr[1] "vor %s Stunden"
+
+#. translators: min=minute
+#: inc/template-tags.php:102
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "Vor %s Minute"
+msgstr[1] "Vor %s Minuten"
+
+#: inc/template-tags.php:52
+msgctxt "Next post link"
+msgid "Next"
+msgstr "Nächster"
+
+#: inc/template-tags.php:49
+msgctxt "Previous post link"
+msgid "Previous"
+msgstr "Vorheriger"
+
+#: inc/template-tags.php:46
+msgid "Post navigation"
+msgstr "Beitragsnavigation"
+
+#: inc/extras.php:36
+msgid "Page %s"
+msgstr "Seite %s"
+
+#: inc/customizer.php:44
+msgid "Enable front end feature-starring for easier tagging of Featured Content."
+msgstr "Aktiviere Frontend-Feature: Leichteres Tagging von \"Featured Content\" mittels Stern-Symbol."
+
+#: inc/customizer.php:32
+msgid "Hide author bio panel on individual post pages."
+msgstr "Verstecke Autoren-Bio auf einzelnen Post-Seiten."
+
+#: inc/customizer.php:22
+msgid "Theme"
+msgstr "Theme"
+
+#: image.php:64
+msgctxt "Parent post link"
+msgid "<span class=\"meta-nav\">Published in</span><span class=\"post-title\">%title</span>"
+msgstr "<span class=\"meta-nav\">Veröffentlicht in</span><span class=\"post-title\">%title</span>"
+
+#: image.php:57
+msgid "Next Image &raquo;"
+msgstr "Nächstes Bild &raquo;"
+
+#: image.php:57
+msgid "&laquo; Previous Image"
+msgstr "&laquo; Vorheriges Bild"
+
+#: image.php:48
+msgid "Page"
+msgstr "Seite"
+
+#: header.php:35
+msgid "Skip to content"
+msgstr "Zum Inhalt springen"
+
+#: header.php:34
+msgid "Menu"
+msgstr "Menü"
+
+#. Translators: If there are characters in your language that are not
+#. * supported by Open Sans, translate this to 'off'. Do not translate
+#. * into your own language.
+#: functions.php:167
+msgctxt "Open Sans font: on or off"
+msgid "on"
+msgstr "on"
+
+#. Translators: If there are characters in your language that are not
+#. * supported by PT Serif, translate this to 'off'. Do not translate
+#. * into your own language.
+#: functions.php:161
+msgctxt "PT Serif font: on or off"
+msgid "on"
+msgstr "on"
+
+#: functions.php:141
+msgid "Footer Sidebar"
+msgstr "Fußzeilen-Sidebar"
+
+#: functions.php:132
+msgid "Tertiary"
+msgstr "Tertiär"
+
+#: functions.php:123
+msgid "Secondary"
+msgstr "Sekundär"
+
+#: functions.php:114
+msgid "Primary"
+msgstr "Hauptblog"
+
+#: functions.php:62
+msgid "Social Menu"
+msgstr "Social Media-Menü"
+
+#: functions.php:61
+msgid "Primary Menu"
+msgstr "Hauptmenü"
+
+#: footer.php:26
+msgid "Theme: %1$s by %2$s."
+msgstr "Theme: %1$s von %2$s."
+
+#: footer.php:24
+msgid "Proudly powered by %s"
+msgstr "Mit freundlicher Unterstützung von %s"
+
+#: footer.php:24
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: content-single.php:10 image.php:21
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: content-page.php:18 content-single.php:21 image.php:44
+msgid "Pages:"
+msgstr "Seiten:"
+
+#: content-none.php:28
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "Wie es scheint, kann das Gesuchte nicht gefunden werden. Vielleicht hilft die Suchfunktion."
+
+#: content-none.php:23
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Tut mir Leid, aber zu deinem Suchbegriff konnte nichts gefunden werden. Versuche es mit anderen Schlüsselwörtern doch erneut."
+
+#: content-none.php:19
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "Bereit deinen ersten Beitrag zu veröffentlichen? <a href=\"%1$s\">Erste Schritte</a>."
+
+#: content-none.php:13
+msgid "Nothing Found"
+msgstr "Nichts gefunden"
+
+#: comments.php:61
+msgid "Comments are closed."
+msgstr "Die Kommentarfunktion ist geschlossen."
+
+#: comments.php:35 comments.php:51
+msgid "Newer Comments &raquo;"
+msgstr "Neuere Kommentare &raquo;"
+
+#: comments.php:34 comments.php:50
+msgid "&laquo; Older Comments"
+msgstr "&laquo; Ältere Kommentare"
+
+#: comments.php:33 comments.php:49
+msgid "Comment navigation"
+msgstr "Kommentar-Navigation"
+
+#. translators: %1$s: smiley
+#: 404.php:46
+msgid "Try looking in the monthly archives. %1$s"
+msgstr "Versuchs mit einem Blick in die monatlichen Archive. %1$s"
+
+#: 404.php:27
+msgid "Most Used Categories"
+msgstr "Oft verwendete Kategorien"
+
+#: 404.php:19
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr "Sieht so aus, als ob an dieser Stelle nichts gefunden wird. Vielleicht versuchst Du es mit einem der Links unten oder einer Suche?"
+
+#: 404.php:15
+msgid "Oops! That page can&rsquo;t be found."
+msgstr "Uups! Diese Seite konnte leider nicht gefunden werden."

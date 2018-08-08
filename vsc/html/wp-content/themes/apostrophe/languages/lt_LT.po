@@ -1,0 +1,75 @@
+# Translation of Apostrophe in Lithuanian
+# This file is distributed under the same license as the Apostrophe package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-05-29 11:16:57+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: GlotPress/1.0-alpha-1000\n"
+"Project-Id-Version: Apostrophe\n"
+
+#: content-single.php:10 image.php:21
+msgid "Edit"
+msgstr "Redaguoti"
+
+#: content-page.php:18 content-single.php:21 image.php:44
+msgid "Pages:"
+msgstr "Puslapiai:"
+
+#: content-none.php:28
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "Atrodo mes negalime rasti to ko jūs ieškote. Gal paieška padės."
+
+#: content-none.php:23
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Deja, nieko panašaus rasti nepavyko. Pabandykite įvesti kitokį paieškos raktažodį."
+
+#: content-none.php:19
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "Pasirengę išleisti savo pirmą įrašą? <a href=\"%1$s\">Pradėkite čia</a>."
+
+#: content-none.php:13
+msgid "Nothing Found"
+msgstr "Nieko nerasta"
+
+#: comments.php:58
+msgid "Comments are closed."
+msgstr "Komentavimo galimybė išjungta."
+
+#: comments.php:31 comments.php:48
+msgid "Newer Comments &raquo;"
+msgstr "Naujesni komentarai &raquo;"
+
+#: comments.php:30 comments.php:47
+msgid "&laquo; Older Comments"
+msgstr "&laquo; Senesni komentarai"
+
+#: comments.php:24
+msgid "1 comment"
+msgid_plural "%s comments"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: comments.php:29 comments.php:46
+msgid "Comment navigation"
+msgstr "Komentaro naršymas"
+
+#. translators: %1$s: smiley
+#: 404.php:46
+msgid "Try looking in the monthly archives. %1$s"
+msgstr "Pabandykite pažiūrėti mėnesio archyve. %1$s"
+
+#: 404.php:27
+msgid "Most Used Categories"
+msgstr "Populiariausios kategorijos"
+
+#: 404.php:19
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr ""
+
+#: 404.php:15
+msgid "Oops! That page can&rsquo;t be found."
+msgstr "Deja, toks puslapis nerastas."
