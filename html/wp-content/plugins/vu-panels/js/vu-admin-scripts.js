@@ -22,14 +22,14 @@ var Debugger = function (gState, klass){
 function vu_alter_user_group_taxonomy_submit(){
 	var spath = ajax_object.ajax_url;
 	data =  {"action": "vu_alter_user_group_taxonomy_process_request",
-				"group": $("#vu_augt_group_field").val(),
-				"role": $("#vu_augt_role_select").val(),
-				"vu_augt_nonce": $("#vu_augt_nonce").val()};
+				"group": jQuery("#vu_augt_group_field").val(),
+				"role": jQuery("#vu_augt_role_select").val(),
+				"vu_augt_nonce": jQuery("#vu_augt_nonce").val()};
 	debug.log(data);
 	debug.log("vu_alter_user_group_taxonomy_submit\n", JSON.stringify(data), "\n"+spath);
-	$.post(spath, data, function (response) {
+	jQuery.post(spath, data, function (response) {
 		// Response div
-		$("#vu_augt_return").html(response.replace(/\\n/g, "<br />")); //replace \n's with <br>'s so they print properly
+		jQuery("#vu_augt_return").html(response.replace(/\\n/g, "<br />")); //replace \n's with <br>'s so they print properly
 	});
 };
 
