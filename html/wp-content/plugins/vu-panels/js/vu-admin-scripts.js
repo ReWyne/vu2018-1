@@ -21,7 +21,6 @@ var Debugger = function (gState, klass){
 //vu_alter_user_group_taxonomy submit
 function vu_alter_user_group_taxonomy_submit(){
 	var spath = ajax_object.ajax_url;
-	alert(spath);
 	data =  {"action": "vu_alter_user_group_taxonomy_process_request",
 				"group": $("#vu_augt_group_field").val(),
 				"role": $("#vu_augt_role_select").val(),
