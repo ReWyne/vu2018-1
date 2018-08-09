@@ -146,8 +146,9 @@ function vu_mark_CPTs($classes){
   if(!vu_is_custom_post_type($classes)){
     return $classes;
   }
+  //get the user group that the post belongs to to add as a class
   $user_group = vu_get_real_object_terms( $post->ID, VU_USER_GROUP )[0]->name;
-  vu_dbg('CPT $user_group',$user_group);
+
   $additional_classes = array('vu-panel', $user_group);
 
   $classes = $classes + $additional_classes;
