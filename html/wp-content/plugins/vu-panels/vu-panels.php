@@ -31,10 +31,11 @@ $vu_panels_vars['RESTRICT_DEBUG_LEVEL'] = 3;
 //Setting the global to higher numbers should print less. Ohalso, floats are fine.
 //roughly speaking, 0 == "print everything", 1 == "print reasonably important functions", 2 == "important", 3 == "VERY important", 4 == "print programmer's summaries" 5 == "layman's summaries", 
 function VU_RESTRICT_DEBUG_LEVEL($level){ global $vu_panels_vars; if(IS_WP_DEBUG && $vu_panels_vars['RESTRICT_DEBUG_LEVEL'] <= $level) return true; else return false; }
-vu_dbg("test dbg msg");
 include_once dirname( __FILE__ ) . '/vu-util.php';
 include_once dirname( __FILE__ ) . '/vu-db.php';
 include_once dirname( __FILE__ ) . '/vu-permissions.php'; 
+vu_dbg("test dbg msg");
+
 //is there a better way to handle this besides putting all the little php files in their own folder and adding them all with a for loop? (with a text file or summit to ensure order) I guess I could class them and include_once, but that seems a little...
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-user.php';
 include_once dirname( __FILE__ ) . '/vu-alter-user-group.php';
