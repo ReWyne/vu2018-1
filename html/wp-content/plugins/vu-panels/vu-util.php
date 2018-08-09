@@ -153,7 +153,7 @@ function vu_to_str(...$params){
 
 /**
  * Check if a post is a custom post type.
- * @param  object|int|array|string $post Post object, ID, array, or post type as a string/array of strings
+ * @param  object|int|array|string $post Post object, post ID, or post type as a string/array of strings. In the case of an array of strings, true is returned iff at least one is the name of a custom post type.
  * @return boolean
  */
 function vu_is_custom_post_type( $post = NULL )
@@ -167,17 +167,22 @@ function vu_is_custom_post_type( $post = NULL )
 
     $custom_types = array_keys( $all_custom_post_types );
 
-    //if array was passed, check if anything in it is a custom post type
+    //if array was passed, check if anything in it is the name of a custom post type
+    //note that this is assuming an array (without explicit keys) was passed in, not a hashmap or the improvised "set" used elsewhere 
     if(is_array($post)){
-        /*if(VU_RESTRICT_DEBUG_LEVEL(1))*/vu_dbg('vu_is_custom_post_type is_array($post) ',$post);
-        return array_intersect($post, $custom_types);
+        if(VU_RESTRICT_DEBUG_LEVEL(1))vu_dbg('vu_is_custom_post_type is_array($post) ',$post);
+        return array_intersect($post, $custom_types) ? true : false;
     }
 
-    //if string was passed, assume it is the post type. if object was passed, get its post type
-    if (is_string($post)){
+    $current_post_type = false; //initializing to false is unnecessary, but clearer
+
+    //if string was passed, assume it is the post type. if object/ID was passed, get its post type
+    if ( is_string($post) && ! is_numeric($post) ){
+        if(VU_RESTRICT_DEBUG_LEVEL(1))vu_dbg('vu_is_custom_post_type is_string($post) ',$post);
         $current_post_type = $post;
     }
     else{
+        if(VU_RESTRICT_DEBUG_LEVEL(1))vu_dbg('vu_is_custom_post_type is_object_or_ID($post) ',$post);
         $current_post_type = get_post_type( $post );
     }
 

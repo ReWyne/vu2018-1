@@ -18,18 +18,7 @@ abstract class vu_permission_level {
 define("VU_ADMIN_GROUP", "vu_admin"); //name of the term in the vu_user_group taxonomy that specifies the user in question as an admin
 
 add_action( 'init', 'vu_register_permissions', 0 );
-function vu_register_permissions(){
-	// if(IS_WP_DEBUG){
-	// 	vu_dbg("vu_register_permissions");
-
-	// 	global $wp_roles;
-
-	// 	if ( ! isset( $wp_roles ) )
-    // 		$wp_roles = new WP_Roles();
-
-	// 	$t_all_roles = $wp_roles->get_names();
-	// 	vu_debug("pre-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
-	// }
+function vu_register_permissions(){	
 	//the intended capabilities of standard (non-admin) VU staff
 	add_role(
 		'vu_department', //like editor, but without ability to modify pages/html
@@ -62,6 +51,7 @@ function vu_register_permissions(){
 			remove_role( $old_role );
 		}
 	}
+
 	// //if we want our own admin role
 	// $t_role = get_role('administrator');
 	// $admin_caps = $t_role['capabilities'];
@@ -107,19 +97,19 @@ function vu_register_permissions(){
 		// $admins->add_cap( 'edit_vu_user_groups' );
 		// $admins->add_cap( 'delete_vu_user_groups' );
 
-	if(IS_WP_DEBUG){
+	if(IS_WP_DEBUG && VU_RESTRICT_DEBUG_LEVEL(1)){
 		global $wp_roles;
 
 		if ( ! isset( $wp_roles ) )
 			$wp_roles = new WP_Roles();
 
 		$t_all_roles = $wp_roles->get_names();
-		//vu_debug("post-adding full roles list: ", array('err_log', 'pc_dbg'), $t_all_roles);
+		vu_dbg("post-adding full roles list: ", $t_all_roles);
 
 		$terms = get_terms( array(
 			'taxonomy' => VU_USER_GROUP,
 			'hide_empty' => false,  ) );
-		//vu_debug("vu_user_group current terms: ", '', $terms);
+		vu_dbg("vu_user_group current terms: ", $terms);
 	}
 
 }
@@ -148,12 +138,10 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
         return;
     }
 	wp_enqueue_script( 'vu_plugin_admin_js', plugins_url( '/js/vu-admin-scripts.js', __FILE__ ), array('jquery'));
-	//error_log("admin enqueue script " . plugin_dir_url( __FILE__ ) . 'js/vu-admin-scripts.js');
 
 	// in JavaScript, accessed as (ex) ajax_object.ajax_url
 	wp_localize_script( 'vu_plugin_admin_js', 'ajax_object',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'IS_WP_DEBUG' => (IS_WP_DEBUG === true) ) );
-
 }
 
 /**
@@ -289,7 +277,6 @@ function vu_get_object_user_group_intersection($left_id, $right_id, $term_field)
 
 /**
  * Block access to posts that the user should not have access to based on their user group membership
- * TODO
  * @param  none
  * @return none
  */
@@ -318,95 +305,15 @@ function vu_post_group_access_handler() {
 		exit;
    }
 }
-	
-// 	//reference
-//    /* Get the meta key. */
-//    $meta_key = 'smashing_flautist_access';
-
-//    /* Get the meta value of the custom field key. */
-//    $meta_value = get_post_meta( $post_id, $meta_key, true );
-
-//    /* If a new meta value was added and there was no previous value, add it. */
-//    if ( $new_meta_value && '' == $meta_value )
-//       {
-//       add_post_meta( $post_id, $meta_key, $new_meta_value, true );
-//       $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'private' WHERE ID = ".$post_id." AND post_type ='post'"));
-//       }
-
 /**
  * Prevent posts that the user does not have permission to modify from showing up on the All Posts page
- * TODO
  * @param  none
  * @return none
  */
-
-//from current-branch
-// add_action('restrict_manage_posts', 'vu_filter_by_the_author');
-// function vu_filter_by_the_author() {
-// 	global $pagenow;
-
-// 	if($pagenow != 'post.php'){
-// 		return;
-// 	}
-
-
-
-
-/* Sort posts in wp_list_table by column in ascending or descending order. */
-if(is_admin()){
+if(is_admin()){ //only filter posts in the query if this is done in the admin panel
     add_action('pre_get_posts', 'custom_post_listing');
 }
 function custom_post_listing($query){
-	// $args = array(
-	// 	'post_type' => array('post','link'),
-	// 	'tax_query' => array(
-	// 		array(
-	// 			'taxonomy' => VU_USER_GROUP,
-	// 			'field'    => 'slug',
-	// 			'terms'    => 'testgroup',
-	// 		),
-	// 	),
-	// );
-	// $query = new WP_Query( $args );
-	// $args = array(
-	// 	'post_type' => 'post',
-	// 	'tax_query' => array(
-	// 		array(
-	// 			'taxonomy' => 'people',
-	// 			'field'    => 'slug',
-	// 			'terms'    => 'bob',
-	// 		),
-	// 	),
-	// );
-	// $query = new WP_Query( $args );
-
-	//vu_dbg("custom_post_listing query", $query);
-
-
-
-
-
-// from current-branch	
-// 	//https://rudrastyh.com/wordpress/filter-posts-by-terms.html
-// 	//just copy past this in and then modify it to get it working
-	
-// 	$params = array(
-// 		'name' => 'author', // this is the "name" attribute for filter <select>
-// 		'show_option_all' => 'All authors' // label for all authors (display posts without filter)
-// 	);
- 
-// 	if ( isset($_GET['user']) )
-// 		$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
- 
-// 	wp_dropdown_users( $params ); // print the ready author list
-// 	return;
-
-
-	// $post_types = get_post_types(array('_builtin' => true), 'objects');
-	// $custom_post_types = get_post_types(array('_builtin' => false), 'objects');
-	// vu_dbg("\$post_types",$post_types);
-	// vu_dbg("\$custom_post_types",$custom_post_types);
-
 	//first, skip all this if user is an admin; they do what they want
 	if(current_user_can(vu_permission_level::Admin)){
 		return $query;
@@ -415,16 +322,11 @@ function custom_post_listing($query){
 	// [_builtin => true] as a first param returns only WordPress default post types. 
 	// [_builtin => false] as a first param returns only registered custom post types. 
 	$post_types = get_post_types('', 'objects'); //all post types
-	//vu_dbg("got post types",array_keys($post_types));
 
 	$post_type = $query->get('post_type'); //queried post type
-	//vu_dbg("got post type",$post_type);
 
-	// vu_dbg("arr_keys",$post_type,array_keys($post_types));
-	// vu_dbg("in_array check test",$post_type == 'link',$post_type == array('link'),in_array($post_type, array_keys($post_types)));
-    /* Check post types. */
+    /* Check that queried post type actually exists, then check specifically if it's a link or post */
     if(in_array($post_type, array_keys($post_types)) && ($post_type == 'post' || $post_type == 'link')){
-		vu_dbg("pass in_array");
 
 		$query->set( 'tax_query', array(
 			array(
@@ -434,109 +336,7 @@ function custom_post_listing($query){
 				'operator' => 'IN'
 			)
 		) );
-		// $query->set('taxonomy', VU_USER_GROUP);
-		// $query->set('field', 'name');
-		// $query->set('terms', array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
-		// vu_dbg('array_keys',array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ));
-		// vu_dbg("\$query2",$query);
-
-		// vu_get_object_tax_intersection($current_post_id, $current_user_id, VU_USER_GROUP, 'name');
-
-
-
-
-		//Display only the specific posts (super kludgy but it works for now)
-
-
-		// OUTDATED: Calling get_posts results in an infinite loop (b/c it inits a new Query obj)
-		//for each user_group, get all posts that are members of that user group
-			//get all user groups
-		// $user_terms = array_keys( vu_terms_array_to_set( vu_get_real_object_terms( get_current_user_id(), VU_USER_GROUP ), 'name' ) ); // there is a provided wp function to simplify this, but I can't remember what it is. Sorry
-		// vu_dbg("array_keys finished");
-		// //get all posts attached to those user groups
-		// $posts = get_posts(array(
-		// 	'post_type' => $post_type,
-		// 	'numberposts' => -1,
-		// 	'tax_query' => array(
-		// 		array(
-		// 		'taxonomy' => VU_USER_GROUP,
-		// 		'field' => 'id',
-		// 		'terms' => $user_terms // Where term_id of Term 1 is "1".
-		// 		)
-		// 	)
-		// 	));
-		// 	vu_dbg('the $posts: ', $posts);
-
-		// 	//get all ids from those posts
-		// 	$post_ids = array_map( function($a){ return $a->ID; }, $posts );
-
-		// 	//$query = new WP_Query( array( 'post_type' => 'page', 'post__in' => array( 2, 5, 12, 14, 20 ) ) );
-		// 	$query->set('post__in', $post_ids);
-
-
-
-        /* Post Column: e.g. title */
-        // if($query->get('orderby') == ''){
-        //     $query->set('orderby', 'title');
-        // }
-        // /* Post Order: ASC / DESC */
-        // if($query->get('order') == ''){
-        //     $query->set('order', 'ASC');
-        // }
 	}
 	
 	return $query;
 }
-
-// Display posts tagged with bob, under people custom taxonomy:
-
-// $args = array(
-// 	'post_type' => 'post',
-// 	'tax_query' => array(
-// 		array(
-// 			'taxonomy' => 'people',
-// 			'field'    => 'slug',
-// 			'terms'    => 'bob',
-// 		),
-// 	),
-// );
-// $query = new WP_Query( $args );
-
-
-
-
-
-
-
-// //#TEMP
-// add_filter( 'template_include', 'var_template_include', 1000 );
-// function var_template_include( $t ){
-// 	$GLOBALS['current_theme_template'] = basename($t);
-//     vu_dbg("var_template_include",$GLOBALS['current_theme_template']);
-//     return $t;
-// }
-
-// function get_current_template( $echo = false ) {
-//     if( !isset( $GLOBALS['current_theme_template'] ) )
-//         return false;
-//     if( $echo )
-//         echo $GLOBALS['current_theme_template'];
-//     else
-//         return $GLOBALS['current_theme_template'];
-// }
-
-
-// add_action('restrict_manage_posts', 'vu_filter_by_the_author');
-// function vu_filter_by_the_author() {
-
-// $params = array(
-// 	'name' => 'author', // this is the "name" attribute for filter <select>
-// 	'show_option_all' => 'All authors' // label for all authors (display posts without filter)
-// );
-
-// if ( isset($_GET['user']) )
-// 	$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
-
-// wp_dropdown_users( $params ); // print the ready author list
-// return;
-//}

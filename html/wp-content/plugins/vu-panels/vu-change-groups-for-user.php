@@ -78,37 +78,22 @@ function vu_change_groups_for_user_process_request( $user_id ) {
 	// get checkbox data from frontend
 	$frontend_array = array_key_exists('vu_cgfu_checkbox', $_POST) ? $_POST['vu_cgfu_checkbox'] : []; //value-only array
 	array_map( function($a){ return (int)$a; }, $frontend_array ); // TODO: this line may be unnecessary
-	//vu_dbg("\$frontend_array + gettype([0]): ",$frontend_array, gettype($frontend_array[0]));
-
-	// // properly format array to go array('group'=>true, ...) instead of array('group', ...) for O(1) lookup
-	// $new_ugs_array = array();
-	// foreach($frontend_array as $group){
-	// 	$new_ugs_array["$group"] = true;
-	// }
-
-	// vu_debug('\$new_ugs_array: ','',$new_ugs_array);
-	// update_user_meta( $user_id, 'vu_my_ugs_array', json_encode($new_ugs_array) );
 
 	//update user group data
 	wp_set_object_terms( $user_id, $frontend_array, VU_USER_GROUP );
 
-	// echo "Successfully updated user's vu_my_ugs_array data entry to: ".json_encode($new_ugs_array).
-	// "\nUser role has been updated to: "/*TODO*/;
 	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('get_role pre update',$user->roles);
+
 	//update
 	$new_role = vu_get_user_role($user_id);
 	$user = get_user_by('id', $user_id);
-	//vu_dbg('\$user_cgfu',$user);
 	$user->set_role($new_role);
 	$_POST['role'] = $new_role; //we should override whatever the previous value for the Role select was
-	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('get_role',$user->roles);
-	// $user->set_role('administrator');
-	// vu_dbg('get_role2',$user->roles);
+	
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('get_role post update',$user->roles);
 
 	global $wp_roles;
-
 	$all_roles = $wp_roles->roles;
-	//vu_dbg('all roles',$all_roles);
 
 	if(VU_RESTRICT_DEBUG_LEVEL(5)) vu_dbg("Successfully updated user $user_id's vu_my_ugs_array data entry to: ".print_r(wp_get_object_terms($user_id, VU_USER_GROUP),true).
 	"\nUser role has been updated to: $new_role");

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VU Panels
  * Plugin URI: 
- * Description: Adds the Panel post type, encompassing custom post types used by the VU portal.
+ * Description: Adds the Link post type, and a variety of backend panels helpful for managing posts by user group in the VU portal.
  * Version: 1.0.0
  * Author: Anthony Nelson
  * Author URI: https://github.com/ReWyne/anthony-nelson
@@ -12,7 +12,7 @@
 defined( 'ABSPATH' ) or die(); //canonical way to exit if accessed directly
 
 //Misc convenience definitions
-//WP_DEBUG* should already be defined in wp-settings.php
+//WP_DEBUG* should already be defined in wp-settings.php. Code here should override those settings, however.
 // define( 'WP_DEBUG', true );
 // define( 'WP_DEBUG_LOG', true );
 // define( 'WP_DEBUG_DISPLAY', true );
@@ -40,12 +40,8 @@ include_once dirname( __FILE__ ) . '/vu-change-groups-for-user.php';
 include_once dirname( __FILE__ ) . '/vu-alter-user-group.php';
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-post.php';
 
-
-
-// register_activation_hook's in other files
-// register_activation_hook( __FILE__, 'vu_register_permissions' );
-
-//link post type
+// Link post type
+// Just like regular posts except they also have the link_url_value metavalue
 class vu_link_post_type {
 
   function __construct() {
@@ -82,7 +78,6 @@ class vu_link_post_type {
       )
     );
   }
-
 
   //Callback from register_post_type
   function add_link_custom_fields() {
@@ -146,48 +141,6 @@ function vu_generate_link_posts( $query ) {
     }
 }
 
-
-// add links custom post type to front page shortcode function
-
-// function vu_display_link_posts( $atts = null, $content = null, $tag = null ) {
-// vu_log('vu_display_link_posts');
-//   $out = '';
-
-//   $args = array( 
-//       'numberposts' => '99', 
-//       'post_status' => 'publish', 
-//       'post_type' => 'link' ,
-//   );
-
-//   $recent = wp_get_recent_posts( $args );
-
-//   if ( $recent ) {
-
-//       $out .= '<section class="overview">';
-
-//       $out .= '<h1>Recent Projects</h1>';
-
-//       $out .= '<div class="overview">';
-
-//       foreach ( $recent as $item ) {
-
-//           $out .= '<a href="' . get_permalink( $item['ID'] ) . '">';
-//           $out .= get_the_post_thumbnail( $item['ID'] ); 
-//           $out .= '</a>';
-//       }
-
-//       $out .= '</div></section>';
-//   }
-
-//   if ( $tag ) {
-//       return $out;
-//   } else {
-//       echo $out;
-//   }
-// }
-// add_shortcode( 'recentposts', 'vu_display_link_posts' );
-
-
 //add general class for all our custom post types
 function vu_mark_CPTs($classes){
   if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('vu_mark_CPTs $classes', $classes);
@@ -218,162 +171,3 @@ function category_id_class( $classes, $class, $post_id = NULL ) {
 }
 add_filter( 'post_class', 'category_id_class',10,3 );
 add_filter( 'body_class', 'category_id_class',10,2 ); //
-
-
-
-
-
-//handle custom meta boxes for setting people as admins
-//#TODO, currently copy-paste from https://www.smashingmagazine.com/2012/01/limiting-visibility-posts-username/
-/* Fire our meta box setup function on the post editor screen. */
-<<<'EOT'
-add_action( 'load-post.php', 'smashing_post_meta_boxes_setup' );
-add_action( 'load-post-new.php', 'smashing_post_meta_boxes_setup' );
-
-/* Meta box setup function. */
-function smashing_post_meta_boxes_setup() {
-
-   /* Add meta boxes on the 'add_meta_boxes' hook. */
-   add_action( 'add_meta_boxes', 'smashing_add_post_meta_boxes' );
-
-   /* Save post meta on the 'save_post' hook. */
-   add_action( 'save_post', 'smashing_flautist_access_save_meta', 10, 2 );
-}
-
-/* Create one or more meta boxes to be displayed on the post editor screen. */
-function smashing_add_post_meta_boxes() {
-
-   add_meta_box(
-      'smashing-flautist-access',         // Unique ID
-      esc_html__( 'Post Viewing Permission', 'smashing_flautist' ),     // Title
-      'smashing_flautist_access_meta_box',      // Callback function
-      'post',              // Admin page (or post type)
-      'normal',               // Context
-      'default'               // Priority
-   );
-}
-
-/* Display the post meta box. */
-function smashing_flautist_access_meta_box( $object, $box ) { ?>
-
-   <?php wp_nonce_field( basename( __FILE__ ), 'smashing_flautist_access_nonce' ); ?>
-
-   <p>
-      <label for='smashing-flautist-access'><?php _e( 'Enter the username of the subscriber that you want to view this content.', 'smashing_flautist' ); ?></label>
-      <br />
-      <input class='widefat' type='text' name='smashing-flautist-access' id='smashing-flautist-access' value='<?php echo esc_attr( get_post_meta( $object->ID, 'smashing_flautist_access', true ) ); ?>' size='30' />
-   </p>
-<?php }
-
-
-
-
-
-
-
-
-//still need to add "adding ease to the selection" code block
-
-
-
-
-
-
-
-
-/* Save post meta on the 'save_post' hook. */
-add_action( 'save_post', 'smashing_flautist_access_save_meta', 10, 2 );
-
-/* Save the meta box's post metadata. */
-function smashing_flautist_access_save_meta( $post_id, $post ) {
-
-   /* Make all $wpdb references within this function refer to this variable */
-   global $wpdb;
-
-   /* Verify the nonce before proceeding. */
-   if ( !isset( $_POST['smashing_flautist_access_nonce'] ) || !wp_verify_nonce( $_POST['smashing_flautist_access_nonce'], basename( __FILE__ ) ) )
-      return $post_id;
-
-   /* Get the post type object. */
-   $post_type = get_post_type_object( $post->post_type );
-
-   /* Check if the current user has permission to edit the post. */
-   if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
-      return $post_id;
-
-   /* Get the posted data and sanitize it for use as an HTML class. */
-   $new_meta_value = ( isset( $_POST['smashing-flautist-access'] ) ? sanitize_html_class( $_POST['smashing-flautist-access'] ) : '' );
-
-   /* Get the meta key. */
-   $meta_key = 'smashing_flautist_access';
-
-   /* Get the meta value of the custom field key. */
-   $meta_value = get_post_meta( $post_id, $meta_key, true );
-
-   /* If a new meta value was added and there was no previous value, add it. */
-   if ( $new_meta_value && '' == $meta_value )
-      {
-      add_post_meta( $post_id, $meta_key, $new_meta_value, true );
-      $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'private' WHERE ID = ".$post_id." AND post_type ='post'"));
-      }
-   /* If the new meta value does not match the old value, update it. */
-   elseif ( $new_meta_value && $new_meta_value != $meta_value )
-      {
-      update_post_meta( $post_id, $meta_key, $new_meta_value );
-      $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'private' WHERE ID = ".$post_id." AND post_type ='post'"));
-      }
-   /* If there is no new meta value but an old value exists, delete it. */
-   elseif ( '' == $new_meta_value && $meta_value )
-      {
-      delete_post_meta( $post_id, $meta_key, $meta_value );
-      $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_status = 'public' WHERE ID = ".$post_id." AND post_type ='post'"));
-      }
-}
-
-
-EOT;
-
-
-
-
-
-
-
-
-
-// add_action( 'init', 'vu_create_link_posttype' );
-// function vu_create_link_posttype() {
-
-//     //Link type post -- Limited visibility item redirecting to an external page
-
-//       // Set the labels, this variable is used in the $args array
-//   $labels = array(
-    // 'name'               => _x( 'Links', 'link plural' ),
-    // 'singular_name'      => _x( 'Link', 'link singular' ),
-    // //'add_new'            => __( 'Add New Link' ),
-    // 'add_new_item'       => __( 'Add New Link' ),
-    // 'edit_item'          => __( 'Edit Link' ),
-    // 'new_item'           => __( 'New Link' ),
-    // 'all_items'          => __( 'All Links' ),
-    // 'view_item'          => __( 'View Link' ),
-    // 'search_items'       => __( 'Search Links' ),
-//     'featured_image'     => 'Icon',
-//     'set_featured_image' => 'Add Icon',
-//   );
- 
-//   // The arguments for our post type, to be entered as parameter 2 of register_post_type()
-//   $args = array(
-//     'labels'            => $labels,
-//     'description'       => 'Holds our movies and movie specific data',
-//     'public'            => true,
-//     //'menu_position'     => 5,
-//     'show_in_menu'      => 'post.php',
-//     'supports'          => array( 'title', 'editor', 'thumbnail', 'custom-fields'), //#TODO custom field: tags array (if categories don't work fine)
-//     'has_archive'       => false,                                                   //#TODO add 'url' custom field
-//     'show_in_admin_bar' => false,
-//     'show_in_nav_menus' => false,
-//     'query_var'         => 'link',
-//   );
-
-//   register_post_type( 'link', $args);
-// }s
