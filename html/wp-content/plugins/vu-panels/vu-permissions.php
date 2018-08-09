@@ -144,10 +144,11 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
 	if(VU_RESTRICT_DEBUG_LEVEL(5))vu_dbg("vu_selectively_enqueue_admin_scripts for hook $hook succeeded ");
 
 	wp_enqueue_script( 'vu_plugin_admin_js', plugins_url( '/js/vu-admin-scripts.js', __FILE__ ), array('jquery'));
-
+	vu_dbg("test3");
 	// in JavaScript, accessed as (ex) ajax_object.ajax_url
 	wp_localize_script( 'vu_plugin_admin_js', 'ajax_object',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'IS_WP_DEBUG' => (IS_WP_DEBUG === true) ) );
+	vu_dbg("test4");
 }
 
 /**
