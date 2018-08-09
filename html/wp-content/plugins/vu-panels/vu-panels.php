@@ -146,7 +146,7 @@ function vu_mark_CPTs($classes){
   if(!vu_is_custom_post_type($classes)){
     return $classes;
   }
-
+  if(VU_RESTRICT_DEBUG_LEVEL(3))vu_dbg("marking CPT classes");
   $additional_classes = array('vu-panel');
 
   $classes = $classes + $additional_classes;
