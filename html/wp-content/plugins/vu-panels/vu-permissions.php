@@ -219,7 +219,7 @@ function vu_get_accesible_user_groups($user = ''){
 }  
 
 /**
- * Get what vu_user_group should be considered the user's "default" one for the purpose of adding posts (NOT permissions)
+ * Get what vu_user_group should be considered the user's "default" one for the purpose of adding posts (this is UNRELATED to their actual permissions)
  * @param  object $user
  * @return string $primary_ug
  */

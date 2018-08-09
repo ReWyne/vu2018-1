@@ -139,7 +139,7 @@ function vu_generate_link_posts( $query ) {
     }
 }
 
-//add general class for all our custom post types
+//add general class AND the post's vu_user_group term for all our custom post types
 function vu_mark_CPTs($classes){
   global $post; 
   if(VU_RESTRICT_DEBUG_LEVEL(1))vu_dbg('vu_mark_CPTs $classes', $classes, $post);
@@ -156,7 +156,7 @@ function vu_mark_CPTs($classes){
 }
 add_filter('post_class', 'vu_mark_CPTs');
 
-// add category nicenames in body and post class
+// add category nicenames in body and post class for all posts
 function category_id_class( $classes, $class, $post_id = NULL ) {
   if($post_id === NULL){
     if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('Notice: $post_id was NULL! Context... ',debug_backtrace());

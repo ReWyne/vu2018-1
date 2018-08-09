@@ -134,7 +134,7 @@ if ( ! function_exists( 'vu_custom_portal_post_thumbnail' ) ) :
 		<?php else : ?>
 
 		<a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
-			<?php vu_pc_debug("getting thumbnail", vu_echo_to_str('bloginfo', 'template_directory')."/images/default_image.png");
+			<?php vu_dbg("getting thumbnail", vu_echo_to_str('bloginfo', 'template_directory')."/images/default_image.png");
 			if ( has_post_thumbnail() ) {
 				the_post_thumbnail('post-thumbnail', array(
 					'alt' => the_title_attribute( array(
