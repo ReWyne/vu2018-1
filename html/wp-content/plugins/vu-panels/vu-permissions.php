@@ -16,7 +16,6 @@ abstract class vu_permission_level {
   }
 
 define("VU_ADMIN_GROUP", "vu_admin"); //name of the term in the vu_user_group taxonomy that specifies the user in question as an admin
-vu_dbg("test permissions msg");
 
 add_action( 'init', 'vu_register_permissions', 0 );
 function vu_register_permissions(){	
@@ -135,7 +134,8 @@ function vu_term_exists($term, $taxonomy){
  */
 add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 function vu_selectively_enqueue_admin_scripts( $hook ) {
-    if ( 'users.php' != $hook && 'profile.php' != $hook ) {
+   vu_dbg('admin_enqueue_scripts');
+	if ( 'users.php' != $hook && 'profile.php' != $hook ) {
 		if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("vu_selectively_enqueue_admin_scripts for hook $hook failed ");
         return;
 	}
