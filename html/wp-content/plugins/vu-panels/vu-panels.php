@@ -34,12 +34,11 @@ function VU_RESTRICT_DEBUG_LEVEL($level){ global $vu_panels_vars; if(IS_WP_DEBUG
 include_once dirname( __FILE__ ) . '/vu-util.php';
 include_once dirname( __FILE__ ) . '/vu-db.php';
 include_once dirname( __FILE__ ) . '/vu-permissions.php'; 
-vu_dbg("test dbg msg");
-
 //is there a better way to handle this besides putting all the little php files in their own folder and adding them all with a for loop? (with a text file or summit to ensure order) I guess I could class them and include_once, but that seems a little...
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-user.php';
 include_once dirname( __FILE__ ) . '/vu-alter-user-group.php';
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-post.php';
+vu_dbg("test dbg msg");
 
 // Link post type
 // Just like regular posts except they also have the link_url_value metavalue
