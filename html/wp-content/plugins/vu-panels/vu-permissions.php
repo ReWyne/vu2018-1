@@ -16,6 +16,7 @@ abstract class vu_permission_level {
   }
 
 define("VU_ADMIN_GROUP", "vu_admin"); //name of the term in the vu_user_group taxonomy that specifies the user in question as an admin
+vu_dbg("test permissions msg");
 
 add_action( 'init', 'vu_register_permissions', 0 );
 function vu_register_permissions(){	
