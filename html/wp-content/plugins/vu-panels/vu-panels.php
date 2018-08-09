@@ -141,13 +141,14 @@ function vu_generate_link_posts( $query ) {
 
 //add general class for all our custom post types
 function vu_mark_CPTs($classes){
-  if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('vu_mark_CPTs $classes', $classes);
-  global $post; vu_dbg('vu_mark_CPTs $classes', $classes, $post);
+  global $post; 
+  if(VU_RESTRICT_DEBUG_LEVEL(1))vu_dbg('vu_mark_CPTs $classes', $classes, $post);
   if(!vu_is_custom_post_type($classes)){
     return $classes;
   }
-  if(VU_RESTRICT_DEBUG_LEVEL(3))vu_dbg("marking CPT classes");
-  $additional_classes = array('vu-panel');
+  $user_group = vu_get_real_object_terms( $post->ID, VU_USER_GROUP )[0]->name;
+  vu_dbg('CPT $user_group',$user_group);
+  $additional_classes = array('vu-panel', $user_group);
 
   $classes = $classes + $additional_classes;
   return $classes;
