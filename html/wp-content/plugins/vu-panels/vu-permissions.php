@@ -137,7 +137,9 @@ function vu_selectively_enqueue_admin_scripts( $hook ) {
     if ( 'users.php' != $hook && 'profile.php' != $hook ) {
 		if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("vu_selectively_enqueue_admin_scripts for hook $hook failed ");
         return;
-    }
+	}
+	if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("vu_selectively_enqueue_admin_scripts for hook $hook succeeded ");
+
 	wp_enqueue_script( 'vu_plugin_admin_js', plugins_url( '/js/vu-admin-scripts.js', __FILE__ ), array('jquery'));
 
 	// in JavaScript, accessed as (ex) ajax_object.ajax_url
