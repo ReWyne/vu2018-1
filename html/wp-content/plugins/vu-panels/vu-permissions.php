@@ -134,12 +134,11 @@ function vu_term_exists($term, $taxonomy){
  */
 add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 function vu_selectively_enqueue_admin_scripts( $hook ) {
-	if(VU_RESTRICT_DEBUG_LEVEL(3))vu_dbg('vu_selectively_enqueue_admin_scripts');
+	if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('vu_selectively_enqueue_admin_scripts');
 
 	if ( 'users.php' != $hook && 'profile.php' != $hook ) {
         return;
 	}
-	vu_dbg(plugins_url( '/js/vu-admin-scripts.js', __FILE__ ));
 	wp_enqueue_script( 'vu_plugin_admin_js', plugins_url( '/js/vu-admin-scripts.js', __FILE__ ), array('jquery'));
 	// in JavaScript, accessed as (ex) ajax_object.ajax_url
 	wp_localize_script( 'vu_plugin_admin_js', 'ajax_object',
