@@ -12,7 +12,7 @@ var Debugger = function (gState, klass){
 	}
 	return this.debug
   }
-  isDebug = typeof ajax_object.IS_WP_DEBUG !== "undefined" ? ajax_object.IS_WP_DEBUG : true //global debug state
+  isDebug = typeof ajax_object.IS_WP_DEBUG != "undefined" ? ajax_object.IS_WP_DEBUG : false //global debug state
 
   // we instantiate with the global switch and a ref to this for the local 
   // this must have it's own isDebug defined for local control
