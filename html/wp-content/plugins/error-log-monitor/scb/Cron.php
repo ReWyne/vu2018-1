@@ -118,6 +118,16 @@ class scbCron {
 		wp_schedule_single_event( time() + $delay, $this->hook, $args );
 	}
 
+	/**
+	 * Check if the job is scheduled.
+	 *
+	 * @return bool
+	 */
+	public function is_scheduled() {
+		$timestamp = wp_next_scheduled($this->hook, $this->callback_args);
+		return ($timestamp !== false);
+	}
+
 
 //_____INTERNAL METHODS_____
 

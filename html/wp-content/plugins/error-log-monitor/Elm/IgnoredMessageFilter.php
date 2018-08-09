@@ -1,6 +1,5 @@
 <?php
-class Elm_IgnoredMessageFilter extends FilterIterator implements Elm_LogFilter {
-	private $skippedEntryCount = 0;
+class Elm_IgnoredMessageFilter extends Elm_LogFilter {
 	private $ignoredMessageIndex = array();
 
 	public function __construct(Iterator $iterator, $ignoredMessages) {
@@ -25,21 +24,5 @@ class Elm_IgnoredMessageFilter extends FilterIterator implements Elm_LogFilter {
 		} else {
 			return true;
 		}
-	}
-
-	public function getSkippedEntryCount() {
-		$count = $this->skippedEntryCount;
-
-		$inner = $this->getInnerIterator();
-		if ( $inner instanceof Elm_LogFilter ) {
-			$count += $inner->getSkippedEntryCount();
-		}
-
-		return $count;
-	}
-
-	public function rewind() {
-		$this->skippedEntryCount = 0;
-		parent::rewind();
 	}
 }

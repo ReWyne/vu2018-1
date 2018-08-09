@@ -5,10 +5,13 @@ class Elm_ExclusiveLock {
 	protected $fileName;
 
 	public function __construct($name) {
-		//Usually the /wp-content/uploads directory is writable. Use that to store lock files.
-		$uploads = wp_upload_dir();
-		$this->fileName = $uploads['basedir'] . '/' . $name . '.lock';
-		$this->handle = fopen($this->fileName, 'w+');
+		if ( !preg_match('@^[a-z0-9._+=\s\-]$@i', $name) ) {
+			$name = 'elm-' . md5($name);
+		}
+
+		$directory = get_temp_dir();
+		$this->fileName = $directory . $name . '.lock';
+		$this->handle = @fopen($this->fileName, 'wb');
 	}
 
 	public function acquire() {
@@ -45,6 +48,7 @@ class Elm_ExclusiveLock {
 		}
 		if ( $this->handle ) {
 			fclose($this->handle);
+			@unlink($this->fileName);
 		}
 	}
 }

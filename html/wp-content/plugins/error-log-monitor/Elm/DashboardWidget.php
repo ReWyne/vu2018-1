@@ -1,18 +1,20 @@
 <?php
+
 class Elm_DashboardWidget {
-	private $widgetId = 'ws_php_error_log';
-	private $requiredCapability = 'manage_options';
+	protected $widgetId = 'ws_php_error_log';
+	protected $requiredCapability = 'manage_options';
+	protected $widgetCssPath = 'css/dashboard-widget.css';
 
 	/**
 	 * @var scbOptions $settings Plugin settings.
 	 */
-	private $settings;
+	protected $settings;
 	/**
 	 * @var Elm_plugin $plugin A reference to the main plugin object.
 	 */
-	private $plugin;
+	protected $plugin;
 
-	private function __construct($settings, $plugin) {
+	protected function __construct($settings, $plugin) {
 		$this->settings = $settings;
 		$this->plugin = $plugin;
 
@@ -28,7 +30,13 @@ class Elm_DashboardWidget {
 			->requiredCap($this->requiredCapability)
 			->register();
 
+		ajaw_v1_CreateAction('elm-hide-pro-notice')
+			->handler(array($this, 'ajaxHideUpgradeNotice'))
+			->requiredCap($this->requiredCapability)
+			->register();
+
 		add_action('wp_dashboard_setup', array($this, 'registerWidget'));
+		add_action('wp_network_dashboard_setup', array($this, 'registerWidget'));
 		add_action('admin_init', array($this, 'handleLogClearing'));
 	}
 
@@ -50,20 +58,28 @@ class Elm_DashboardWidget {
 		return apply_filters('elm_show_dashboard_widget', current_user_can($this->requiredCapability));
 	}
 
+	private function userCanClearLog() {
+		return $this->userCanSeeWidget() && current_user_can('update_core');
+	}
+
+	private function userCanChangeSettings() {
+		return $this->userCanSeeWidget() && current_user_can('update_core');
+	}
+
 	public function enqueueWidgetDependencies($hook) {
 		if ( $hook === 'index.php' ) {
 			wp_enqueue_script(
 				'elm-dashboard-widget',
 				plugins_url('js/dashboard-widget.js', $this->plugin->getPluginFile()),
 				array('jquery', 'ajaw-v1-ajax-action-wrapper'),
-				'20170127'
+				'20180801'
 			);
 
 			wp_enqueue_style(
 				'elm-dashboard-widget-styles',
-				plugins_url('css/dashboard-widget.css', $this->plugin->getPluginFile()),
+				plugins_url($this->widgetCssPath, $this->plugin->getPluginFile()),
 				array(),
-				'20170120'
+				'20180801'
 			);
 		}
 	}
@@ -80,13 +96,76 @@ class Elm_DashboardWidget {
 			printf('<p><strong>%s</strong></p>', __('Log cleared.', 'error-log-monitor'));
 		}
 
+		$this->displayContentSection($log);
+
+		if ( $log->getFileSize() > 0 ) {
+			echo '<p>';
+			printf(
+				/* translators: 1: Log file name, 2: Log file size */
+				__('Log file: %1$s (%2$s)', 'error-log-monitor') . ' ',
+				esc_html($log->getFilename()),
+				Elm_Plugin::formatByteCount($log->getFileSize(), 2)
+			);
+			if ( $this->userCanClearLog() ) {
+				/** @noinspection HtmlUnknownTarget */
+				printf(
+					'<a href="%s" class="button" onclick="return confirm(\'%s\');">%s</a>',
+					wp_nonce_url(self_admin_url('/index.php?elm-action=clear-log&noheader=1'), 'clear-log'),
+					esc_js(__('Are you sure you want to clear the error log?', 'error-log-monitor')),
+					__('Clear Log', 'error-log-monitor')
+				);
+			}
+
+			echo '</p>';
+		}
+
+		if (
+			$this->userCanChangeSettings()
+			&& wsh_elm_fs()->is_not_paying()
+			&& $this->settings->get('enable_premium_notice', true)
+			&& wsh_elm_fs()->is_pricing_page_visible()
+			&& (!wsh_elm_fs()->is_activation_mode())
+		) {
+			echo '<div class="elm-upgrade-to-pro-footer">';
+
+			echo __('Upgrade to Pro for more detailed logs and a summary view.', 'error-log-monitor'), '<br>';
+
+			echo '<div class="elm-upgrade-notice-links">';
+			printf(
+				'<a href="%s">%s</a>',
+				esc_attr(wsh_elm_fs()->get_upgrade_url()),
+				__('View Pricing', 'error-log-monitor')
+			);
+			echo ' | ';
+			printf(
+				'<a href="%s" class="elm-hide-upgrade-notice">%s</a>',
+				esc_attr('#'),
+				_x('Hide', 'a link that hides the "Upgrade to Pro" notice', 'error-log-monitor')
+			);
+			echo '</div>';
+
+			echo '</div>';
+		}
+
+		do_action('elm_after_widget_footer');
+	}
+
+	/**
+	 * @param Elm_PhpErrorLog $log
+	 */
+	protected function displayContentSection($log) {
+		$this->displayLatestEntries($log);
+	}
+
+	/**
+	 * @param Elm_PhpErrorLog $log
+	 */
+	protected function displayLatestEntries($log) {
 		$filteredLog = $this->plugin->getWidgetEntries($log);
 		if ( is_wp_error($filteredLog) ) {
 			printf('<p>%s</p>', $filteredLog->get_error_message());
 			return;
 		}
-
-		//$this->displaySummary();
 
 		$startTime = microtime(true);
 		$lines = $filteredLog->readLastEntries($this->settings->get('widget_line_count'));
@@ -130,25 +209,6 @@ class Elm_DashboardWidget {
 			if ( $filteredLog->getSkippedEntryCount() > 0 ) {
 				$this->displaySkippedEntryCount($filteredLog);
 			}
-		}
-
-		if ( $log->getFileSize() > 0 ) {
-			echo '<p>';
-			printf(
-				/* translators: 1: Log file name, 2: Log file size */
-				__('Log file: %1$s (%2$s)', 'error-log-monitor') . ' ',
-				esc_html($log->getFilename()),
-				Elm_Plugin::formatByteCount($log->getFileSize(), 2)
-			);
-			/** @noinspection HtmlUnknownTarget */
-			printf(
-				'<a href="%s" class="button" onclick="return confirm(\'%s\');">%s</a>',
-				wp_nonce_url(admin_url('/index.php?elm-action=clear-log&noheader=1'), 'clear-log'),
-				esc_js(__('Are you sure you want to clear the error log?', 'error-log-monitor')),
-				__('Clear Log', 'error-log-monitor')
-			);
-
-			echo '</p>';
 		}
 	}
 
@@ -201,7 +261,7 @@ class Elm_DashboardWidget {
 		echo '</tbody></table>';
 	}
 
-	private function displayLogAsList($lines) {
+	protected function displayLogAsList($lines, $listClasses = array(), $callbacks = array()) {
 		//Do any of the log entries have a stack trace?
 		$hasStackTraces = false;
 		foreach($lines as $line) {
@@ -211,31 +271,70 @@ class Elm_DashboardWidget {
 			}
 		}
 
-		$listClasses = array('elm-log-entries', 'elm-wide-list');
+		$listClasses = array_merge(array('elm-log-entries', 'elm-wide-list'), $listClasses);
 		if ( $hasStackTraces ) {
 			$listClasses[] = 'elm-list-with-stack-traces';
 		}
 
 		$actions = sprintf('<div class="elm-line-actions">%s</div>', $this->getIgnoreLink());
 
-		echo '<ul class="', esc_attr(implode(' ', $listClasses)), '"><tbody>';
+		echo '<ul class="', esc_attr(implode(' ', $listClasses)), '">';
 		foreach ($lines as $line) {
+			$itemClasses = array('elm-entry');
+			if ( !empty($line['stacktrace']) ) {
+				$itemClasses[] = 'elm-has-stack-trace';
+			}
+			if ( isset($line['level']) ) {
+				$itemClasses[] = 'elm-level-' . preg_replace('@[^a-z\-]@', '-', $line['level']);
+			}
+
 			printf(
-				'<li class="elm-entry%s" data-raw-message="%s">%s <p class="elm-timestamp" title="%s">%s</p>',
-				!empty($line['stacktrace']) ? ' elm-has-stack-trace' : '',
-				esc_attr($line['message']),
-				$actions,
-				!empty($line['timestamp']) ? gmdate('Y-m-d H:i:s e', $line['timestamp']) : '',
-				!empty($line['timestamp']) ? $this->plugin->formatTimestamp($line['timestamp']) : ''
+				'<li class="%s" data-raw-message="%s">',
+				esc_attr(implode(' ', $itemClasses)),
+				esc_attr($line['message'])
 			);
 
-			echo '<p class="elm-log-message">',
-				esc_html($this->plugin->formatLogMessage($line['message'])),
-			'</p>';
+			echo '<div class="elm-entry-body-container">';
+			echo '<div class="elm-entry-body">', $actions;
 
-			if ( !empty($line['stacktrace']) ) {
+			if ( isset($callbacks['displayMetadata']) ) {
+				call_user_func($callbacks['displayMetadata'], $line);
+			} else {
+				printf(
+					'<p class="elm-entry-metadata"><span class="elm-severity-bubble">&nbsp;</span>'
+					. ' <span class="elm-timestamp" title="%s">%s</span></p>',
+					!empty($line['timestamp']) ? gmdate('Y-m-d H:i:s e', $line['timestamp']) : '',
+					!empty($line['timestamp']) ? $this->plugin->formatTimestamp($line['timestamp']) : ''
+				);
+			}
+
+			if ( isset($callbacks['beforeMessage']) ) {
+				call_user_func($callbacks['beforeMessage'], $line);
+			}
+
+			$message = $this->plugin->formatLogMessage($line['message'], isset($line['level']) ? $line['level'] : null);
+			$message = esc_html($message);
+			$message = nl2br($this->insertCodeBreaks($message));
+			echo '<p class="elm-log-message">', $message, '</p>';
+
+			echo '</div>'; //.elm-entry-body
+			echo '</div>'; //.elm-entry-body-container
+
+			echo '<div class="elm-entry-context-container">';
+			if ( isset($callbacks['inContext']) ) {
+				call_user_func($callbacks['inContext'], $line);
+			}
+
+			if ( isset($line['context'], $line['context']['stackTrace']) ) {
+				$this->displayStackTrace($line['context']['stackTrace']);
+			} else if ( !empty($line['stacktrace']) ) {
 				$this->displayStackTrace($line['stacktrace']);
 			}
+
+			if ( !empty($line['context']) ) {
+				$this->displayContextData($line['context']);
+			}
+			echo '</div>';
 
 			echo '</li>';
 		}
@@ -247,49 +346,198 @@ class Elm_DashboardWidget {
 			return;
 		}
 
-		echo '<ul class="elm-stacktrace">';
-		foreach($stackTrace as $item) {
-			//Remove the "PHP " prefix from trace items.
-			$item = preg_replace('@^PHP @', '', $item, 1);
-			printf('<li>%s</li>'. "\n", esc_html($this->plugin->formatLogMessage($item)));
+		$firstLine = reset($stackTrace);
+		if ( is_string($firstLine) ) {
+			//This is a plain PHP/XDebug stack trace.
+			//Skip the opening "Stack trace:" line. There will be a heading with the same text.
+			$firstLine = strtolower(trim($firstLine, ' :'));
+			if ( ($firstLine === 'stack trace') || ($firstLine === 'php stack trace') ) {
+				array_shift($stackTrace);
+			}
 		}
-		echo '</ul>';
-	}
 
-	/** @noinspection PhpUnusedPrivateMethodInspection Unfinished feature. */
-	private function displaySummary() {
-		//TODO: Finish summary generation.
-		$summary = $this->plugin->getSummary(new Elm_PhpErrorLog('C:\xampp\htdocs\cbtool\blog\wp-content\adminmenueditor_com.php.error.log'));
-		$maxBarHeight = 100;
+		$isMundane = $this->findMundaneTraceItems($stackTrace);
 
-		foreach($summary as $item) {
-			printf(
-				'<p>%s</p><p>Count: %d</p>',
-				htmlentities($item->message),
-				$item->count
-			);
+		echo '<div class="elm-context-group">
+			<h3 class="elm-context-group-caption">', __('Stack Trace', 'error-log-monitor'), '</h3>
+			<table class="elm-context-group-content elm-hide-mundane-items elm-stacktrace">';
 
-			$maxBinValue = max($item->chart);
+		$visibleRowNumber = 0;
 
-			echo '<ol class="elm-chart">';
-			foreach($item->chart as $eventsInBin) {
+		foreach ($stackTrace as $index => $item) {
+			$classes = array();
+
+			if ( !empty($isMundane[$index]) ) {
+				$classes[] = 'elm-is-mundane';
+			} else {
+				$visibleRowNumber++;
+				if ( $visibleRowNumber % 2 === 1 ) {
+					$classes[] = 'elm-is-odd-visible-row';
+				}
+				if ( $visibleRowNumber === 1 ) {
+					$classes[] = 'elm-first-non-mundane-item';
+				}
+			}
+
+			if ( is_string($item) ) {
+				//Remove the "PHP " prefix from trace items.
+				$item = preg_replace('@^PHP @', '', $item, 1);
 				printf(
-					'<li class="elm-chart-point %s" style="height: %d%%; width: %.2f%%" title="%d"></li>',
-					($eventsInBin === 0) ? 'elm-chart-zero-point' : '',
-					max(min(($eventsInBin / $maxBinValue), 1) * $maxBarHeight, 1),
-					1 / count($item->chart) * 100,
-					$eventsInBin
+					'<li class="%s"><span class="elm-stack-frame-content">%s</span></li>' . "\n",
+					implode(' ', $classes),
+					$this->insertPathBreaks(esc_html($this->plugin->formatLogMessage($item)))
+				);
+				continue;
+			}
+
+			printf('<tr class="%s">', implode(' ', $classes));
+			printf('<td class="elm-stack-frame-index">%d.</td>', $index + 1);
+
+			echo '<td class="elm-stack-frame-content">';
+			if ( !empty($item['call']) ) {
+				printf('<span class="elm-function-call">%s</span>', esc_html($item['call']));
+			}
+
+			if ( !empty($item['file']) ) {
+				printf(
+					'<span class="elm-code-location"><span class="elm-code-file-name">%s</span>'
+					. ':<span class="elm-line-number">%d</span></span>',
+					$this->insertPathBreaks(esc_html($this->plugin->formatLogMessage($item['file']))),
+					isset($item['line']) ? $item['line'] : 0
 				);
 			}
-			echo '</ol>';
+			echo '</td>';
+			echo '</tr>';
 
-			//var_dump($item);
 		}
+
+		$mundaneItems = array_sum($isMundane);
+		if ( $mundaneItems > 0 ) {
+			echo '<tr class="elm-more-context-row"><td colspan="2"><a href="#" class="elm-show-mundane-context">';
+			printf(
+				_x('Show %d more', 'show hidden stack trace items', 'error-log-monitor'),
+				$mundaneItems
+			);
+			echo '</a></td></tr>';
+		}
+
+		echo '</table></div>';
+	}
+
+	protected function insertPathBreaks($text) {
+		return preg_replace('@(\?|\(|[/\\\]++)@', '<wbr>$1', $text);
+	}
+
+	protected function insertCodeBreaks($text) {
+		$text = preg_replace('@(->|[./\\\]++)@', '<wbr>$1', $text);
+		$text = preg_replace('@([()\[\]])@', '$1<wbr>', $text);
+		return $text;
+	}
+
+	/**
+	 * Filter a stack trace and decide which items should be hidden because they're mundane/uninteresting.
+	 *
+	 * Returns an array with the same indexes as the input. The values indicate if the corresponding stack
+	 * trace item is mundane or not:
+	 *  0 = not mundane, leave it visible.
+	 *  1 = mundane or irrelevant, hide it.
+	 *
+	 * The returned array might be smaller than the input and it could be missing some indexes.
+	 * Assume that the default is 0 (i.e. not mundane).
+	 *
+	 * @param array $stackTrace A stack trace.
+	 * @return int[]
+	 */
+	protected function findMundaneTraceItems($stackTrace) {
+		$isMundane = array();
+		//If there are 4 or fewer items, just show them all.
+		if ( count($stackTrace) <= 4 ) {
+			return $isMundane;
+		}
+
+		//Always show the first and last item.
+		$isMundane[0] = 0;
+		$isMundane[count($stackTrace) - 1] = 0;
+		foreach ($stackTrace as $index => $item) {
+			if ( is_string($item) || isset($isMundane[$index]) ) {
+				continue;
+			}
+
+			$fileName = isset($item['file']) ? str_replace('\\', '/', $item['file']) : '';
+
+			if ( $fileName && (strpos($fileName, '/wp-content/') !== false) ) {
+				//Show any items where the file is part of a plugin or theme (check for 'wp-content').
+				$isMundane[$index] = 0;
+			} else if (
+				(!empty($item['call']) && $this->startsWith($item['call'], 'WP_CLI\\'))
+				|| (strpos($fileName, '/wp-cli.phar/') !== false)
+			) {
+				//Hide everything in the WP_CLI namespace.
+				$isMundane[$index] = 1;
+			} else if ( $fileName === '' ) {
+				//Show items that don't have a file name.
+				$isMundane[$index] = 0;
+			} else if (
+				!empty($item['call'])
+				&& (strpos($item['call'], 'WP_Hook->') !== false)
+				&& (strpos($fileName, '/wp-includes/') !== false)
+			) {
+				//Hide calls involving the "WP_Hook" class if the file is part of WordPress core.
+				$isMundane[$index] = 1;
+			} else if ( $this->endsWithAny(
+				$fileName,
+				array('/wp-load.php', '/wp-config.php', '/wp-settings.php', '/wp-admin/admin.php', '/wp-admin/menu.php',)
+			) ) {
+				//Hide core files that are included on almost every page load.
+				$isMundane[$index] = 1;
+			}
+		}
+
+		//If there are fewer than 2 hidden items, just show them all.
+		if ( array_sum($isMundane) < 2 ) {
+			$isMundane = array();
+		}
+
+		//Always show at least 3 items. Show the second one if there are fewer than 3 visible.
+		$visibleItems = count($stackTrace) - array_sum($isMundane);
+		if ( ($visibleItems < 3) && (count($stackTrace) >= 3) && isset($stackTrace[1]) ) {
+			$isMundane[1] = 0;
+		}
+
+		return $isMundane;
+	}
+
+	protected function startsWith($string, $prefix) {
+		if ( !isset($string, $prefix) ) {
+			return false;
+		}
+		return (substr($string, 0, strlen($prefix)) === $prefix);
+	}
+
+	protected function endsWith($string, $suffix) {
+		if ( !isset($string, $suffix) ) {
+			return false;
+		}
+		return (substr($string, -strlen($suffix)) === $suffix);
+	}
+
+	protected function endsWithAny($string, $suffixList) {
+		foreach ($suffixList as $suffix) {
+			if ( $this->endsWith($string, $suffix) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected function displayContextData($context) {
+		//The free version doesn't collect context data.
+		//This method is an extension point for other versions.
 	}
 
 	private function displayConfigurationHelp($problem) {
-		$exampleCode = "ini_set('log_errors', 'On');\n" . "ini_set('error_log', '/full/path/to/php-errors.log');\n"
-			. "error_reporting(E_ALL);";
+		$exampleCode = "@ini_set('log_errors', 'On');\n"
+			. "@ini_set('error_log', '/full/path/to/php-errors.log');";
 		printf('<p><strong>%s</strong></p>', $problem);
 
 		echo '<p>';
@@ -303,6 +551,21 @@ class Elm_DashboardWidget {
 		echo '</p>';
 		echo '<pre>', $exampleCode, '</pre>';
 
+		if ( !WP_DEBUG ) {
+			echo '<p>';
+			_e(
+				'By default, only fatal errors and warnings will be logged. To also log notices
+                and other messages, enable the <code>WP_DEBUG</code> option by adding this code:'
+			);
+			echo '</p>';
+			$debugCode =
+				"//Report all types of errors.\n"
+				. "define('WP_DEBUG', true);\n"
+				. "//Don't show errors to site visitors.\n"
+				. "define('WP_DEBUG_DISPLAY', false);";
+			echo '<pre>', $debugCode, '</pre>';
+		}
+
 		echo '<p>';
 		printf(
 			__('For reference, the full path of the WordPress directory is:<br>%s', 'error-log-monitor'),
@@ -314,13 +577,18 @@ class Elm_DashboardWidget {
 		printf(
 			/* translators: Links to English-language articles about configuring error logging. */
 			__('See also: %s', 'error-log-monitor'),
-			'<a href="http://codex.wordpress.org/Editing_wp-config.php#Configure_Error_Log">Editing wp-config.php</a>,
-			 <a href="http://digwp.com/2009/07/monitor-php-errors-wordpress/">3 Ways To Monitor PHP Errors</a>'
+			'<a href="https://codex.wordpress.org/Editing_wp-config.php#Configure_Error_Logging">Editing wp-config.php</a>,
+			 <a href="https://digwp.com/2009/07/monitor-php-errors-wordpress/">3 Ways To Monitor PHP Errors</a>'
 		);
 		echo '</p>';
 	}
 
 	public function handleSettingsForm() {
+		if ( !$this->userCanChangeSettings() ) {
+			_e("Sorry, you are not allowed to change these settings.", 'error-log-monitor');
+			return;
+		}
+
 		if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['widget_id']) && is_array($_POST[$this->widgetId]) ) {
 			$formInputs = $_POST[$this->widgetId];
 
@@ -337,6 +605,15 @@ class Elm_DashboardWidget {
 			$this->settings->set('email_interval', intval($formInputs['email_interval']));
 			if ( $this->settings->get('email_interval') <= 60 ) {
 				$this->settings->set('email_interval', $this->settings->get_defaults('email_interval'));
+			}
+
+			$this->settings->set('email_log_check_interval', intval($formInputs['email_log_check_interval']));
+			//We must check the log at least as often as email_interval or email_interval will never be reached.
+			if ( $this->settings->get('email_log_check_interval') > $this->settings->get('email_interval') ) {
+				$this->settings->set('email_log_check_interval', $this->settings->get('email_interval'));
+			}
+			if ( $this->settings->get('email_log_check_interval') <= 60 ) {
+				$this->settings->set('email_log_check_interval', $this->settings->get_defaults('email_log_check_interval'));
 			}
 
 			if ( isset($formInputs['sort_order']) ) {
@@ -393,6 +670,7 @@ class Elm_DashboardWidget {
 				$this->settings->set('dashboard_log_layout', $logLayout);
 			}
 
+			do_action('elm_handle_widget_settings_form', $formInputs);
 			do_action('elm_settings_changed', $this->settings);
 		}
 
@@ -425,7 +703,7 @@ class Elm_DashboardWidget {
 		printf('<p class="hidden">%s <br>', __('Widget layout:', 'error-log-monitor'));
 		$layouts = array(
 			_x('Table', 'widget layout option', 'error-log-monitor') => 'table',
-			_x('List', 'widget layout option', 'error-log-monitor') => 'list',
+			_x('List', 'widget layout option', 'error-log-monitor')  => 'list',
 		);
 		foreach($layouts as $name => $value) {
 			printf(
@@ -464,18 +742,37 @@ class Elm_DashboardWidget {
 			)
 		);
 
+		$intervals = array(
+			__('Every 2 minutes', 'error-log-monitor')  => 2 * 60,
+			__('Every 5 minutes', 'error-log-monitor')  => 5 * 60,
+			__('Every 10 minutes', 'error-log-monitor') => 10 * 60,
+			__('Every 15 minutes', 'error-log-monitor') => 15 * 60,
+			__('Every 30 minutes', 'error-log-monitor') => 30 * 60,
+			__('Hourly', 'error-log-monitor')           => 60 * 60,
+			__('Daily', 'error-log-monitor')            => 24 * 60 * 60,
+			__('Weekly', 'error-log-monitor')           => 7 * 24 * 60 * 60,
+		);
+
+		printf(
+			'<p><label>%s <br><select name="%s[email_log_check_interval]">',
+			__('How often to check the log for new messages:', 'error-log-monitor'),
+			esc_attr($this->widgetId)
+		);
+		$logCheckInterval = min($this->settings->get('email_interval'), $this->settings->get('email_log_check_interval'));
+		foreach($intervals as $name => $interval) {
+			printf(
+				'<option value="%d" %s>%s</option>',
+				$interval,
+				($interval == $logCheckInterval) ? ' selected="selected"' : '',
+				$name
+			);
+		}
+		echo '</select></label></p>';
+
 		printf(
 			'<p><label>%s <br><select name="%s[email_interval]">',
 			__('How often to send email (max):', 'error-log-monitor'),
 			esc_attr($this->widgetId)
-		);
-		$intervals = array(
-			__('Every 10 minutes', 'error-log-monitor') => 10*60,
-			__('Every 15 minutes', 'error-log-monitor') => 15*60,
-			__('Every 30 minutes', 'error-log-monitor') => 30*60,
-			__('Hourly', 'error-log-monitor')           => 60*60,
-			__('Daily', 'error-log-monitor')            => 24*60*60,
-			__('Weekly', 'error-log-monitor')           => 7*24*60*60,
 		);
 		foreach($intervals as $name => $interval) {
 			printf(
@@ -486,6 +783,8 @@ class Elm_DashboardWidget {
 			);
 		}
 		echo '</select></label></p>';
+
+		do_action('elm_after_email_interval_field');
 
 		printf(
 			'<p><label><input type="checkbox" name="%s[enable_log_size_notification]" 
@@ -504,7 +803,7 @@ class Elm_DashboardWidget {
 		);
 		echo '</p>';
 
-		//This script is too short to be worth placing in a separate file. Lets just inline it.
+		//This script is too short to be worth placing in a separate file. Let's just inline it.
 		?>
 		<script type="text/javascript">
 			jQuery(function($) {
@@ -515,6 +814,8 @@ class Elm_DashboardWidget {
 			});
 		</script>
 		<?php
+
+		do_action('elm_after_notification_settings');
 
 		printf(
 			'<h3 class="elm-config-section-heading"><strong>%s</strong></h3>',
@@ -585,6 +886,19 @@ class Elm_DashboardWidget {
 			echo '</table>';
 		}
 
+		if ( !wsh_elm_fs()->is_activation_mode() ) {
+			echo '<div id="elm-pro-version-settings-section">';
+			printf(
+				'<h3 class="elm-config-section-heading"><strong>%s</strong></h3>',
+				_x(
+					'Pro Version',
+					'the heading of the upgrade-to-pro section in widget settings',
+					'error-log-monitor'
+				)
+			);
+			$this->displayProSection();
+			echo '</div>';
+		}
 	}
 
 	/**
@@ -651,8 +965,8 @@ class Elm_DashboardWidget {
 	}
 
 	public function handleLogClearing() {
-		$doClearLog =  isset($_GET['elm-action']) && ($_GET['elm-action'] === 'clear-log')
-			&& check_admin_referer('clear-log') && $this->userCanSeeWidget();
+		$doClearLog = isset($_GET['elm-action']) && ($_GET['elm-action'] === 'clear-log')
+			&& check_admin_referer('clear-log') && $this->userCanClearLog();
 
 		if ( $doClearLog ) {
 			$log = Elm_PhpErrorLog::autodetect();
@@ -665,7 +979,7 @@ class Elm_DashboardWidget {
 			//Since the log is empty now, we can reset the file size notification.
 			$this->settings->set('log_size_notification_sent', false);
 
-			wp_redirect(admin_url('index.php?elm-log-cleared=1'));
+			wp_redirect(self_admin_url('index.php?elm-log-cleared=1'));
 			exit();
 		}
 	}
@@ -690,15 +1004,55 @@ class Elm_DashboardWidget {
 		if ( $params['action'] === 'elm-ignore-message' ) {
 			//Add the message to the list.
 			$ignoredMessages[$params['message']] = true;
+			$isIgnored = true;
 		} else {
 			//Remove the message from the list.
 			unset($ignoredMessages[$params['message']]);
+			$isIgnored = false;
 		}
 
 		$this->settings->set('ignored_messages', $ignoredMessages);
 
+		do_action('elm_ignored_status_changed', $params['message'], $isIgnored);
+
 		flock($handle, LOCK_UN);
 		return $ignoredMessages;
+	}
+
+	public function displayProSection() {
+		//Pro version call-to-action.
+		if ( wsh_elm_fs()->is_not_paying() && current_user_can('manage_options') ) {
+			echo 'Upgrade to Pro to get these additional features: ';
+			echo '<ul class="elm-pro-features">';
+			echo '<li>"Summary" tab that groups together identical errors.</li>';
+			echo '<li>Stack traces for warnings and notices, not just fatal errors.</li>';
+			echo '<li>Error context like page URL, current filter, and more.</li>';
+			echo '</ul>';
+
+			echo '<p>';
+			if ( wsh_elm_fs()->is_pricing_page_visible() ) {
+				printf(
+					'<a href="%s">%s</a>',
+					esc_attr(wsh_elm_fs()->get_upgrade_url()),
+					__('Upgrade to Pro', 'error-log-monitor')
+				);
+			}
+
+			if ( wsh_elm_fs()->is_registered() ) {
+				echo ' | ';
+				printf(
+					'<a href="%s">%s</a>',
+					esc_attr(wsh_elm_fs()->get_account_url()),
+					_x('Account', 'Freemius account link', 'error-log-monitor')
+				);
+			}
+			echo '</p>';
+		}
+	}
+
+	public function ajaxHideUpgradeNotice() {
+		$this->settings->set('enable_premium_notice', false);
+		return array('success' => true);
 	}
 
 	public static function getInstance($settings, $plugin) {

@@ -64,11 +64,13 @@ class Elm_PhpErrorLog {
 	 * Get an iterator over log entries in reverse order (i.e. starting from the end of the file).
 	 *
 	 * @param int|null $maxLines If set, the iterator will stop after reading this many lines. NULL = no line limit.
+	 * @param int|null $fromOffset Start reading from this byte offset. NULL = read from the end of the file.
+	 * @param int $toOffset Stop reading at this byte offset. Default is 0, i.e. the beginning of the file.
 	 * @return Elm_ReverseLogParser|WP_Error
 	 */
-	public function getIterator($maxLines = null) {
+	public function getIterator($maxLines = null, $fromOffset = null, $toOffset = 0) {
 		try {
-			$lineIterator = new Elm_ReverseLineIterator($this->getFilename(), $maxLines);
+			$lineIterator = new Elm_ReverseLineIterator($this->getFilename(), $maxLines, $fromOffset, $toOffset);
 		} catch (RuntimeException $exception) {
 			return new WP_Error('error_log_fopen_failed', $exception->getMessage());
 		}

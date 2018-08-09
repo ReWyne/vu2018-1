@@ -54,4 +54,28 @@ jQuery(function($) {
 
 		return false;
 	});
+
+	//Handle the "Show X more" context link.
+	widget.on('click', '.elm-show-mundane-context', function() {
+		var link = $(this),
+			container = link.closest('.elm-context-group-content');
+		container.removeClass('elm-hide-mundane-items');
+		link.hide().closest('tr,li').hide();
+		return false;
+	});
+
+	//Handle the "Hide" link that hides the "Upgrade to Pro" notice.
+	widget.on('click', '.elm-hide-upgrade-notice', function(event) {
+		$(this).closest('.elm-upgrade-to-pro-footer').hide();
+		AjawV1.getAction('elm-hide-pro-notice').post();
+		event.preventDefault();
+		return false;
+	});
+
+	//Move the "Upgrade to Pro" section to the very bottom of the widget settings panel, below the "Submit" button.
+	var settingsForm = widget.find('.dashboard-widget-control-form'),
+		proSection = settingsForm.find('#elm-pro-version-settings-section');
+	if (settingsForm.length > 0) {
+		proSection.appendTo(settingsForm).show();
+	}
 });

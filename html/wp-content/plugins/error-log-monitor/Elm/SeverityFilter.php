@@ -3,13 +3,10 @@
 /**
  * Filters log entries by the severity level.
  */
-class Elm_SeverityFilter implements Iterator, Elm_LogFilter {
+class Elm_SeverityFilter extends Elm_LogFilter {
 	const UNKNOWN_LEVEL_GROUP = 'other';
 
-	private $logIterator;
 	private $isGroupIncluded = array();
-
-	private $skippedEntryCount = 0;
 
 	//Some severity levels have the same general meaning, so we map them to the same group.
 	private static $severityMap = array(
@@ -19,7 +16,7 @@ class Elm_SeverityFilter implements Iterator, Elm_LogFilter {
 	);
 
 	public function __construct(Iterator $logIterator, $includedGroups = null) {
-		$this->logIterator = $logIterator;
+		parent::__construct($logIterator);
 
 		//Include everything by default.
 		$allGroups = self::getAvailableOptions();
@@ -65,21 +62,6 @@ class Elm_SeverityFilter implements Iterator, Elm_LogFilter {
 		return array_reverse($filtered);
 	}
 
-	/**
-	 * Move to the next log entry that matches the filter settings.
-	 */
-	private function findMatchingEntry() {
-		while ( $this->logIterator->valid() ) {
-			$entry = $this->logIterator->current();
-			if ( $this->isSeverityLevelIncluded($entry['level']) ) {
-				break;
-			}
-
-			$this->skippedEntryCount++;
-			$this->logIterator->next();
-		}
-	}
-
 	private function isSeverityLevelIncluded($severityLevel) {
 		if ( !isset($severityLevel) ) {
 			$group = self::UNKNOWN_LEVEL_GROUP;
@@ -96,14 +78,37 @@ class Elm_SeverityFilter implements Iterator, Elm_LogFilter {
 		return $this->isGroupIncluded[$group];
 	}
 
-	public function getSkippedEntryCount() {
-		$count = $this->skippedEntryCount;
-
-		if ( $this->logIterator instanceof Elm_LogFilter ) {
-			$count += $this->logIterator->getSkippedEntryCount();
+	/**
+	 * Convert a list of severity groups to a list of PHP error severity levels.
+	 * The "other/unknown" group is represented by NULL.
+	 *
+	 * @param string[] $severityGroups
+	 * @return array
+	 */
+	public static function groupsToLevels($severityGroups) {
+		if ( empty($severityGroups) ) {
+			return array();
 		}
 
-		return $count;
+		$invertedMap = array();
+		foreach(self::$severityMap as $level => $group) {
+			if ( !isset($invertedMap[$group]) ) {
+				$invertedMap[$group] = array();
+			}
+			$invertedMap[$group][] = $level;
+		}
+
+		$levels = array();
+		foreach($severityGroups as $group) {
+			if ( $group === self::UNKNOWN_LEVEL_GROUP ) {
+				$levels[] = null;
+			} else if ( isset($invertedMap[$group]) ) {
+				$levels = array_merge($levels, $invertedMap[$group]);
+			} else {
+				$levels[] = $group;
+			}
+		}
+		return $levels;
 	}
 
 	public function formatSkippedEntryCount() {
@@ -119,45 +124,23 @@ class Elm_SeverityFilter implements Iterator, Elm_LogFilter {
 	}
 
 	/**
-	 * Return the current log entry.
+	 * Check whether the current element of the iterator is acceptable
 	 *
-	 * @return array
+	 * @link http://php.net/manual/en/filteriterator.accept.php
+	 * @return bool true if the current element is acceptable, otherwise false.
+	 * @since 5.1.0
 	 */
-	public function current() {
-		return $this->logIterator->current();
-	}
+	public function accept() {
+		$entry = $this->getInnerIterator()->current();
+		if ( !isset($entry, $entry['level']) ) {
+			return true;
+		}
 
-	/**
-	 * Move forward to next log entry that matches the filter.
-	 */
-	public function next() {
-		$this->logIterator->next();
-		$this->findMatchingEntry();
-	}
-
-	/**
-	 * Return the key of the current entry.
-	 *
-	 * @return mixed scalar on success, or NULL on failure.
-	 */
-	public function key() {
-		return $this->logIterator->key();
-	}
-
-	/**
-	 * Checks if current position is valid.
-	 *
-	 * @return boolean
-	 */
-	public function valid() {
-		return $this->logIterator->valid();
-	}
-
-	/**
-	 * Rewind the Iterator to the first entry that matches the filter.
-	 */
-	public function rewind() {
-		$this->logIterator->rewind();
-		$this->findMatchingEntry();
+		if ( $this->isSeverityLevelIncluded($entry['level']) ) {
+			return true;
+		} else {
+			$this->skippedEntryCount++;
+			return false;
+		}
 	}
 }

@@ -15,17 +15,19 @@ class Elm_ReverseLogParser implements OuterIterator {
 	);
 
 	/**
-	 * @var Iterator
+	 * @var Elm_ReverseLineIterator
 	 */
 	private $lineIterator;
 	private $currentEntry = null;
 	private $currentKey = 0;
+	private $currentFileOffset = 0;
 
 	/**
 	 * @var array A circular buffer used to implement backtracking.
 	 */
 	private $backtrackBuffer = array();
 	private $backtrackingBufferSize = 200;
+	private $fileOffsetBuffer = array();
 
 	/**
 	 * @var int Next read index. Must not exceed the write index.
@@ -49,7 +51,12 @@ class Elm_ReverseLogParser implements OuterIterator {
 	 */
 	private $isPhpDefaultTraceEnabled = false;
 
-	public function __construct(Iterator $lineIterator) {
+	/**
+	 * @var int The maximum number of lines in a multi-line log entry. This doesn't include stack traces.
+	 */
+	private $maxMessageLines = 32;
+
+	public function __construct(Elm_ReverseLineIterator $lineIterator) {
 		$this->lineIterator = $lineIterator;
 		$this->isXdebugTraceEnabled = function_exists('extension_loaded') && extension_loaded('xdebug');
 		$this->isPhpDefaultTraceEnabled = version_compare(phpversion(), '5.4', '>=');
@@ -73,13 +80,15 @@ class Elm_ReverseLogParser implements OuterIterator {
 
 		$this->currentKey++;
 
+		//Read post-entry context.
+		$context = $this->tryReadContext('previous');
+
 		//Try to read a log entry with an XDebug stack trace.
 		if ( $this->isXdebugTraceEnabled ) {
 			$this->saveState();
 			$this->currentEntry = $this->parseEntryWithXdebugTrace();
 			if ( $this->currentEntry !== null ) {
 				$this->complete();
-				return;
 			} else {
 				$this->backtrack();
 			}
@@ -91,17 +100,32 @@ class Elm_ReverseLogParser implements OuterIterator {
 			$this->currentEntry = $this->parseEntryWithStackTrace();
 			if ( $this->currentEntry !== null ) {
 				$this->complete();
-				return;
 			} else {
 				$this->backtrack();
 			}
 		}
 
 		//Try to read a normal log entry.
-		$this->currentEntry = $this->readParsedLine();
+		if ( !isset($this->currentEntry) ) {
+			$this->currentEntry = $this->readMultiLineMessage();
+		}
+
+		if ( isset($this->currentEntry) && empty($this->currentEntry['isContext']) ) {
+			//Read pre-entry context.
+			if ( $context === null ) {
+				$context = $this->tryReadContext();
+			}
+
+			if ( $context !== null ) {
+				//TODO: Verify that the context data is about this particular entry.
+				//Sometimes multi-line messages can be interleaved (probably due to concurrency).
+				$this->currentEntry['context'] = $context;
+			}
+		}
 	}
 
 	private function parseEntryWithXdebugTrace() {
+		//Note: XDebug stack traces are deepest-call-last (i.e. most recent call last).
 		$stackTraceRegex = '/^PHP[ ]{1,5}?(\d{1,3}?)\.\s./';
 		$stackTrace = null;
 
@@ -129,7 +153,7 @@ class Elm_ReverseLogParser implements OuterIterator {
 			return null;
 		}
 
-		$entry = $this->readParsedLine();
+		$entry = $this->readMultiLineMessage();
 		if ( $entry === null ) {
 			return null;
 		}
@@ -139,12 +163,18 @@ class Elm_ReverseLogParser implements OuterIterator {
 	}
 
 	private function parseEntryWithStackTrace() {
+		//Note: Native PHP stack traces are deepest-call-first (i.e. most recent call first).
 		$stackTrace = array();
 
 		//The last line of the stack trace can be "#123 /path/to/x.php..." or "  thrown in /path/to/x.php..."
 		$line = $this->readNextLine();
 		if ( isset($line) && preg_match('/^(\s\sthrown in |#\d{1,3}\s\S)/', $line) ) {
-			$stackTrace[] = $line;
+			$item = $this->parsePhpStackTraceItem($line);
+			if ( $item !== null ) {
+				$stackTrace[] = $item;
+			} else {
+				$stackTrace[] = $line;
+			}
 		} else {
 			return null;
 		}
@@ -157,8 +187,15 @@ class Elm_ReverseLogParser implements OuterIterator {
 				return null;
 			}
 
+			//Potential bug: If the error message itself has multiple lines, all except the first line
+			//will be treated as if they were part of the stack trace.
 			if ( empty($entry['timestamp']) ) {
-				$stackTrace[] = $entry['message'];
+				$item = $this->parsePhpStackTraceItem($entry['message']);
+				if ( $item !== null ) {
+					$stackTrace[] = $item;
+				} else {
+					$stackTrace[] = $entry['message'];
+				}
 			} else {
 				$stackTrace = array_reverse($stackTrace);
 				//The stack trace always starts with "Stack trace:" on its own line.
@@ -174,11 +211,125 @@ class Elm_ReverseLogParser implements OuterIterator {
 		return null;
 	}
 
+	private function parsePhpStackTraceItem($message) {
+		//It's usually "#123 C:\path\to\plugin.php(456): functionCallHere()"
+		if ( preg_match(
+			'@^\#(?P<index>\d++)\s  # Stack frame index.
+			(?:
+			    (?P<source>
+			        \[internal\sfunction\]
+			        | 
+			        (?P<file>
+			             (?:phar://)?          # PHAR archive prefix (optional).
+			             (?:[a-zA-Z]:)?        # Drive letter (optional).
+			             [^:?*<>{}]+           # File path.
+			        ) \((?P<line>\d{1,6})\)    # Line number.
+			    ):
+			    | (?P<main>{main})\s*?$
+			)@x',
+			$message,
+			$matches
+		) ) {
+			$item = array();
+
+			if ( !empty($matches['source']) && !empty($matches[0]) ) {
+				$item['call'] = ltrim(substr($message, strlen($matches[0])));
+			} else if ( !empty($matches['main']) ) {
+				$item['call'] = $matches['main'];
+			}
+
+			if ( !empty($matches['file']) ) {
+				$item['file'] = $matches['file'];
+			} else if ( !empty($matches['source']) ) {
+				$item['file'] = $matches['source'];
+			}
+
+			if ( !empty($matches['line']) ) {
+				$item['line'] = $matches['line'];
+			}
+
+			return $item;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * @param string $expectedParentPosition
+	 * @return array|null
+	 */
+	private function tryReadContext($expectedParentPosition = 'next') {
+		//If position is "previous", read all context lines and discard everything except the last one.
+		//If it's "next", read just one.
+
+		$context = null;
+		do {
+			$this->saveState();
+
+			$line = $this->readParsedLine();
+			if ( ($line === null) || !isset($line['contextPayload']) || !is_array($line['contextPayload']) ) {
+				//This is not a context entry.
+				$this->backtrack();
+				break;
+			}
+			$this->complete();
+			$context = $line['contextPayload'];
+
+		} while (($line !== null) && ($expectedParentPosition === 'previous'));
+
+		if ( $context !== null ) {
+			$parentEntryPosition = isset($context['parentEntryPosition']) ? $context['parentEntryPosition'] : 'next';
+			if ($parentEntryPosition === $expectedParentPosition) {
+				return $context;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Read a message that spans multiple lines.
+	 * This is basically the same as readParsedLine() except it can handle messages that contain line breaks.
+	 *
+	 * @return array|null
+	 */
+	private function readMultiLineMessage() {
+		//Optimization shortcut.
+		$lastLine = $this->readParsedLine();
+		if ( isset($lastLine, $lastLine['timestamp']) || ($lastLine === null) ) {
+			return $lastLine;
+		}
+
+		$this->saveState();
+		$messageLines = array($lastLine['message']);
+
+		//The first line of a multi-line message is the only one that has a timestamp.
+		do {
+			$line = $this->readParsedLine();
+			if ( $line === null ) {
+				break;
+			}
+
+			if ( isset($line['timestamp']) ) {
+				//This is the first line.
+				if ( !empty($messageLines) ) {
+					$line['message'] .= "\n" . implode("\n", array_reverse($messageLines));
+				}
+				$this->complete();
+				return $line;
+			} else {
+				$messageLines[] = $line['message'];
+			}
+		} while (count($messageLines) < $this->maxMessageLines);
+
+		$this->backtrack();
+		return $lastLine;
+	}
+
 	/**
 	 * Save the current read state for later backtracking.
 	 */
 	private function saveState() {
-		$this->backtrackingIndexStack[] = $this->bufferReadIndex;
+		$this->backtrackingIndexStack[] = array($this->bufferReadIndex, $this->currentFileOffset);
 	}
 
 	/**
@@ -188,7 +339,7 @@ class Elm_ReverseLogParser implements OuterIterator {
 		if ( empty($this->backtrackingIndexStack) ) {
 			throw new LogicException('Tried to backtrack but the stack is empty!');
 		}
-		$this->bufferReadIndex = array_pop($this->backtrackingIndexStack);
+		list($this->bufferReadIndex, $this->currentFileOffset) = array_pop($this->backtrackingIndexStack);
 	}
 
 	/**
@@ -217,6 +368,16 @@ class Elm_ReverseLogParser implements OuterIterator {
 		$timestamp = null;
 		$message = $line;
 		$level = null;
+		$context = null;
+
+		/* TODO: Attempt to extract the file name and line number from the message.
+		 *
+		 * spprintf(&log_buffer, 0, "PHP %s:  %s in %s on line %" PRIu32, error_type_str, buffer, error_filename, error_lineno);
+php_log_err_with_severity(log_buffer, syslog_type_int);
+
+zend_error_va(severity, (file && ZSTR_LEN(file) > 0) ? ZSTR_VAL(file) : NULL, line,
+"Uncaught %s\n  thrown", ZSTR_VAL(str));
+		 */
 
 		//We expect log entries to be structured like this: "[date-and-time] Optional severity: error message".
 		$pattern = '/
@@ -244,13 +405,50 @@ class Elm_ReverseLogParser implements OuterIterator {
 					$level = $levelName;
 				}
 			}
+
+			//Does this line contain contextual data for another error?
+			$contextPrefix = '[ELM_context_';
+			$trimmedMessage = trim($message);
+			if ( substr($trimmedMessage, 0, strlen($contextPrefix)) === $contextPrefix ) {
+				$context = $this->parseContextLine($trimmedMessage);
+			}
 		}
 
 		return array(
 			'message' => $message,
 			'timestamp' => $timestamp,
 			'level' => $level,
+			'isContext' => ($context !== null),
+			'contextPayload' => $context,
 		);
+	}
+
+	private function parseContextLine($message) {
+		if ( !preg_match('@^\[(ELM_context_\d{1,8}?)\]@', $message, $matches) ) {
+			return null;
+		}
+
+		$endTag = '[/' . $matches[1] . ']';
+		$endTagPosition = strrpos($message, $endTag);
+		if ( $endTagPosition === false ) {
+			return null;
+		}
+
+		$serializedContext = substr(
+			$message,
+			strlen($matches[0]),
+			$endTagPosition - strlen($matches[0])
+		);
+		$context = @json_decode($serializedContext, true);
+
+		if ( !is_array($context) ) {
+			return null;
+		}
+
+		if ( !isset($context['parentEntryPosition']) ) {
+			$context['parentEntryPosition'] = 'next';
+		}
+		return $context;
 	}
 
 	/**
@@ -262,16 +460,20 @@ class Elm_ReverseLogParser implements OuterIterator {
 	private function readNextLine($skipEmptyLines = true) {
 		//Check the internal buffer first.
 		while ( $this->bufferReadIndex < $this->bufferWriteIndex ) {
-			$line = $this->backtrackBuffer[$this->bufferReadIndex % $this->backtrackingBufferSize];
+			$index = $this->bufferReadIndex % $this->backtrackingBufferSize;
+			$line = $this->backtrackBuffer[$index];
+			$offset = $this->fileOffsetBuffer[$index];
+
 			$this->bufferReadIndex++;
 
 			if ( !$skipEmptyLines || ($line !== '') ) {
+				$this->currentFileOffset = $offset;
 				return $line;
 			}
 		}
 
 		$isBacktrackingBufferFull = !empty($this->backtrackingIndexStack)
-			&& (($this->bufferWriteIndex - $this->backtrackingIndexStack[0]) === $this->backtrackingBufferSize);
+			&& (($this->bufferWriteIndex - $this->backtrackingIndexStack[0][0]) === $this->backtrackingBufferSize);
 		if ( $isBacktrackingBufferFull ) {
 			//The current log entry is malformed or too large to fit in the buffer.
 			return null;
@@ -280,14 +482,18 @@ class Elm_ReverseLogParser implements OuterIterator {
 		//Then check the actual file iterator.
 		while ( $this->lineIterator->valid() ) {
 			$line = $this->lineIterator->current();
+			$offset = $this->lineIterator->getPositionInFile();
 			$this->lineIterator->next();
 
 			if ( !empty($this->backtrackingIndexStack) ) {
-				$this->backtrackBuffer[$this->bufferWriteIndex % $this->backtrackingBufferSize] = $line;
+				$index = $this->bufferWriteIndex % $this->backtrackingBufferSize;
+				$this->backtrackBuffer[$index] = $line;
+				$this->fileOffsetBuffer[$index] = $offset;
+
 				$this->bufferWriteIndex++;
 				$this->bufferReadIndex = $this->bufferWriteIndex;
 
-				if ( $this->bufferWriteIndex - $this->backtrackingIndexStack[0] > $this->backtrackingBufferSize ) {
+				if ( $this->bufferWriteIndex - $this->backtrackingIndexStack[0][0] > $this->backtrackingBufferSize ) {
 					//This should never happen in practice. Instead of overfilling the buffer,
 					//the plugin should abort the current parse and fall back to something else.
 					throw new LogicException('Backtrack buffer overflow');
@@ -295,10 +501,12 @@ class Elm_ReverseLogParser implements OuterIterator {
 			}
 
 			if ( !$skipEmptyLines || ($line !== '') ) {
+				$this->currentFileOffset = $offset;
 				return $line;
 			}
 		}
 
+		$this->currentFileOffset = $this->lineIterator->getPositionInFile();
 		return null;
 	}
 
@@ -349,15 +557,28 @@ class Elm_ReverseLogParser implements OuterIterator {
 		$this->bufferReadIndex = 0;
 		$this->bufferWriteIndex = 0;
 
+		$this->fileOffsetBuffer = array();
+		$this->currentFileOffset = $this->lineIterator->getPositionInFile();
+
 		$this->readNextEntry();
 	}
 
 	/**
 	 * Returns the inner iterator.
 	 *
-	 * @return Iterator
+	 * @return Elm_ReverseLineIterator
 	 */
 	public function getInnerIterator() {
 		return $this->lineIterator;
+	}
+
+	/**
+	 * Returns the position of the current log entry in the log file, as an offset
+	 * from the start of the file.
+	 *
+	 * @return int
+	 */
+	public function getPositionInFile() {
+		return $this->currentFileOffset;
 	}
 }

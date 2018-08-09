@@ -1,3 +1,20 @@
+@charset "utf-8";
+
+$codeFontFamily: Consolas, Monaco, monospace;
+$timestampColor: #72777c;
+
+$entryBorderColor: rgba(0, 0, 0, 0.06);
+$oddEntryBackground: #fafafa;
+
+$contextDarkBackground: rgba(0, 0, 0, 0.02);
+//$contextDarkBackground: rgba(0, 0, 0, 0.0);
+$contextBasePadding: 5px;
+$contextBaseColor: #555;
+$tableBorderColor: #ddd;
+
+$widgetPadding: 12px;
+$widgetTopMargin: 11px;
+
 #ws_php_error_log {
 	.elm-log-table {
 		table-layout: fixed;
@@ -6,8 +23,7 @@
 	}
 
 	.elm-stacktrace {
-		//Match the default text color in dashboard widgets.
-		color: #555;
+
 	}
 
 	.elm-config-section-heading {
@@ -37,26 +53,35 @@
 
 	//List-based log layout.
 	.elm-wide-list {
-		$widgetPadding: 12px;
-
 		position: relative;
-		margin: -$widgetPadding 0 -$widgetPadding 13px;
+		margin: -$widgetTopMargin 0 -$widgetPadding 13px;
 		border-bottom: 1px solid #eee;
 
 		.elm-entry {
-			padding: 8px $widgetPadding;
-			box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.06);
+			padding: 8px 0;
+			border-bottom: 1px solid $entryBorderColor;
 			margin: 0;
 			position: relative;
+
+			.elm-entry-body, .elm-entry-context-container {
+				padding: 0 $widgetPadding;
+			}
+
+			&:last-of-type {
+				border-bottom: none;
+			}
 		}
 
 		.elm-entry:nth-child(2n+1) {
-			background-color: #f9f9f9;
+			background-color: $oddEntryBackground;
 		}
 
-		.elm-timestamp {
+		.elm-entry-metadata {
 			color: #72777c; //The same color as the timestamps in the activity widget.
-			//color: #666;
+
+			display: flex;
+			align-items: center;
+
 			margin-top: 0;
 			margin-bottom: 0;
 		}
@@ -66,51 +91,197 @@
 		}
 
 		.elm-log-message {
+			color: #23282d;
 			margin: 2px 0;
+			font-size: 14px;
 		}
 
-		//Stack trace display.
-		.elm-stacktrace {
-			margin-left: 1.5em;
-			margin-top: 1em;
-			margin-bottom: 1em;
+		.elm-severity-bubble {
+			//TODO: Could also try putting this right before the message, inline with it.
+			display: inline-block;
+			border-radius: 9.5px;
+			background: blue;
+			height: 12px;
+			width: 12px;
+
+			margin-right: 0.4em;
+		}
+
+		//Colored bubbles for different severity levels.
+		.elm-level-fatal-error, .elm-level-catchable-fatal-error, .elm-level-parse-error {
+			.elm-severity-bubble {
+				background: orangered;
+			}
+		}
+		.elm-level-warning {
+			.elm-severity-bubble {
+				background: orange;
+			}
+		}
+		.elm-level-notice, .elm-level-strict-standards, .elm-level-deprecated {
+			.elm-severity-bubble {
+				background: darkgrey;
+			}
 		}
 	}
 
-	.elm-chart {
-		position: relative;
-		clear: both;
+	.elm-entry-context-container {
+		//border-top: 1px solid $tableBorderColor;
+		//background: #ffffff;
+	}
 
-		width: 200px;
-		height: 50px;
-		line-height: 100%;
+	.elm-context-group {
+		margin-left: 1em;
+		margin-top: 1em;
+		margin-bottom: 1em;
 
-		border: 1px solid silver;
-		padding: 0;
+		border-top: 1px solid $entryBorderColor;
 
+		color: $contextBaseColor;
 
-		.elm-chart-point {
-			-webkit-box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			box-sizing: border-box;
+		h3 {
+			$headingSpacing: 8px;
+			margin: $headingSpacing 0;
+			//padding-top: $headingSpacing;
+		}
 
-			display: inline-block;
-			vertical-align: bottom;
-			
-			list-style-type: none;
-			margin: 0 1px 0 0;
-			padding: 0;
-			border-radius: 2px 2px 0 0;
+		.elm-stacktrace {
+			margin: 0;
+		}
+	}
 
-			background: #898989;
+	.elm-context-group-content {
+		box-sizing: border-box;
+		width: 100%;
 
-			&:hover {
-				background: #959595;
+		border: 1px solid #ddd;
+		border-radius: 3px;
+
+		&.elm-hide-mundane-items .elm-is-mundane {
+			display: none;
+		}
+	}
+
+	.elm-show-mundane-context {
+		color: $contextBaseColor;
+		//color: #666;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	table.elm-context-group-content {
+		border-spacing: 0;
+		$defaultRowBackground: white;
+
+		th, td {
+			padding: $contextBasePadding;
+			vertical-align: top;
+			border-top: 1px solid $tableBorderColor;
+		}
+
+		tr:first-child, &.elm-hide-mundane-items .elm-first-non-mundane-item {
+			td, th {
+				border-top: none;
 			}
 		}
 
-		.elm-chart-zero-point {
-			background: #bbbbbb;
+		tr {
+			background: $defaultRowBackground;
+		}
+
+		tr:nth-child(2n+1) {
+			background-color: $contextDarkBackground;
+		}
+
+		&.elm-hide-mundane-items {
+			tr {
+				background: $defaultRowBackground;
+			}
+			.elm-is-odd-visible-row {
+				background-color: $contextDarkBackground;
+			}
+		}
+	}
+
+	//Enhanced stack trace.
+	table.elm-stacktrace {
+		border: none;
+		table-layout: fixed;
+
+		tr:first-child td {
+			padding-top: 0;
+		}
+
+		.elm-stack-frame-content {
+
+		}
+
+		.elm-stack-frame-index {
+			padding-right: 0;
+			color: #777;
+			font-family: $codeFontFamily;
+			width: 1.7em;
+
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		.elm-function-call {
+			display: block;
+			font-family: $codeFontFamily;
+			overflow-x: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.elm-code-location {
+			display: block;
+			color: #777;
+		}
+
+		tr, td, th {
+			background: transparent !important;
+			border: none;
+			padding-bottom: 0;
+			overflow-wrap: break-word;
+			word-break: break-word;
+		}
+
+		tr > td:first-child {
+			padding-left: 0;
+		}
+	}
+
+	//"Upgrade to Pro" notices.
+	@mixin widget-footer {
+		margin: 10px (-$widgetPadding) (-$widgetPadding) (-$widgetPadding);
+		padding: 8px $widgetPadding 10px $widgetPadding;
+
+		background: #fafafa;
+		border-top: 1px solid #ddd;
+	}
+
+	.elm-upgrade-to-pro-footer {
+		@include widget-footer;
+		border-top-color: #eee;
+
+		p {
+			margin-top: 0;
+		}
+
+		.elm-upgrade-notice-links {
+			color: #bbb;
+		}
+	}
+
+	.elm-pro-features {
+		list-style: disc inside;
+	}
+
+	#elm-pro-version-settings-section {
+		@include widget-footer;
+		p {
+			margin-bottom: 0;
 		}
 	}
 }

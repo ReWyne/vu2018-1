@@ -6,7 +6,7 @@ class Elm_Plugin {
 	/**
 	 * @var scbOptions $settings Plugin settings.
 	 */
-	private $settings;
+	protected $settings;
 	private $emailCronJob = null;
 	private $pluginFile = '';
 
@@ -18,36 +18,7 @@ class Elm_Plugin {
 	public function __construct($pluginFile) {
 		$this->pluginFile = $pluginFile;
 
-		$this->settings = new scbOptions(
-			'ws_error_log_monitor_settings',
-			$pluginFile,
-			array(
-				'widget_line_count' => 20,
-				'strip_wordpress_path' => false,
-				'send_errors_to_email' => array(),
-				'email_line_count' => 100,
-				'email_interval' => 3600, //seconds
-				'email_last_line_timestamp' => 0,
-				'last_sent_email_timestamp' => 0,
-
-				'timestamp_format' => 'M d, H:i:s',
-				'sort_order' => 'chronological',
-				'extra_filter_line_count' => 1000,
-				'dashboard_log_layout' => 'list',
-
-				'enable_log_size_notification' => false,
-				'log_size_notification_threshold' => self::MB_IN_BYTES, //bytes
-				'log_size_check_interval' => 3600, //seconds,
-				'log_size_notification_sent' => false,
-
-				'dashboard_message_filter' => 'all',
-				'dashboard_message_filter_groups' => Elm_SeverityFilter::getAvailableOptions(),
-				'email_message_filter' => 'same_as_dashboard',
-				'email_message_filter_groups' => Elm_SeverityFilter::getAvailableOptions(),
-
-				'ignored_messages' => array(),
-			)
-		);
+		$this->settings = new Elm_Settings('ws_error_log_monitor_settings', $pluginFile, $this->getDefaultSettings());
 
 		if ( did_action('plugins_loaded') > 0 ) {
 			$this->loadTextDomain();
@@ -55,13 +26,16 @@ class Elm_Plugin {
 			add_action('plugins_loaded', array($this, 'loadTextDomain'));
 		}
 
-		Elm_DashboardWidget::getInstance($this->settings, $this);
+		$this->createDashboardWidget();
 		add_action('elm_settings_changed', array($this, 'updateEmailSchedule'));
 
 		$this->emailCronJob = new scbCron(
 			$pluginFile,
 			array(
-				'interval' => $this->settings->get('email_interval'),
+				'interval' => min(
+					$this->settings->get('email_interval'),
+					$this->settings->get('email_log_check_interval')
+				),
 				'callback' => array($this, 'emailErrors'),
 			)
 		);
@@ -75,8 +49,47 @@ class Elm_Plugin {
 		);
 	}
 
+	protected function getDefaultSettings() {
+		return array(
+			'widget_line_count' => 20,
+			'strip_wordpress_path' => false,
+			'send_errors_to_email' => array(),
+			'email_line_count' => 100,
+			'email_interval' => 3600, //seconds
+			'email_log_check_interval' => 3600,
+
+			'last_sent_email_timestamp' => 0,
+			//The end of the time interval that was covered by the last notification email.
+			'last_email_log_interval_end' => null,
+			'email_last_line_timestamp' => 0, //Superseded by last_email_log_interval_end.
+
+			'timestamp_format' => 'M d, H:i:s',
+			'sort_order' => 'chronological',
+			'extra_filter_line_count' => 1000,
+			'dashboard_log_layout' => 'list',
+
+			'enable_log_size_notification' => false,
+			'log_size_notification_threshold' => self::MB_IN_BYTES, //bytes
+			'log_size_check_interval' => 3600, //seconds,
+			'log_size_notification_sent' => false,
+
+			'dashboard_message_filter' => 'all',
+			'dashboard_message_filter_groups' => Elm_SeverityFilter::getAvailableOptions(),
+			'email_message_filter' => 'same_as_dashboard',
+			'email_message_filter_groups' => Elm_SeverityFilter::getAvailableOptions(),
+
+			'ignored_messages' => array(),
+
+			'enable_premium_notice' => true,
+		);
+	}
+
 	public function loadTextDomain() {
 		load_plugin_textdomain('error-log-monitor', false, basename(dirname($this->pluginFile)));
+	}
+
+	protected function createDashboardWidget() {
+		Elm_DashboardWidget::getInstance($this->settings, $this);
 	}
 
 	/**
@@ -110,13 +123,6 @@ class Elm_Plugin {
 		//which are either intentional (making "/wp-content/uploads" non-writable) or not easily fixed by the user.
 		//It's better to occasionally send multiple email notifications than to never send any.
 
-		$log = Elm_PhpErrorLog::autodetect();
-		if ( is_wp_error($log) ) {
-			trigger_error('Error log not detected', E_USER_WARNING);
-			$lock->release();
-			return;
-		}
-
 		//Make sure emails are sent no more than once every email_interval seconds.
 		$timeSinceLastEmail = time() - $this->settings->get('last_sent_email_timestamp');
 		$desiredInterval = $this->settings->get('email_interval');
@@ -127,12 +133,49 @@ class Elm_Plugin {
 			return;
 		}
 
+		$intervalStart = $this->settings->get(
+			'last_email_log_interval_end',
+			$this->settings->get('email_last_line_timestamp', 0)
+		);
+
+		$notification = $this->prepareEmailNotification($intervalStart);
+		if ( empty($notification) ) {
+			$lock->release();
+			return;
+		}
+
+		$subject = sprintf(
+			__('PHP errors logged on %s', 'error-log-monitor'),
+			site_url()
+		);
+		$body = $notification['body'];
+
+		if ( wp_mail($this->settings->get('send_errors_to_email'), $subject, $body) ) {
+			$this->settings->set('last_email_log_interval_end', $notification['intervalEnd']);
+			$this->settings->set('last_sent_email_timestamp', time());
+		} else{
+			trigger_error('Failed to send an email, wp_mail() returned FALSE', E_USER_WARNING);
+		}
+
+		$lock->release();
+	}
+
+	protected function prepareEmailNotification($intervalStart) {
+		return $this->prepareNewEntriesNotification($intervalStart);
+	}
+
+	protected function prepareNewEntriesNotification($intervalStart) {
+		$log = Elm_PhpErrorLog::autodetect();
+		if ( is_wp_error($log) ) {
+			trigger_error('Error log not detected', E_USER_WARNING);
+			return null;
+		}
+
 		$filteredLog = $this->getEmailEntries($log);
 
 		if ( is_wp_error($filteredLog) ) {
 			trigger_error('Error log is not accessible', E_USER_WARNING);
-			$lock->release();
-			return;
+			return null;
 		}
 
 		$lines = $filteredLog->readLastEntries($this->settings->get('email_line_count'));
@@ -140,12 +183,10 @@ class Elm_Plugin {
 		//Only include messages logged since the previous email.
 		$logEntries = array();
 		$foundNewMessages = false;
-
-		$lastEmailTimestamp = $this->settings->get('email_last_line_timestamp');
 		$lastEntryTimestamp = time(); //Fall-back value in case none of the new entries have a timestamp.
 
-		foreach($lines as $line) {
-			$foundNewMessages = $foundNewMessages || ($line['timestamp'] > $lastEmailTimestamp);
+		foreach ($lines as $line) {
+			$foundNewMessages = $foundNewMessages || ($line['timestamp'] > $intervalStart);
 			if ( $foundNewMessages ) {
 				$logEntries[] = $line;
 			}
@@ -154,54 +195,77 @@ class Elm_Plugin {
 			}
 		}
 
-		if ( !empty($logEntries) ) {
-			$subject = sprintf(
-				__('PHP errors logged on %s', 'error-log-monitor'),
-				site_url()
-			);
-			$body = sprintf(
-				/* translators: 1: Site URL, 2: Number of log entries, 3: Log file name */
-				__("New PHP errors have been logged on %1\$s\nHere are the last %2\$d entries from %3\$s:\n\n", 'error-log-monitor'),
-				site_url(),
-				count($logEntries),
-				$log->getFilename()
-			);
+		if ( empty($logEntries) ) {
+			return null;
+		}
 
-			if ($this->settings->get('sort_order') === 'reverse-chronological') {
-				$logEntries = array_reverse($logEntries);
+		$body = sprintf(
+		/* translators: 1: Site URL, 2: Number of log entries, 3: Log file name */
+			__("New PHP errors have been logged on %1\$s\nHere are the last %2\$d entries from %3\$s:\n\n", 'error-log-monitor'),
+			site_url(),
+			count($logEntries),
+			$log->getFilename()
+		);
+
+		if ( $this->settings->get('sort_order') === 'reverse-chronological' ) {
+			$logEntries = array_reverse($logEntries);
+		}
+
+		$stripWordPressPath = $this->settings->get('strip_wordpress_path');
+		foreach ($logEntries as $logEntry) {
+			if ( $stripWordPressPath ) {
+				$logEntry['message'] = $this->stripWpPath($logEntry['message']);
 			}
-
-			$stripWordPressPath = $this->settings->get('strip_wordpress_path');
-			foreach($logEntries as $logEntry) {
-				if ( $stripWordPressPath ) {
-					$logEntry['message'] = $this->stripWpPath($logEntry['message']);
-				}
-				if ( !empty($logEntry['timestamp']) ) {
-					$body .= '[' . $this->formatTimestamp($logEntry['timestamp']). '] ';
-				}
-				$body .= $logEntry['message'] . "\n";
-
-				//Include the stack trace. Note how this doesn't count towards the line limit.
-				if ( !empty($logEntry['stacktrace']) ) {
-					foreach($logEntry['stacktrace'] as $traceItem) {
-						$body .= "\t" . $traceItem . "\n";
-					}
-				}
+			if ( !empty($logEntry['timestamp']) ) {
+				$body .= '[' . $this->formatTimestamp($logEntry['timestamp']) . '] ';
 			}
+			$body .= $logEntry['message'] . "\n";
 
-			if ( $filteredLog->getSkippedEntryCount() > 0 ) {
-				$body .= "\n\n" . $filteredLog->formatSkippedEntryCount() . "\n\n";
-			}
-
-			if ( wp_mail($this->settings->get('send_errors_to_email'), $subject, $body) ) {
-				$this->settings->set('email_last_line_timestamp', $lastEntryTimestamp);
-				$this->settings->set('last_sent_email_timestamp', time());
-			} else{
-				trigger_error('Failed to send an email, wp_mail() returned FALSE', E_USER_WARNING);
+			//Include the stack trace. Note how this doesn't count towards the line limit.
+			if ( !empty($logEntry['stacktrace']) ) {
+				foreach ($logEntry['stacktrace'] as $traceItem) {
+					$body .= "\t" . self::getStackTraceItemText($traceItem) . "\n";
+				}
 			}
 		}
 
-		$lock->release();
+		if ( $filteredLog->getSkippedEntryCount() > 0 ) {
+			$body .= "\n\n" . $filteredLog->formatSkippedEntryCount() . "\n\n";
+		}
+
+		return array(
+			'body'        => $body,
+			'intervalEnd' => $lastEntryTimestamp,
+		);
+	}
+
+	/**
+	 * Get the plain text representation of a stack trace item.
+	 *
+	 * @param string|array $traceItem
+	 * @return string
+	 */
+	public static function getStackTraceItemText($traceItem) {
+		if ( is_string($traceItem) ) {
+			return $traceItem;
+		}
+
+		$text = '';
+		if ( isset($traceItem['call']) ) {
+			$text .= $traceItem['call'];
+		}
+
+		if ( isset($traceItem['file']) ) {
+			if ( isset($traceItem['call']) ) {
+				$text .= ' ';
+			}
+			$text .= $traceItem['file'];
+			if ( isset($traceItem['line']) ) {
+				$text .= ':' . $traceItem['line'];
+			}
+		}
+
+		return $text;
 	}
 
 	/**
@@ -236,8 +300,11 @@ class Elm_Plugin {
 	 * @param int $desiredEntryCount
 	 * @return Elm_SeverityFilter|WP_Error
 	 */
-	private function getFilteredEntries(Elm_PhpErrorLog $log, $includedGroups, $desiredEntryCount) {
-		$maxLinesToRead = $desiredEntryCount + $this->settings->get('extra_filter_line_count');
+	protected function getFilteredEntries(Elm_PhpErrorLog $log, $includedGroups, $desiredEntryCount) {
+		$maxLinesToRead = $desiredEntryCount;
+		if ( $maxLinesToRead !== null ) {
+			$maxLinesToRead = $desiredEntryCount + $this->settings->get('extra_filter_line_count');
+		}
 
 		$logIterator = $log->getIterator($maxLinesToRead);
 		if ( is_wp_error($logIterator) ) {
@@ -250,7 +317,7 @@ class Elm_Plugin {
 		return $filteredLog;
 	}
 
-	private function getIncludedGroupsForDashboard() {
+	public function getIncludedGroupsForDashboard() {
 		if ( $this->settings->get('dashboard_message_filter') === 'all' ) {
 			return Elm_SeverityFilter::getAvailableOptions();
 		} else {
@@ -258,7 +325,7 @@ class Elm_Plugin {
 		}
 	}
 
-	private function getIncludedGroupsForEmail() {
+	protected function getIncludedGroupsForEmail() {
 		if ( $this->settings->get('email_message_filter') === 'same_as_dashboard' ) {
 			return $this->getIncludedGroupsForDashboard();
 		} else {
@@ -266,17 +333,9 @@ class Elm_Plugin {
 		}
 	}
 
-	/**
-	 * @param Elm_PhpErrorLog $log
-	 * @return Elm_SummaryItem[]
-	 */
-	public function getSummary(Elm_PhpErrorLog $log) {
-		$entries = $this->getFilteredEntries($log, $this->getIncludedGroupsForDashboard(), 10000);
-
-		$generator = new Elm_SummaryGenerator($entries, 7 * 24 * 3600, 7 * 4);
-		$summary = $generator->getSummary();
-
-		return $summary;
+	public function updateLogSummary() {
+		//Not implemented.
+		return array();
 	}
 
 	public function stripWpPath($string) {
@@ -294,12 +353,23 @@ class Elm_Plugin {
 	 * Format a log message for display. Does not escape special characters.
 	 *
 	 * @param string $message
+	 * @param null $level
 	 * @return string
 	 */
-	public function formatLogMessage($message) {
+	public function formatLogMessage($message, $level = null) {
 		if ( $this->settings->get('strip_wordpress_path') ) {
 			$message = $this->stripWpPath($message);
 		}
+
+		//Remove the "PHP" prefix from known severity levels.
+		static $removablePrefix = 'PHP ';
+		if ( $level !== null ) {
+			$levelPrefix = $removablePrefix . $level;
+			if ( strcasecmp(substr($message, 0, strlen($levelPrefix)), $levelPrefix) === 0 ) {
+				$message = substr($message, strlen($removablePrefix));
+			}
+		}
+
 		return $message;
 	}
 
@@ -368,5 +438,21 @@ class Elm_Plugin {
 
 	public function getPluginFile() {
 		return $this->pluginFile;
+	}
+
+	public function getRemainingMemory() {
+		if ( !function_exists('wp_convert_hr_to_bytes') ) {
+			return null;
+		}
+
+		$currentLimit = @ini_get('memory_limit');
+		$currentLimitBytes = wp_convert_hr_to_bytes($currentLimit);
+
+		if ( $currentLimitBytes === -1 ) {
+			return null;
+		}
+
+		$remainingBytes = $currentLimitBytes - memory_get_usage();
+		return max(0, $remainingBytes);
 	}
 }

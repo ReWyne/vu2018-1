@@ -2,8 +2,8 @@
 Contributors: whiteshadow
 Tags: dashboard widget, administration, error reporting, admin, maintenance, php
 Requires at least: 4.5
-Tested up to: 4.9.4
-Stable tag: 1.5.7
+Tested up to: 4.9
+Stable tag: 1.6.1
 
 Adds a Dashboard widget that displays the latest messages from your PHP error log. It can also send logged errors to email.
 
@@ -45,6 +45,20 @@ Follow these steps to install the plugin on your site:
 2. Dashboard widget configuration screen.
 
 == Changelog ==
+
+= 1.6.1 =
+* Fixed the "upgrade" link being broken in certain configurations.
+
+= 1.6 =
+* Added a colored dot showing the severity level to each error message. Fatal errors are red, warnings are orange, notices and strict-standards messages are grey, and custom or unrecognized messages are blue.
+* Added a new setting for email notifications: "how often to check the log for new messages". 
+* Added a notice explaining how to configure WordPress to log all types of errors (including PHP notices) instead of just fatal errors and warnings.
+* Added Freemius integration.
+* Added a link to the Pro version to bottom of the widget.
+* Improved parsing of multi-line log entries. Now the plugin will show all of the lines as part of the same message instead of treating every line as an entirely separate error.
+* Improved stack trace formatting.
+* In Multisite, the dashboard widget now also shows up in the network admin dashboard.
+* Changed permissions so that only Super Admins can change plugin settings or clear the log file. Regular administrators can still see the widget.
 
 = 1.5.7 =
 * The widget now displays log timestamps in local time instead of UTC.
