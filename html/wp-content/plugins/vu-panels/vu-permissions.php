@@ -134,7 +134,7 @@ function vu_term_exists($term, $taxonomy){
  */
 add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 function vu_selectively_enqueue_admin_scripts( $hook ) {
-   vu_dbg('admin_enqueue_scripts');
+	if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('admin_enqueue_scripts');
 	if ( 'users.php' != $hook && 'profile.php' != $hook ) {
 		if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("vu_selectively_enqueue_admin_scripts for hook $hook failed ");
         return;
