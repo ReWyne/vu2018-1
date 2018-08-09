@@ -38,8 +38,6 @@ include_once dirname( __FILE__ ) . '/vu-permissions.php';
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-user.php';
 include_once dirname( __FILE__ ) . '/vu-alter-user-group.php';
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-post.php';
-vu_dbg("test dbg msg");
-
 // Link post type
 // Just like regular posts except they also have the link_url_value metavalue
 class vu_link_post_type {
