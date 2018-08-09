@@ -1,52 +1,34 @@
-- setup server
-- setup apache
-to install mcrypt:
-	# Install prerequisites
-	sudo apt-get install php-dev libmcrypt-dev gcc make autoconf libc-dev pkg-config
-
-	# Compile mcrypt extension
-	sudo pecl install mcrypt-1.0.1
-	# Just press enter when it asks about libmcrypt prefix
-
-	# Enable extension for apache
-	echo "extension=mcrypt.so" | sudo tee -a /etc/php/7.2/apache2/conf.d/mcrypt.ini
-
-	# Restart apache
-	sudo service apache2 restart
-
-
-sudo apt-get update
-sudo apt-get install tasksel
-sudo tasksel install lamp-server
-
-- setup mysql
-- migrate files
+- Follow the tutorial: https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04
+- Follow the tutorial: https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04
+	- If you're feeling adventurous, you can try running these commands instead of following the tutorial:
+		- sudo apt-get update
+		- sudo apt-get install tasksel
+		- sudo tasksel install lamp-server
+		- # this worked fine for me, but if it doesn't for you you'll have to go back and do things right.
+	- # NOTE that when `sudo apt-get install php libapache2-mod-php php-mcrypt php-mysql` fails at php-mcrypt, php-mysql will not install. Be sure to re-run this command with php-mcrypt removed.
+	- to install mcrypt:
+		- # Install prerequisites
+			- sudo apt-get install php-dev libmcrypt-dev gcc make autoconf libc-dev pkg-config
+		- # Compile mcrypt extension
+			- sudo pecl install mcrypt-1.0.1
+			- # Just press enter when it asks about libmcrypt prefix
+		- # Enable extension for apache
+			- echo "extension=mcrypt.so" | sudo tee -a /etc/php/7.2/apache2/conf.d/mcrypt.ini
+		- # Restart apache
+			- sudo service apache2 restart
+- clone the wordpress folder form svn into /var/www/html/ (wp-content should be top level within this folder)
+- Follow step one of the tutorial: https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-on-ubuntu-14-04
+- Modify config.php to connect to your database according to step 3 of the above tutorial
+- fix file/directory permissions, if you broke them
+	- sudo find . -type d -exec chmod 775 {} \;
+	- sudo find . -type f -exec chmod 664 {} \;
+	- sudo chown -R :www-data /var/www/html/wp-content/themes
+	- sudo chown -R :www-data /var/www/html/wp-content/plugins
 - setup wordpress
-	- Enable all plugins
+	- Enable (at minimum) the following plugins:
+		- VU Panels
+		- WP PHP Console
+		- WPS Hide Login
+		- Remove Dashboard Access
 	- Go to Admin Panel > Settings > Dashboard Access. Set Advanced: Limit by capability: **edit_others_posts**
 	- (optional) Go to Admin Panel > Settings > WPS Hide Login. Set Login url to whatever you want the login page to be.
-
-- fix file/directory permissions, if you broke them
-sudo find . -type d -exec chmod 775 {} \;
-sudo find . -type f -exec chmod 664 {} \;
-sudo chown -R :www-data /var/www/html/wp-content/themes
-sudo chown -R :www-data /var/www/html/wp-content/plugins
-
-
-
-
-
-
-
-
-~~[jk we're not doing this; too much trouble]
-setup js stuff
-	sudo curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-	sudo nvm install node
-		sudo nvm use node
-	sudo apt install npm
-	sudo npm install -g npm@latest
-	sudo npm install --global gulp-cli
-	sudo npm install -g browser-sync
-	cd wp-content/themes/understrap
-	sudo npm install~~
