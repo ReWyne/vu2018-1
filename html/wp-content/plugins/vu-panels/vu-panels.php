@@ -224,6 +224,10 @@ function vu_custom_admin_css(){
     -o-user-select: none;
     user-select: none;
     pointer-events: none;
+    background-color: transparent;
+    zoom: 1;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
   }
 
   .log-entry.message{
