@@ -97,7 +97,7 @@ function print_to_ug_column_in_listing( $column_id, $post_id ) {
         if( $column_id == VU_UG_COLUMN_KEY ){
             $user_groups = vu_get_real_terms($post_id, $taxonomy);
             // Get and insert our user groups (there should only be one, tho)
-            if ( is_array($user_groups) ) {
+            if ( is_array($user_groups) ) { 
                 foreach( $user_groups as $key => $ug ) {
                     $edit_link = get_term_link($ug, $taxonomy);
                     $user_groups[$key] = '<a href="'.$edit_link.'">' . $ug->name . '</a>';
