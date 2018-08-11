@@ -20,6 +20,7 @@ function vu_display_by_user_group_filter() {
     if ( $typenow == 'post' || $typenow == 'link' ) {
         $taxonomy = VU_USER_GROUP;
         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
+        vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
         wp_dropdown_categories(array(
             'show_option_all' =>  __("Show All {$vu_ug_taxonomy->label}"),
             'taxonomy'        =>  $taxonomy,
