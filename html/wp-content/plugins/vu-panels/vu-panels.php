@@ -205,6 +205,7 @@ add_filter( 'body_class', 'category_id_class',10,2 );
  */
 add_action('admin_head', 'vu_custom_admin_css');
 function vu_custom_admin_css(){
+  vu_dbg("vu_custom_admin_css");
   echo ' 
 <style>
   span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
