@@ -8,6 +8,19 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 define('VU_UG_COLUMN_KEY', 'user_groups');
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * Add the User Group dropdown, for filtering displayed posts to a particular user group, to edit.php
  * @param  none
@@ -22,14 +35,14 @@ function vu_display_by_user_group_filter() {
         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
         vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
         wp_dropdown_categories(array(
-            'show_option_all' =>  __("Show All {$vu_ug_taxonomy->label}"),
+            'show_option_all' =>  __("Show All User Groups"), // or {$vu_ug_taxonomy->label}
             'taxonomy'        =>  $taxonomy,
             'name'            =>  'vu_user_group',
             'orderby'         =>  'name',
             //'selected'        =>  $wp_query->query['term'], // allows vu-fbug dropdown to show current term
             'hierarchical'    =>  false,
-            'show_count'      =>  false, // Don't show # user groups in parens
-            'hide_empty'      =>  true, // Hide posts w/o user groups
+            'show_count'      =>  false, // If true, show # user groups in parens
+            'hide_empty'      =>  false, // If true, hide posts w/o user groups
         ));
     }
 }
@@ -39,7 +52,7 @@ function vu_display_by_user_group_filter() {
  * @param  none
  * @return none
  */
-add_filter( 'parse_query','convert_id_to_taxonomy_term_in_query' );
+add_filter( 'parse_query', 'convert_id_to_taxonomy_term_in_query' );
 function convert_id_to_taxonomy_term_in_query( $query ) {
     global $pagenow; global $typenow; //actually needs pagenow
     $qv = &$query->query_vars;
@@ -62,8 +75,8 @@ function convert_id_to_taxonomy_term_in_query( $query ) {
  * @param  none
  * @return none
  */
-add_action( 'manage_post_posts_columns', 'display_ug_column_in_listing' );
-add_action( 'manage_link_posts_columns', 'display_ug_column_in_listing' );
+add_filter( 'manage_posts_columns', 'display_ug_column_in_listing' );
+add_filter( 'manage_link_posts_columns', 'display_ug_column_in_listing' );
 function display_ug_column_in_listing( $posts_columns ) {
     // Insert the new User Group column after the Author column
     global $pagenow; global $typenow;
@@ -89,16 +102,16 @@ function display_ug_column_in_listing( $posts_columns ) {
  * @param  none
  * @return none
  */
-add_action('manage_post_custom_column', 'print_to_ug_column_in_listing',10,2);
-add_action('manage_link_custom_column', 'print_to_ug_column_in_listing',10,2);
-function print_to_ug_column_in_listing( $column_id, $post_id ) {
+add_action('manage_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
+add_action('manage_link_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
+function print_to_ug_column_in_listing( $column_name, $post_id ) {
     global $pagenow; global $typenow; //actually needs typenow
     vu_dbg('print_to_ug_column_in_listing', $pagenow, $typenow);
     if ( in_array($typenow, ['post', 'link']) ) {
         $taxonomy = VU_USER_GROUP;
         // Find our custom column
-        // Example more advanced formatting: switch ( "{$typenow}:{$column_id}" ) { case 'link:vu_user_group': ...
-        if( $column_id == VU_UG_COLUMN_KEY ){
+        // Example more advanced formatting: switch ( "{$typenow}:{$column_name}" ) { case 'link:vu_user_group': ...
+        if( $column_name == VU_UG_COLUMN_KEY ){
             $user_groups = vu_get_real_terms($post_id, $taxonomy);
             // Get and insert our user groups (there should only be one, tho)
             if ( is_array($user_groups) ) { 
