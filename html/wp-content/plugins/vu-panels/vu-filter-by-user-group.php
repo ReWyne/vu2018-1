@@ -8,31 +8,31 @@ defined( 'ABSPATH' ) or die(); //exit if accessed directly
 
 define('VU_UG_COLUMN_KEY', 'user_groups');
 
-/**
- * Add the User Group dropdown, for filtering displayed posts to a particular user group, to edit.php
- * @param  none
- * @return none
- */
-add_action( 'restrict_manage_posts', 'vu_display_by_user_group_filter' );
-function vu_display_by_user_group_filter() {
-    global $typenow;
-    global $wp_query;
-    if ( $typenow == 'post' || $typenow == 'link' ) {
-        $taxonomy = VU_USER_GROUP;
-        $vu_ug_taxonomy = get_taxonomy( $taxonomy );
-        vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
-        wp_dropdown_categories(array(
-            'show_option_all' =>  __("Show All {$vu_ug_taxonomy->label}"),
-            'taxonomy'        =>  $taxonomy,
-            'name'            =>  'vu_user_group',
-            'orderby'         =>  'name',
-            //'selected'        =>  $wp_query->query['term'], // allows vu-fbug dropdown to show current term
-            'hierarchical'    =>  false,
-            'show_count'      =>  false, // Don't show # user groups in parens
-            'hide_empty'      =>  true, // Hide posts w/o user groups
-        ));
-    }
-}
+// /**
+//  * Add the User Group dropdown, for filtering displayed posts to a particular user group, to edit.php
+//  * @param  none
+//  * @return none
+//  */
+// add_action( 'restrict_manage_posts', 'vu_display_by_user_group_filter' );
+// function vu_display_by_user_group_filter() {
+//     global $typenow;
+//     global $wp_query;
+//     if ( $typenow == 'post' || $typenow == 'link' ) {
+//         $taxonomy = VU_USER_GROUP;
+//         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
+//         vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
+//         wp_dropdown_categories(array(
+//             'show_option_all' =>  __("Show All {$vu_ug_taxonomy->label}"),
+//             'taxonomy'        =>  $taxonomy,
+//             'name'            =>  'vu_user_group',
+//             'orderby'         =>  'name',
+//             //'selected'        =>  $wp_query->query['term'], // allows vu-fbug dropdown to show current term
+//             'hierarchical'    =>  false,
+//             'show_count'      =>  false, // Don't show # user groups in parens
+//             'hide_empty'      =>  true, // Hide posts w/o user groups
+//         ));
+//     }
+// }
 
 // /**
 //  * Add the User Group dropdown, for filtering displayed posts to a particular user group, to edit.php
