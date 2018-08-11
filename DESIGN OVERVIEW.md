@@ -20,9 +20,10 @@ The site's display is handled by the **vu_custom_portal** theme.
         - Several debugging-related globals are defined at the top of the file.
         - The most useful functions provided are: vu_dbg(), vu_is_custom_post_type(), vu_terms_array_to_set(),  vu_get_set_intersection(), vu_get_real_object_terms(), and vu_get_real_terms()
 - `vu-panels.php`
-    - **Description:** The first file called in the plugin. Defines various constants, initalizes the link custom post type and adds a few functions that affect to that custom post type:
+    - **Description:** The first file called in the plugin. Defines various constants, initalizes the link custom post type, adds a bit of custom css, and adds a few functions that affect to that custom post type:
         - **vu_mark_CPTs()** and **category_id_class()** add some additional classes to our posts, for frontend display purposess.
         - **vu_generate_link_posts()** replaces the posts which are usually printed to the website's front page with the link custom post type.
+        - **vu_custom_admin_css** adds css that, along with a few other minor changes, makes the Role select in users' profile pages unselectable.
     - **Notes:** Primary debugging-related globals are also set here. As the name suggests, vu_mark_CPTs() only affects custom post types, while category_id_class() affects all post types.
 - `js/vu-admin-scripts.js`
     - **Description:** Contains custom javascript functions used by the admin panel. 

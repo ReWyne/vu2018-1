@@ -1216,28 +1216,5 @@ body:before {
   }/*
 
 /*--------------------------------------------------------------
-# ADMIN PAGE STUFF
+# ADMIN PAGE STUFF ***see vu-panels/vu-panels.php -> vu_custom_admin_css
 --------------------------------------------------------------*/
-
-span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
-	font-family: monospace; 
-	color: red; 
-	white-space: pre;
-}
-
-/* role should be selected via user groups, not manually */
-select#role{
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;      
-	display: none;    
-}
-
-/*--------------------------------------------------------------
-# DEBUGGER TWEAK
---------------------------------------------------------------*/
-.log-entry.message{
-	font-family: monospace; 
-	white-space: pre;
-}

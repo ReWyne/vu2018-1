@@ -43,20 +43,24 @@ include_once dirname( __FILE__ ) . '/vu-change-groups-for-post.php';
 class vu_link_post_type {
 
   function __construct() {
-    add_action( 'init', array($this, 'register_link_post_type')); //TODO: find way to make this run once and still work? register_activation_hook method didn't work
-    add_action( 'add_meta_boxes_link', array($this,'add_link_custom_fields' )); //calls the function in this class
+    add_action( 'init', array($this, 'register_link_post_type')); //calls the function in this class
+    add_action( 'add_meta_boxes_link', array($this,'add_link_custom_fields' ));
     add_action( 'save_post', array($this,'save_link_url'));
   }
 
-  /*static*/ function register_link_post_type() {
-    if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("register_link_post_type");}
+  /**
+   * Registers the link post type
+   * @return void
+   */
+  function register_link_post_type() {
+    if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("register_link_post_type");
 
     register_post_type( 'link',
       array(
         'labels' => array(
           'name'               => _x( 'Links', 'link plural', 'vu-panels' ),
           'singular_name'      => _x( 'Link', 'link singular' ),
-          //'add_new'            => __( 'Add New Link', 'vu-panels' ),
+          //'add_new'            => __( 'Add New Link', 'vu-panels' ), //should be depreciated
           'add_new_item'       => __( 'Add New Link', 'vu-panels' ),
           'edit_item'          => __( 'Edit Link', 'vu-panels' ),
           'new_item'           => __( 'New Link', 'vu-panels' ),
@@ -72,12 +76,15 @@ class vu_link_post_type {
         'register_meta_box_cb' => array($this,'add_link_custom_fields'), //would use $this if func weren't static
         'supports' => array( 'title', 'editor', 'thumbnail' ),
         'taxonomies' => array('post_tag', 'category'),
-        //'menu_icon' => 'dashicons-editor-unlink',
+        //'menu_icon' => 'dashicons-editor-unlink', //uncomment if you want a different symbol for links than exists for posts
       )
     );
   }
 
-  //Callback from register_post_type
+  /**
+   * Callback from register_post_type
+   * @return void
+   */
   function add_link_custom_fields() {
     if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("add_link_custom_fields");}
 
@@ -85,7 +92,10 @@ class vu_link_post_type {
     add_meta_box( 'link_meta_id', __('Link URL'), array($this, 'links_url_custom_field_display'), 'link', 'normal', 'high' );
   }
 
-  //Display the contents of the custom meta box
+/**
+ * Display the contents of the custom meta box
+ * @return void
+ */
   function links_url_custom_field_display(){
     if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("links_url_custom_field_display");}
 
@@ -97,7 +107,11 @@ class vu_link_post_type {
     echo '<input type="text" id="link_url_field" name="link_url_value" value="' . esc_url( $value ) . '" size="60" />';
   }
 
-  //Save the meta value entered
+/**
+ * Save the meta value entered
+ * @param  int|string $post_id
+ * @return int|void $post_id (on failure)
+ */
   function save_link_url( $post_id ) {
     if(VU_RESTRICT_DEBUG_LEVEL(2)){vu_dbg("save_link_url \$post_id ", $post_id);}
 
@@ -126,10 +140,13 @@ class vu_link_post_type {
 
 }
 
-//register_activation_hook( __FILE__, array('vu_link_post_type', 'register_link_post_type') );
-$link_post_type = new vu_link_post_type();
+$link_post_type = new vu_link_post_type(); // Doesn't work because CPTs must be registered each page load:   register_activation_hook( __FILE__, array('vu_link_post_type', 'register_link_post_type') );
 
-// add links custom post type to the front page main loop via hooks
+/**
+ * Add links custom post type to the front page main loop via hooks
+ * @param  object $query (WP::Query)
+ * @return void
+ */
 add_action( 'pre_get_posts', 'vu_generate_link_posts' );
 function vu_generate_link_posts( $query ) {
   if(VU_RESTRICT_DEBUG_LEVEL(1)){vu_dbg("vu_generate_link_posts \$query", $query);}
@@ -139,7 +156,11 @@ function vu_generate_link_posts( $query ) {
     }
 }
 
-//add general class AND the post's vu_user_group term for all our custom post types
+/**
+ * Add general class AND the post's vu_user_group term for all our custom post types
+ * @param  array $classes
+ * @return array $classes
+ */
 function vu_mark_CPTs($classes){
   global $post; 
   if(VU_RESTRICT_DEBUG_LEVEL(1))vu_dbg('vu_mark_CPTs $classes', $classes, $post);
@@ -156,7 +177,13 @@ function vu_mark_CPTs($classes){
 }
 add_filter('post_class', 'vu_mark_CPTs');
 
-// add category nicenames in body and post class for all posts
+/**
+ * Add category nicenames in body and post class for all posts
+ * @param  array $classes
+ * @param  string $class
+ * @param  int|string $post_id
+ * @return array $classes
+ */
 function category_id_class( $classes, $class, $post_id = NULL ) {
   if($post_id === NULL){
     if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('Notice: $post_id was NULL! Context... ',debug_backtrace());
@@ -170,4 +197,36 @@ function category_id_class( $classes, $class, $post_id = NULL ) {
 	return $classes;
 }
 add_filter( 'post_class', 'category_id_class',10,3 );
-add_filter( 'body_class', 'category_id_class',10,2 ); //
+add_filter( 'body_class', 'category_id_class',10,2 );
+
+/**
+ * Injects css to make the Role select in the user profile page unselectable
+ * @return void
+ */
+add_action('admin_head', 'vu_custom_admin_css');
+function vu_custom_admin_css(){
+  echo ' 
+<style>
+  span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
+    font-family: monospace; 
+    color: red; 
+    white-space: pre;
+  }
+
+  /* role should be selected via user groups, not manually */
+  select#role{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  }
+
+  .log-entry.message{
+    font-family: monospace; 
+    white-space: pre;
+  }
+</style>';
+}

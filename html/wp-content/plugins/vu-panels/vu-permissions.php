@@ -311,6 +311,7 @@ function vu_post_group_access_handler() {
  * @param  none
  * @return none
  */
+// IMPORTANT: If you want to create a WP::Query object within this action, you need to call remove_action( 'pre_get_posts', __FUNCTION__ ); at the beginning of the function to avoid an infinite loop
 if(is_admin()){ //only filter posts in the query if this is done in the admin panel
     add_action('pre_get_posts', 'custom_post_listing');
 }
