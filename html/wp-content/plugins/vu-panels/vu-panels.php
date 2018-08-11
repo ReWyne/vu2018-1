@@ -214,7 +214,6 @@ function vu_custom_admin_css(){
     white-space: pre;
   }
 
-  /* role should be selected via user groups, not manually */
   select#role{
     -webkit-touch-callout: none;
     -webkit-user-select: none;
