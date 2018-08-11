@@ -26,7 +26,7 @@ function vu_display_by_user_group_filter() {
             'taxonomy'        =>  $taxonomy,
             'name'            =>  'vu_user_group',
             'orderby'         =>  'name',
-            'selected'        =>  $wp_query->query['term'], // allows vu-fbug dropdown to show current term
+            //'selected'        =>  $wp_query->query['term'], // allows vu-fbug dropdown to show current term
             'hierarchical'    =>  false,
             'show_count'      =>  false, // Don't show # user groups in parens
             'hide_empty'      =>  false, // Show posts w/o user groups
