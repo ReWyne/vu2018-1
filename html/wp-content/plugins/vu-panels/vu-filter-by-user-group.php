@@ -42,8 +42,8 @@ function vu_display_by_user_group_filter() {
 add_filter( 'parse_query','convert_id_to_taxonomy_term_in_query' );
 function convert_id_to_taxonomy_term_in_query( $query ) {
     global $pagenow; global $typenow; //actually needs pagenow
-    if(VU_RESTRICT_DEBUG_LEVEL(3)) vu_dbg('convert_id_to_taxonomy_term_in_query', $pagenow, $typenow);
     $qv = &$query->query_vars;
+    if(VU_RESTRICT_DEBUG_LEVEL(3)) vu_dbg('convert_id_to_taxonomy_term_in_query', $pagenow, $typenow, $qv);
     // If this is the query we're looking for
     if ( $pagenow=='edit.php' &&
         isset( $qv['taxonomy'] ) && $qv['taxonomy'] == VU_USER_GROUP) {
