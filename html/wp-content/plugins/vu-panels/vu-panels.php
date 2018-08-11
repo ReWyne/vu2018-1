@@ -34,10 +34,12 @@ function VU_RESTRICT_DEBUG_LEVEL($level){ global $vu_panels_vars; if(IS_WP_DEBUG
 include_once dirname( __FILE__ ) . '/vu-util.php';
 include_once dirname( __FILE__ ) . '/vu-db.php';
 include_once dirname( __FILE__ ) . '/vu-permissions.php'; 
-//is there a better way to handle this besides putting all the little php files in their own folder and adding them all with a for loop? (with a text file or summit to ensure order) I guess I could class them and include_once, but that seems a little...
+//Misc dialogue items. Btw, is there a better way to handle this besides putting all the little php files in their own folder and adding them all with a for loop? (with a text file or similar to ensure order) I guess I could class them and include_once, but that seems a little...
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-user.php';
 include_once dirname( __FILE__ ) . '/vu-alter-user-group.php';
 include_once dirname( __FILE__ ) . '/vu-change-groups-for-post.php';
+include_once dirname( __FILE__ ) . '/vu-filter-by-user-group.php';
+
 // Link post type
 // Just like regular posts except they also have the link_url_value metavalue
 class vu_link_post_type {
@@ -50,7 +52,7 @@ class vu_link_post_type {
 
   /**
    * Registers the link post type
-   * @return void
+   * @return none
    */
   function register_link_post_type() {
     if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("register_link_post_type");
@@ -83,7 +85,7 @@ class vu_link_post_type {
 
   /**
    * Callback from register_post_type
-   * @return void
+   * @return none
    */
   function add_link_custom_fields() {
     if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("add_link_custom_fields");}
@@ -94,7 +96,7 @@ class vu_link_post_type {
 
 /**
  * Display the contents of the custom meta box
- * @return void
+ * @return none
  */
   function links_url_custom_field_display(){
     if(VU_RESTRICT_DEBUG_LEVEL(0)){vu_dbg("links_url_custom_field_display");}
@@ -110,7 +112,7 @@ class vu_link_post_type {
 /**
  * Save the meta value entered
  * @param  int|string $post_id
- * @return int|void $post_id (on failure)
+ * @return int|none $post_id (on failure)
  */
   function save_link_url( $post_id ) {
     if(VU_RESTRICT_DEBUG_LEVEL(2)){vu_dbg("save_link_url \$post_id ", $post_id);}
@@ -145,7 +147,7 @@ $link_post_type = new vu_link_post_type(); // Doesn't work because CPTs must be 
 /**
  * Add links custom post type to the front page main loop via hooks
  * @param  object $query (WP::Query)
- * @return void
+ * @return none
  */
 add_action( 'pre_get_posts', 'vu_generate_link_posts' );
 function vu_generate_link_posts( $query ) {
@@ -201,12 +203,12 @@ add_filter( 'body_class', 'category_id_class',10,2 );
 
 /**
  * Injects css to make the Role select in the user profile page unselectable
- * @return void
+ * @return none
  */
 add_action('admin_head', 'vu_custom_admin_css');
 function vu_custom_admin_css(){
   vu_dbg("vu_custom_admin_css");
-  echo ' 
+?>
 <style>
   span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {
     font-family: monospace; 
@@ -215,6 +217,7 @@ function vu_custom_admin_css(){
   }
 
   /* role should be selected via user groups, not manually */
+  /* Note: As this was done via css, this does not prevent altering this select via the tab key, but doing so will not actually alter the user\'s role */
   select#role{
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -234,5 +237,6 @@ function vu_custom_admin_css(){
     font-family: monospace; 
     white-space: pre;
   }
-</style>';
+</style>
+<?php
 }

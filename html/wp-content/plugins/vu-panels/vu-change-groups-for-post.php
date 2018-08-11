@@ -36,8 +36,8 @@ function vu_add_post_user_group_display(){
 		$selected_text;
 		$post_terms = vu_get_real_object_terms($current_post_id, VU_USER_GROUP);
 		$primary_ug = vu_get_primary_user_group($user->ID);
-		vu_dbg('$post_terms',$post_terms);
-		vu_dbg('$primary_ug',$primary_ug);
+		if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('$post_terms',$post_terms);
+		if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('$primary_ug',$primary_ug);
 		if(IS_WP_DEBUG && count($post_terms) > 1){
 			vu_dbg("ERROR: Post".$current_post_id." has more than one user group! \$post_terms: ",$post_terms);
 		}
@@ -45,11 +45,11 @@ function vu_add_post_user_group_display(){
 			
 			if($post_terms){ //if the post already has a user group (it should), use the first (and only) one from that list as the default
 				$selected_text = ($post_terms[0]->name == $term_object->name) ? 'selected="selected"' : '';  //#TODO: $post_terms[0] *should* be getting the first and only term that the post has from the vu_user_group taxonomy
-				vu_dbg('using $post_terms[0]->name for ', $term_object);
+				if(VU_RESTRICT_DEBUG_LEVEL(1)) vu_dbg('using $post_terms[0]->name for ', $term_object);
 			}
 			else{ //otherwise, use whatever user group this particular user picked last
 				$selected_text = ($primary_ug == $term_object->name) ? 'selected="selected"' : '';
-				vu_dbg('using $primary_ug for ', $term_object);
+				if(VU_RESTRICT_DEBUG_LEVEL(1)) vu_dbg('using $primary_ug for ', $term_object);
 			}
 			echo '<option '.$selected_text.' value="'.$term_object->term_id.'" >'.$term_object->name.'<br>';
 		}
@@ -96,7 +96,7 @@ function vu_add_post_user_group_save( $post_id ) {
 		//set user's default user group to whatever they decided to use here
 		update_user_meta( $user_id, VU_USER_PRIMARY_UG, get_term($new_ug, VU_USER_GROUP)->name );
 
-		if(VU_RESTRICT_DEBUG_LEVEL(4)) vu_debug("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, VU_USER_GROUP),true).
+		if(VU_RESTRICT_DEBUG_LEVEL(4)) vu_dbg("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, VU_USER_GROUP),true).
 		"\n<br>User vu_user_primary_ug meta has been updated to: ".get_user_meta($user_id, VU_USER_PRIMARY_UG));
 		return;
 	}
