@@ -112,7 +112,7 @@ function print_to_ug_column_in_listing( $column_name, $post_id ) {
         // Find our custom column
         // Example more advanced formatting: switch ( "{$typenow}:{$column_name}" ) { case 'link:vu_user_group': ...
         if( $column_name == VU_UG_COLUMN_KEY ){
-            $user_groups = vu_get_real_terms($post_id, $taxonomy);
+            $user_groups = get_the_terms($post_id, $taxonomy);
             // Get and insert our user groups (there should only be one, tho)
             if ( is_array($user_groups) ) { 
                 foreach( $user_groups as $key => $ug ) {
