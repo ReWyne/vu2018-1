@@ -298,7 +298,23 @@ function vu_post_group_access_handler() {
       exit;
    }
 
+   //get post id
+   global $post;
+   global $wp_query;
+   $current_post_id;
+   if(defined($_GET['post'])){
+	$current_post_id = $_GET['post'];
+   }
+   else if(defined($post)){
+	$current_post_id = $post->ID;
+   }
+   else if(defined($wp_query) && $current_post_id = $wp_query->get_queried_object_id()){
+   }
+   else{
+	vu_dbg('ERROR: $_GET["post"] and fallbacks failed', $_GET, $wp_query);
+   }
    $current_post_id = $_GET['post']; //get_the_ID() doesn't work out of the loop
+   
    $current_user_id = get_current_user_id();
    //Exit if the user cannot edit *this* post, due to lacking group membership. (second && says "posts without groups are visible by everyone")
    if ( ! vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name') &&
