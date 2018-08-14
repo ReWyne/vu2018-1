@@ -21,31 +21,31 @@ define('VU_UG_COLUMN_KEY', 'user_groups');
 
 
 
-// /**
-//  * Add the User Group dropdown, for filtering displayed posts to a particular user group, to edit.php
-//  * @param  none
-//  * @return none
-//  */
-// add_action( 'restrict_manage_posts', 'vu_display_by_user_group_filter' );
-// function vu_display_by_user_group_filter() {
-//     global $typenow;
-//     global $wp_query;
-//     if ( $typenow == 'post' || $typenow == 'link' ) {
-//         $taxonomy = VU_USER_GROUP;
-//         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
-//         vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
-//         wp_dropdown_categories(array(
-//             'show_option_all' =>  __("Show All User Groups"), // or {$vu_ug_taxonomy->label}
-//             'taxonomy'        =>  $taxonomy,
-//             'name'            =>  'vu_user_group',
-//             'orderby'         =>  'name',
-//             //'selected'        =>  $wp_query->query['term'], // allows vu-fbug dropdown to show current term
-//             'hierarchical'    =>  false,
-//             'show_count'      =>  false, // If true, show # user groups in parens
-//             'hide_empty'      =>  false, // If true, hide posts w/o user groups
-//         ));
-//     }
-// }
+/**
+ * Add the User Group dropdown, for filtering displayed posts to a particular user group, to edit.php
+ * @param  none
+ * @return none
+ */
+add_action( 'restrict_manage_posts', 'vu_display_by_user_group_filter' );
+function vu_display_by_user_group_filter() {
+    global $typenow;
+    global $wp_query;
+    if ( $typenow == 'post' || $typenow == 'link' ) {
+        $taxonomy = VU_USER_GROUP;
+        $vu_ug_taxonomy = get_taxonomy( $taxonomy );
+        vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
+        wp_dropdown_categories(array(
+            'show_option_all' =>  __("Show All User Groups"), // or {$vu_ug_taxonomy->label}
+            'taxonomy'        =>  $taxonomy,
+            'name'            =>  'vu_user_group',
+            'orderby'         =>  'name',
+            //'selected'        =>  $wp_query->query['term'], // allows vu-fbug dropdown to show current term
+            'hierarchical'    =>  false,
+            'show_count'      =>  false, // If true, show # user groups in parens
+            'hide_empty'      =>  false, // If true, hide posts w/o user groups
+        ));
+    }
+}
 
 // /**
 //  * Add the User Group dropdown, for filtering displayed posts to a particular user group, to edit.php
@@ -99,31 +99,32 @@ define('VU_UG_COLUMN_KEY', 'user_groups');
 //     return $new_posts_columns;
 // }
 
-// /**
-//  * Add the User Group column, for displaying the current user group of each post, to edit.php
-//  * @param  none
-//  * @return none
-//  */
-// add_action('manage_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
-// add_action('manage_link_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
-// function print_to_ug_column_in_listing( $column_name, $post_id ) {
-//     global $pagenow; global $typenow; //actually needs typenow
-//     //vu_dbg('print_to_ug_column_in_listing', $pagenow, $typenow);
-//     if ( in_array($typenow, ['post', 'link']) ) {
-//         $taxonomy = VU_USER_GROUP;
-//         // Find our custom column
-//         // Example more advanced formatting: switch ( "{$typenow}:{$column_name}" ) { case 'link:vu_user_group': ...
-//         if( $column_name == VU_UG_COLUMN_KEY ){
-//             $user_groups = get_the_terms($post_id, $taxonomy);
-//             // Get and insert our user groups (there should only be one, tho)
-//             if ( is_array($user_groups) ) { 
-//                 foreach( $user_groups as $key => $ug ) {
-//                     $edit_link = get_term_link($ug, $taxonomy);
-//                     $user_groups[$key] = '<a href="'.$edit_link.'">' . $ug->name . '</a>';
-//                 }
-//                 //echo implode("<br/>",$user_groups);
-//                 echo implode(', ', $user_groups);
-//             }
-//         }
-//     }
-// }
+/**
+ * Add the User Group column, for displaying the current user group of each post, to edit.php
+ * @param  none
+ * @return none
+ */
+add_action('manage_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
+add_action('manage_link_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
+function print_to_ug_column_in_listing( $column_name, $post_id ) {
+    global $pagenow; global $typenow; //actually needs typenow
+    //vu_dbg('print_to_ug_column_in_listing', $pagenow, $typenow);
+    if ( in_array($typenow, ['post', 'link']) ) {
+        $taxonomy = VU_USER_GROUP;
+        // Find our custom column
+        // Example more advanced formatting: switch ( "{$typenow}:{$column_name}" ) { case 'link:vu_user_group': ...
+        if( $column_name == VU_UG_COLUMN_KEY ){
+            $user_groups = get_the_terms($post_id, $taxonomy);
+            vu_dbg('print_to_ug_column_in_listing',$user_groups,vu_get_real_object_terms( $post_id, $taxonomy ));
+            // Get and insert our user groups (there should only be one, tho)
+            if ( is_array($user_groups) ) { 
+                foreach( $user_groups as $key => $ug ) {
+                    $edit_link = get_term_link($ug, $taxonomy);
+                    $user_groups[$key] = '<a href="'.$edit_link.'">' . $ug->name . '</a>';
+                }
+                //echo implode("<br/>",$user_groups);
+                echo implode(', ', $user_groups);
+            }
+        }
+    }
+}
