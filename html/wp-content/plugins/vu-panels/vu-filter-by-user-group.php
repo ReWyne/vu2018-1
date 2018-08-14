@@ -95,7 +95,7 @@ function display_ug_column_in_listing( $posts_columns ) {
     }
     $new_posts_columns[VU_UG_COLUMN_KEY] = 'User Groups';
         unset($new_posts_columns[VU_UG_COLUMN_KEY]); //#TEMP
-        $new_posts_columns = array_values($new_posts_columns);
+        //$new_posts_columns = array_values($new_posts_columns);
     return $new_posts_columns;
 }
 
