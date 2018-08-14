@@ -56,7 +56,7 @@ add_filter( 'parse_query', 'convert_id_to_taxonomy_term_in_query' );
 function convert_id_to_taxonomy_term_in_query( $query ) {
     global $pagenow; global $typenow; //actually needs pagenow
     $qv = &$query->query_vars;
-    if(VU_RESTRICT_DEBUG_LEVEL(3)) vu_dbg('convert_id_to_taxonomy_term_in_query', $pagenow, $typenow, $qv);
+    if(VU_RESTRICT_DEBUG_LEVEL(3) && $pagenow == 'edit.php') vu_dbg('convert_id_to_taxonomy_term_in_query', $typenow, $qv);
     // If this is the query we're looking for
     if ( $pagenow=='edit.php' &&
         isset( $qv['taxonomy'] ) && $qv['taxonomy'] == VU_USER_GROUP) {
@@ -80,7 +80,7 @@ add_filter( 'manage_link_posts_columns', 'display_ug_column_in_listing' );
 function display_ug_column_in_listing( $posts_columns ) {
     // Insert the new User Group column after the Author column
     global $pagenow; global $typenow;
-    vu_dbg('display_ug_column_in_listing', $pagenow, $typenow);
+    //vu_dbg('display_ug_column_in_listing', $pagenow, $typenow);
     if (isset($posts_columns['author'])) {
         $new_posts_columns = array();
         $index = 0;
@@ -106,7 +106,7 @@ add_action('manage_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
 add_action('manage_link_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
 function print_to_ug_column_in_listing( $column_name, $post_id ) {
     global $pagenow; global $typenow; //actually needs typenow
-    vu_dbg('print_to_ug_column_in_listing', $pagenow, $typenow);
+    //vu_dbg('print_to_ug_column_in_listing', $pagenow, $typenow);
     if ( in_array($typenow, ['post', 'link']) ) {
         $taxonomy = VU_USER_GROUP;
         // Find our custom column
