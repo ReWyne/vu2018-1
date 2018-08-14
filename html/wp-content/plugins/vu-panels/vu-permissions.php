@@ -302,13 +302,13 @@ function vu_post_group_access_handler() {
    global $post;
    global $wp_query;
    $current_post_id;
-   if(defined($_GET['post'])){
+   if(array_key_exists($_GET['post'])){
 	$current_post_id = $_GET['post'];
    }
-   else if(defined($post)){
+   else if(isset($post)){
 	$current_post_id = $post->ID;
    }
-   else if(defined($wp_query) && $current_post_id = $wp_query->get_queried_object_id()){
+   else if(isset($wp_query) && $current_post_id = $wp_query->get_queried_object_id()){
    }
    else{
 	vu_dbg('ERROR: $_GET["post"] and fallbacks failed', $_GET, $wp_query);
