@@ -302,7 +302,7 @@ function vu_post_group_access_handler() {
    global $post;
    global $wp_query;
    $current_post_id;
-   if(array_key_exists($_GET['post'])){
+   if(array_key_exists('post', $_GET)){
 	$current_post_id = $_GET['post'];
    }
    else if(isset($post)){
