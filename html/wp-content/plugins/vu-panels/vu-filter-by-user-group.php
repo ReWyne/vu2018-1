@@ -70,34 +70,34 @@ define('VU_UG_COLUMN_KEY', 'user_groups');
 //     }
 // }
 
-/**
- * Add the User Group column, for displaying the current user group of each post, to edit.php
- * @param  none
- * @return none
- */
-add_filter( 'manage_posts_columns', 'display_ug_column_in_listing' );
-add_filter( 'manage_link_posts_columns', 'display_ug_column_in_listing' );
-function display_ug_column_in_listing( $posts_columns ) {
-    // Insert the new User Group column after the Author column
-    global $pagenow; global $typenow;
-    //vu_dbg('display_ug_column_in_listing', $pagenow, $typenow);
-    if (isset($posts_columns['author'])) {
-        $new_posts_columns = array();
-        $index = 0;
-        foreach($posts_columns as $key => $posts_column) {
-            if ($key=='author')
-                $new_posts_columns[VU_UG_COLUMN_KEY] = null;
-            $new_posts_columns[$key] = $posts_column;
-        }
-    } else {
-    // If someone removed the author column, just put it at the end
-        $new_posts_columns = $posts_columns;
-    }
-    $new_posts_columns[VU_UG_COLUMN_KEY] = 'User Groups';
-        unset($new_posts_columns[VU_UG_COLUMN_KEY]); //#TEMP
-        //$new_posts_columns = array_values($new_posts_columns);
-    return $new_posts_columns;
-}
+// /**
+//  * Add the User Group column, for displaying the current user group of each post, to edit.php
+//  * @param  none
+//  * @return none
+//  */
+// add_filter( 'manage_posts_columns', 'display_ug_column_in_listing' );
+// add_filter( 'manage_link_posts_columns', 'display_ug_column_in_listing' );
+// function display_ug_column_in_listing( $posts_columns ) {
+//     // Insert the new User Group column after the Author column
+//     global $pagenow; global $typenow;
+//     //vu_dbg('display_ug_column_in_listing', $pagenow, $typenow);
+//     if (isset($posts_columns['author'])) {
+//         $new_posts_columns = array();
+//         $index = 0;
+//         foreach($posts_columns as $key => $posts_column) {
+//             if ($key=='author')
+//                 $new_posts_columns[VU_UG_COLUMN_KEY] = null;
+//             $new_posts_columns[$key] = $posts_column;
+//         }
+//     } else {
+//     // If someone removed the author column, just put it at the end
+//         $new_posts_columns = $posts_columns;
+//     }
+//     $new_posts_columns[VU_UG_COLUMN_KEY] = 'User Groups';
+//         //unset($new_posts_columns[VU_UG_COLUMN_KEY]); //#TEMP
+//         //$new_posts_columns = array_values($new_posts_columns);
+//     return $new_posts_columns;
+// }
 
 // /**
 //  * Add the User Group column, for displaying the current user group of each post, to edit.php
