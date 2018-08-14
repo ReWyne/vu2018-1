@@ -107,6 +107,7 @@ function vu_display_by_user_group_filter() {
 add_action('manage_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
 add_action('manage_link_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
 function print_to_ug_column_in_listing( $column_name, $post_id ) {
+    vu_dbg('print_to_ug_column_in_listing',$column_name);
     global $pagenow; global $typenow; //actually needs typenow
     //vu_dbg('print_to_ug_column_in_listing', $pagenow, $typenow);
     if ( in_array($typenow, ['post', 'link']) ) {
