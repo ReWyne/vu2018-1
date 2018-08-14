@@ -297,12 +297,10 @@ function vu_post_group_access_handler() {
       wp_redirect( home_url() );
       exit;
    }
-
-
 }
 add_action( 'admin_head', 'vu_post_group_access_handler_helper' );
 function vu_post_group_access_handler_helper() {
-	   //get post id
+	   // Get post id
 	   global $post;
 	   global $wp_query;
 	   $current_post_id;
@@ -317,8 +315,8 @@ function vu_post_group_access_handler_helper() {
 	   else{
 		vu_dbg('ERROR: $_GET["post"] and fallbacks failed', $_GET, $wp_query);
 	   }
-	   $current_post_id = $_GET['post']; //get_the_ID() doesn't work out of the loop
 	   
+	   // Get user id
 	   $current_user_id = get_current_user_id();
 	   //Exit if the user cannot edit *this* post, due to lacking group membership. (second && says "posts without groups are visible by everyone")
 	   if ( ! vu_get_object_user_group_intersection($current_post_id, $current_user_id, 'name') &&
