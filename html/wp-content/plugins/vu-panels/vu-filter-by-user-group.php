@@ -34,7 +34,7 @@ function vu_display_by_user_group_filter() {
         $taxonomy = VU_USER_GROUP;
         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
         vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
-        vu_dbg(wp_dropdown_categories(array(
+        $output = wp_dropdown_categories(array(
             'show_option_all' =>  __("Show All User Groups"), // or {$vu_ug_taxonomy->label}
             'taxonomy'        =>  $taxonomy,
             'name'            =>  VU_USER_GROUP,
@@ -44,7 +44,9 @@ function vu_display_by_user_group_filter() {
             'show_count'      =>  true, // If true, show # user groups in parens
             'hide_empty'      =>  false, // If true, hide posts w/o user groups
             'echo'            =>  false,
-        )));
+        ));
+        vu_dbg($output);
+        echo $output;
     }
 }
 
