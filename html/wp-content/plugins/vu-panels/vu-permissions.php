@@ -298,6 +298,7 @@ function vu_post_group_access_handler() {
       exit;
    }
 }
+// $post and other relevant globals haven't been initialized yet when the admin_init hook is called, which is why we need the second stage of checking (can the user edit THIS post, rather can the user edit posts) to happen in a separate function
 add_action( 'admin_head', 'vu_post_group_access_handler_helper' );
 function vu_post_group_access_handler_helper() {
 	   // Get post id

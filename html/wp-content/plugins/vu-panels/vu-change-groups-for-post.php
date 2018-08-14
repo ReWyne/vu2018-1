@@ -66,7 +66,7 @@ function vu_add_post_user_group_display(){
  */
 add_action( 'save_post', 'vu_add_post_user_group_save');
 function vu_add_post_user_group_save( $post_id ) {
-	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('vu_show_extra_profile_fields, $post_id: ', $post_id);
+	 vu_dbg('vu_show_extra_profile_fields, $post_id: ', $post_id);
 	//only save meta value if hitting submit
 	if ( IS_DOING_AUTOSAVE ){
 	return $post_id;
@@ -86,11 +86,11 @@ function vu_add_post_user_group_save( $post_id ) {
 	}
 
 	//get frontend's specified user group and update
-	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('VU_USER_GROUP: ', get_terms( VU_USER_GROUP));	
+	 vu_dbg('VU_USER_GROUP: ', get_terms( VU_USER_GROUP));	
 
 	$user_id = get_current_user_id();
 	$new_ug = (int) $_POST['vu_cgfp_value']; // calling sanitize_key() is unecessary only because of the cast to int
-	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('$new_ug',$new_ug);
+	 vu_dbg('$new_ug',$new_ug);
 
 	if( wp_set_object_terms( $post_id, array($new_ug), VU_USER_GROUP ) ){
 		//set user's default user group to whatever they decided to use here
