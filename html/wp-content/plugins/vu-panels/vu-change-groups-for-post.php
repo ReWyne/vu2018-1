@@ -71,7 +71,7 @@ function vu_add_post_user_group_save( $post_id ) {
 	if ( IS_DOING_AUTOSAVE ){
 	return $post_id;
 	}
-
+	vu_dbg('save_post_1');
 	// Check if nonce is set
 	if ( ! isset( $_POST['link_url_nonce'] ) ) {
 	return $post_id;
@@ -79,7 +79,7 @@ function vu_add_post_user_group_save( $post_id ) {
 	if ( ! wp_verify_nonce( $_POST['link_url_nonce'], 'link_save' ) ) {
 	return $post_id;
 	}
-
+	vu_dbg('save_post_verified');
 	// Check that the logged in user has permission to edit this post
 	if ( ! current_user_can( 'edit_post' ) ) {
 	return $post_id;
