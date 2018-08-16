@@ -35,11 +35,11 @@ function vu_display_by_user_group_filter() {
         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
         vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
         $output = wp_dropdown_categories(array(
-            'show_option_all' =>  __("Show All User Groups"), // or {$vu_ug_taxonomy->label}
+            'show_option_all' =>  __("Show All User Groups"), // or "{$vu_ug_taxonomy->label}"
             'taxonomy'        =>  $taxonomy,
             'name'            =>  VU_USER_GROUP,
             'orderby'         =>  'name',
-            'selected'        =>  $wp_query->query['term'], // allows vu-fbug dropdown to show current term
+            //'selected'        =>  $wp_query->query['term'], // supposed to allow vu-fbug dropdown to show current term
             'hierarchical'    =>  false,
             'show_count'      =>  true, // If true, show # user groups in parens
             'hide_empty'      =>  false, // If true, hide posts w/o user groups
@@ -47,10 +47,10 @@ function vu_display_by_user_group_filter() {
         ));
         $count;
         vu_dbg($output);
-        $output = preg_replace('~^.*>(\d+).*</option>.*$~', '', $output, -1, $count); // Remove lines whose printed text starts with a number (these are the reference taxonomy items)
+        $output = preg_replace('~^.*>(\d+).*</option>.*$~m', '', $output, -1, $count); // Remove lines whose printed text starts with a number (these are the reference taxonomy items)
         vu_dbg($output,"\$count = $count");
         $output = preg_replace_callback( // Replace the ID values with their slug equivalents
-            '~(?<=value=")(\d+)(?=")~', // lookbehind & ahead
+            '~(?<=value=")(\d+)(?=")~m', // lookbehind & ahead
             function ($matches) {
                 $tterm = get_term_by( 'id', $matches[0], VU_USER_GROUP );
                 return $tterm->slug;
