@@ -47,6 +47,9 @@ The site's display is handled by the **vu_custom_portal** theme.
 - `vu-change-groups-for-user.php`
     - **Description:** Allows admins to change the user group of a specific post or link from that post's edit page.
     - **Notes:** The Department select defaults to the current vu_user_group (department) in charge of managing that post.
+- `vu-filter-by-user-group.php`
+    - **Description:** Implements the dropdown that allows posts or links to be filtered by user group in edit.php
+    - **Notes:** This file only implements the dropdown used for filtering. The VU User Group column itself uses the premade wordpress option `'show_admin_column' => true` in vu-permissions.php's register_taxonomy call. As the dropdown uses some regex to display correctly, it is comparatively brittle, but is presence is not required for the column itself to work correctly.
 ### Important Constants
 - `IS_WP_DEBUG:` Returns true if wordpress is in debug mode
 - `USER_GROUP_TO_ROLE` Constant portion of the name of the database table mapping vu_user_group terms to their associated roles

@@ -80,7 +80,7 @@ function vu_register_permissions(){
 			'show_ui' => true,
 			'show_admin_column' => true,
 			'query_var' => true,
-			'show_admin_column' => true, //#TEMP
+			'show_admin_column' => true, //adds the vu_user_group column to edit.php
 		)
 	);
 

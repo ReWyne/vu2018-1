@@ -30,8 +30,10 @@ add_action( 'restrict_manage_posts', 'vu_display_by_user_group_filter' );
 function vu_display_by_user_group_filter() {
     global $typenow;
     global $wp_query;
-    $taxonomy = VU_USER_GROUP;
+    
+    // Declare the dropdown that we're using to filter by user group
     if ( $typenow == 'post' || $typenow == 'link' ) {
+        $taxonomy = VU_USER_GROUP;
         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
         vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
         $output = wp_dropdown_categories(array(
@@ -45,10 +47,12 @@ function vu_display_by_user_group_filter() {
             'hide_empty'      =>  false, // If true, hide posts w/o user groups
             'echo'            =>  false,
         ));
+
+        // Use spooky regex to remove unweanted options and change the value to use slugs instead of IDs
         $count;
-        vu_dbg($output);
+        if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg($output);
         $output = preg_replace('~^.*>(\d+).*</option>.*$~m', '', $output, -1, $count); // Remove lines whose printed text starts with a number (these are the reference taxonomy items)
-        vu_dbg($output,"\$count = $count");
+        if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg($output,"\$count = $count");
         $output = preg_replace_callback( // Replace the ID values with their slug equivalents
             '~(?<=value=")(\d+)(?=")~m', // lookbehind & ahead
             function ($matches) {
@@ -57,10 +61,10 @@ function vu_display_by_user_group_filter() {
             }, 
             $output, 
             -1, 
-            $count); 
+            $count);             
+        if(VU_RESTRICT_DEBUG_LEVEL(1)) vu_dbg($output,"\$count2 = $count");
 
-            
-        vu_dbg($output,"\$count2 = $count");
+        // Display
         echo $output;
     }
 }
@@ -117,33 +121,33 @@ function vu_display_by_user_group_filter() {
 //     return $new_posts_columns;
 // }
 
-/**
- * Add the User Group column, for displaying the current user group of each post, to edit.php
- * @param  none
- * @return none
- */
-add_action('manage_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
-add_action('manage_link_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
-function print_to_ug_column_in_listing( $column_name, $post_id ) {
-    vu_dbg('print_to_ug_column_in_listing',$column_name);
-    global $pagenow; global $typenow; //actually needs typenow
-    //vu_dbg('print_to_ug_column_in_listing', $pagenow, $typenow);
-    if ( in_array($typenow, ['post', 'link']) ) {
-        $taxonomy = VU_USER_GROUP;
-        // Find our custom column
-        // Example more advanced formatting: switch ( "{$typenow}:{$column_name}" ) { case 'link:vu_user_group': ...
-        if( $column_name == VU_UG_COLUMN_KEY ){
-            $user_groups = get_the_terms($post_id, $taxonomy);
-            vu_dbg('print_to_ug_column_in_listing',$user_groups,vu_get_real_object_terms( $post_id, $taxonomy ));
-            // Get and insert our user groups (there should only be one, tho)
-            if ( is_array($user_groups) ) { 
-                foreach( $user_groups as $key => $ug ) {
-                    $edit_link = get_term_link($ug, $taxonomy);
-                    $user_groups[$key] = '<a href="'.$edit_link.'">' . $ug->name . '</a>';
-                }
-                //echo implode("<br/>",$user_groups);
-                echo implode(', ', $user_groups);
-            }
-        }
-    }
-}
+// /**
+//  * Add the User Group column, for displaying the current user group of each post, to edit.php
+//  * @param  none
+//  * @return none
+//  */
+// add_action('manage_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
+// add_action('manage_link_posts_custom_column', 'print_to_ug_column_in_listing',10,2);
+// function print_to_ug_column_in_listing( $column_name, $post_id ) {
+//     vu_dbg('print_to_ug_column_in_listing',$column_name);
+//     global $pagenow; global $typenow; //actually needs typenow
+//     //vu_dbg('print_to_ug_column_in_listing', $pagenow, $typenow);
+//     if ( in_array($typenow, ['post', 'link']) ) {
+//         $taxonomy = VU_USER_GROUP;
+//         // Find our custom column
+//         // Example more advanced formatting: switch ( "{$typenow}:{$column_name}" ) { case 'link:vu_user_group': ...
+//         if( $column_name == VU_UG_COLUMN_KEY ){
+//             $user_groups = get_the_terms($post_id, $taxonomy);
+//             vu_dbg('print_to_ug_column_in_listing',$user_groups,vu_get_real_object_terms( $post_id, $taxonomy ));
+//             // Get and insert our user groups (there should only be one, tho)
+//             if ( is_array($user_groups) ) { 
+//                 foreach( $user_groups as $key => $ug ) {
+//                     $edit_link = get_term_link($ug, $taxonomy);
+//                     $user_groups[$key] = '<a href="'.$edit_link.'">' . $ug->name . '</a>';
+//                 }
+//                 //echo implode("<br/>",$user_groups);
+//                 echo implode(', ', $user_groups);
+//             }
+//         }
+//     }
+// }
