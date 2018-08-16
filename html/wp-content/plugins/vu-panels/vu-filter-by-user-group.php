@@ -30,8 +30,8 @@ add_action( 'restrict_manage_posts', 'vu_display_by_user_group_filter' );
 function vu_display_by_user_group_filter() {
     global $typenow;
     global $wp_query;
+    $taxonomy = VU_USER_GROUP;
     if ( $typenow == 'post' || $typenow == 'link' ) {
-        $taxonomy = VU_USER_GROUP;
         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
         vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
         $output = wp_dropdown_categories(array(
@@ -47,7 +47,7 @@ function vu_display_by_user_group_filter() {
         ));
         $count;
         vu_dbg($output);
-        $output = preg_replace('/^.*>(\d+).*<\/option>.*$/', '', $output, -1, $count); // Remove lines whose printed text starts with a number (these are the reference taxonomy items)
+        $output = preg_replace('/^.*>(\d+).*</option>.*$/', '', $output, -1, $count); // Remove lines whose printed text starts with a number (these are the reference taxonomy items)
         vu_dbg($output,"\$count = $count");
         $output = preg_replace_callback( // Replace the ID values with their slug equivalents
             '/(?<=value=")(\d+)(?=")/', // lookbehind & ahead
