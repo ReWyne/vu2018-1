@@ -22,7 +22,7 @@ define( 'IS_DOING_AUTOSAVE', defined( 'DOING_AUTOSAVE' ) && true === DOING_AUTOS
 
 // Debugging convenience globals and accessors
 global $vu_panels_vars;
-$vu_panels_vars['RESTRICT_DEBUG_LEVEL'] = 3; // 6 or higher removes all debugging except error/warning messages
+$vu_panels_vars['RESTRICT_DEBUG_LEVEL'] = 6; // 6 or higher removes all debugging except error/warning messages
 
 // Misc Constants
 define("VU_USER_GROUP","vu_user_group"); //taxonomy
