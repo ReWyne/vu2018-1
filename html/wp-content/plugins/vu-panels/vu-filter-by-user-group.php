@@ -35,7 +35,7 @@ function vu_display_by_user_group_filter() {
     if ( $typenow == 'post' || $typenow == 'link' ) {
         $taxonomy = VU_USER_GROUP;
         $vu_ug_taxonomy = get_taxonomy( $taxonomy );
-        vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
+        if(VU_RESTRICT_DEBUG_LEVEL(2)) vu_dbg('vu_display_by_user_group_filter',$wp_query->query);
         $output = wp_dropdown_categories(array(
             'show_option_all' =>  __("Show All User Groups"), // or "{$vu_ug_taxonomy->label}"
             'taxonomy'        =>  $taxonomy,

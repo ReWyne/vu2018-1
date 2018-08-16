@@ -20,13 +20,13 @@ define( 'IS_WP_DEBUG', defined('WP_DEBUG') && true === WP_DEBUG );
 define( 'IS_DOING_AJAX', defined( 'DOING_AJAX' ) && true === DOING_AJAX );
 define( 'IS_DOING_AUTOSAVE', defined( 'DOING_AUTOSAVE' ) && true === DOING_AUTOSAVE );
 
+// Debugging convenience globals and accessors
+global $vu_panels_vars;
+$vu_panels_vars['RESTRICT_DEBUG_LEVEL'] = 3; // 6 or higher removes all debugging except error/warning messages
+
 // Misc Constants
 define("VU_USER_GROUP","vu_user_group"); //taxonomy
 define("VU_USER_PRIMARY_UG","vu_user_primary_ug"); //user metadata
-
-// Debugging convenience globals and accessors
-global $vu_panels_vars;
-$vu_panels_vars['RESTRICT_DEBUG_LEVEL'] = 3;
 
 //Setting the global to higher numbers should print less. Ohalso, floats are fine.
 //roughly speaking, 0 == "print everything", 1 == "print reasonably important functions", 2 == "important", 3 == "VERY important", 4 == "print programmer's summaries" 5 == "layman's summaries", 
@@ -55,7 +55,7 @@ class vu_link_post_type {
    * @return none
    */
   function register_link_post_type() {
-    if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("register_link_post_type");
+    if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg("register_link_post_type");
 
     register_post_type( 'link',
       array(
@@ -188,11 +188,11 @@ add_filter('post_class', 'vu_mark_CPTs');
  */
 function category_id_class( $classes, $class, $post_id = NULL ) {
   if($post_id === NULL){
-    if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('Notice: $post_id was NULL! Context... ',debug_backtrace());
+    if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('Notice: $post_id was NULL! Context... ',debug_backtrace());
     return $classes;
   }
   $post = get_post( $post_id );
-  if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('category_id_class \$post',$post);
+  if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('category_id_class \$post',$post);
 	foreach ( ( get_the_category( $post->ID ) ) as $category ) {
     $classes[] = $category->category_nicename;
 	}
@@ -207,7 +207,7 @@ add_filter( 'body_class', 'category_id_class',10,2 );
  */
 add_action('admin_head', 'vu_custom_admin_css');
 function vu_custom_admin_css(){
-  vu_dbg("vu_custom_admin_css");
+  if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg("vu_custom_admin_css");
 ?>
 <style>
   span.vu-ajax-return, .vu-ajax-return, #vu_augt_return {

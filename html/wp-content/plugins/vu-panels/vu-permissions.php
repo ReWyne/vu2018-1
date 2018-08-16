@@ -86,7 +86,7 @@ function vu_register_permissions(){
 
 	if ( ! vu_term_exists( VU_ADMIN_GROUP, VU_USER_GROUP ) ){
 		$output = "Inserted admin vu_user_group: " . print_r(wp_insert_term( VU_ADMIN_GROUP, VU_USER_GROUP ), true);
-		vu_dbg($output);
+		if(VU_RESTRICT_DEBUG_LEVEL(5)) vu_dbg($output);
 		
 		vu_db_replace_ug2r_data(VU_ADMIN_GROUP, vu_permission_level::Admin);
 	}
@@ -135,7 +135,7 @@ function vu_term_exists($term, $taxonomy){
  */
 add_action( 'admin_enqueue_scripts', 'vu_selectively_enqueue_admin_scripts' );
 function vu_selectively_enqueue_admin_scripts( $hook ) {
-	if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg('vu_selectively_enqueue_admin_scripts');
+	if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg('vu_selectively_enqueue_admin_scripts');
 
 	if ( 'users.php' != $hook && 'profile.php' != $hook ) {
         return;
@@ -164,24 +164,24 @@ function vu_get_user_role($user = ''){
 
 	foreach($terms as $term){
 		$role = vu_db_get_ug2r_role($term->name);
-		vu_dbg($role);
+		if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg($role);
 		if($role === vu_permission_level::Admin){
 			$permission_level = 2;
 			$permission_role = $role;
-			vu_dbg("set to vu_permission_level::Admin");
+			if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg("set to vu_permission_level::Admin");
 		}
 		else if($role === vu_permission_level::Department && $permission_level < 2){
 			$permission_level = 1;
 			$permission_role = $role;
-			vu_dbg("set to vu_permission_level::Department");
+			if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg("set to vu_permission_level::Department");
 		}
 		else if($role === vu_permission_level::Basic && $permission_level < 1){
 			$permission_level = 0;
 			$permission_role = $role;
-			vu_dbg("set to vu_permission_level::Basic");
+			if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_dbg("set to vu_permission_level::Basic");
 		}
 		else{
-			vu_debug("vu_get_user_role else condition, got role $role for term ".$term->name."current permission role: $permission_role");
+			if(VU_RESTRICT_DEBUG_LEVEL(0)) vu_debug("vu_get_user_role else condition, got role $role for term ".$term->name."current permission role: $permission_role");
 		}
 	}
 	return $permission_role;
@@ -263,16 +263,16 @@ function vu_get_object_user_group_intersection($left_id, $right_id, $term_field)
 	foreach( [$left_id, $right_id] as $id ){
 		++$count;
 		if( get_userdata( $id ) ){ // if the object is a user, use the accessor function
-			//vu_dbg("itsauser",vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
+			if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("itsauser",vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field ) );
 			$compare_terms[$count] = vu_terms_array_to_set( vu_get_accesible_user_groups($id), $term_field );
 		}
 		else{
-			//vu_dbg("itsanobject",vu_terms_array_to_set( vu_get_real_object_terms( $id, VU_USER_GROUP ), $term_field ) );
+			if(VU_RESTRICT_DEBUG_LEVEL(0))vu_dbg("itsanobject",vu_terms_array_to_set( vu_get_real_object_terms( $id, VU_USER_GROUP ), $term_field ) );
 			$compare_terms[$count] = vu_terms_array_to_set( vu_get_real_object_terms( $id, VU_USER_GROUP ), $term_field );
 		}
 	}
 
-	vu_dbg("vu_get_object_tax_intersection \$left_terms, \$right_terms", $compare_terms[0], $compare_terms[1]);
+	if(VU_RESTRICT_DEBUG_LEVEL(2)) vu_dbg("vu_get_object_tax_intersection \$left_terms, \$right_terms", $compare_terms[0], $compare_terms[1]);
 
 	return vu_get_set_intersection($compare_terms[0], $compare_terms[1]);
 }
