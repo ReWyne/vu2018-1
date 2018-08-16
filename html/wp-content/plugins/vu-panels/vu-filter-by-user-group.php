@@ -52,7 +52,7 @@ function vu_display_by_user_group_filter() {
         $output = preg_replace_callback( // Replace the ID values with their slug equivalents
             '~(?<=value=")(\d+)(?=")~', // lookbehind & ahead
             function ($matches) {
-                $tterm = get_term_by( 'id', $matches[0], $taxonomy );
+                $tterm = get_term_by( 'id', $matches[0], VU_USER_GROUP );
                 return $tterm->slug;
             }, 
             $output, 
