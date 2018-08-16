@@ -71,12 +71,13 @@ function vu_add_post_user_group_save( $post_id ) {
 	if ( IS_DOING_AUTOSAVE ){
 	return $post_id;
 	}
-	vu_dbg('save_post_1');
+	vu_dbg('save_post_1',$_POST['vu_post_cgfp_nonce']);
 	// Check if nonce is set
-	if ( ! isset( $_POST['link_url_nonce'] ) ) {
+	if ( ! isset( $_POST['vu_post_cgfp_nonce'] ) ) {
 	return $post_id;
 	}
-	if ( ! wp_verify_nonce( $_POST['link_url_nonce'], 'link_save' ) ) {
+	vu_dbg('save_post_2',wp_verify_nonce( $_POST['vu_post_cgfp_nonce'], 'vu_post_cgfp_save' ));
+	if ( ! wp_verify_nonce( $_POST['vu_post_cgfp_nonce'], 'vu_post_cgfp_save' ) ) {
 	return $post_id;
 	}
 	vu_dbg('save_post_verified');
