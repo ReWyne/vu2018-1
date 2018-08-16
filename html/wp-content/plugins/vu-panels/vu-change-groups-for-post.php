@@ -98,7 +98,7 @@ function vu_add_post_user_group_save( $post_id ) {
 		update_user_meta( $user_id, VU_USER_PRIMARY_UG, get_term($new_ug, VU_USER_GROUP)->name );
 
 		if(VU_RESTRICT_DEBUG_LEVEL(4)) vu_dbg("Successfully updated post $post_id's vu_user_group data entry to: ".print_r(wp_get_object_terms($post_id, VU_USER_GROUP),true).
-		"\n<br>User vu_user_primary_ug meta has been updated to: ".get_user_meta($user_id, VU_USER_PRIMARY_UG));
+		"\n<br>User vu_user_primary_ug meta has been updated to: ".print_r(get_user_meta($user_id, VU_USER_PRIMARY_UG), true));
 		return;
 	}
 }
